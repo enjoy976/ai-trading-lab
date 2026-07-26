@@ -1,41 +1,59 @@
 async function loadSignal(){
 
+    try {
 
-try {
-
-
-const response = await fetch(
-"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + Date.now()
-);
-
-
-
-const data = await response.json();
-
+        const response = await fetch(
+            "https://disposal-exorcist-silly.ngrok-free.dev/signal?_=" + Date.now(),
+            {
+                method: "GET",
+                mode: "cors",
+                cache: "no-store"
+            }
+        );
 
 
-return data;
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP ERROR: " + response.status
+            );
+
+        }
 
 
+        const data = await response.json();
+
+
+        return data;
+
+
+    }
+
+    catch(error){
+
+        console.log("Signal error:", error);
+
+
+        document.getElementById("result").innerHTML = `
+
+        <h2>🥇 XAUUSD AI ENGINE</h2>
+
+        <hr>
+
+        <p>
+        ❌ Connection error
+        <br><br>
+        ${error.message}
+        </p>
+
+        `;
+
+
+        return null;
+
+    }
 
 }
-
-catch(error){
-
-
-console.log("Signal error:", error);
-
-
-return null;
-
-
-}
-
-
-
-}
-
-
 
 
 
@@ -44,191 +62,150 @@ return null;
 async function openXAU(){
 
 
-
-const data = await loadSignal();
-
+    const data = await loadSignal();
 
 
-if(!data){
+
+    if(!data){
+
+        return;
+
+    }
 
 
-document.getElementById("result").innerHTML = `
 
-<h2>🥇 XAUUSD AI ENGINE</h2>
+    let signalColor = "🟢";
 
-<p>
-❌ Signal олдсонгүй
-</p>
 
-`;
+    if(data.signal === "SELL"){
 
-return;
+        signalColor="🔴";
+
+    }
+
+
+    if(data.signal === "WAIT"){
+
+        signalColor="🟡";
+
+    }
+
+
+
+
+    document.getElementById("result").innerHTML = `
+
+
+    <h2>🥇 XAUUSD AI ENGINE</h2>
+
+    <hr>
+
+
+    <p>
+
+    Symbol:
+
+    <br>
+
+    <b>${data.symbol}</b>
+
+
+    <br><br>
+
+
+    PRICE:
+
+    <br>
+
+    <b>${data.price}</b>
+
+
+    <br><br>
+
+
+    SIGNAL:
+
+    <br>
+
+    <b>${signalColor} ${data.signal}</b>
+
+
+    <br><br>
+
+
+    Trend:
+
+    <br>
+
+    <b>${data.trend}</b>
+
+
+    <br><br>
+
+
+    AI Confidence:
+
+    <br>
+
+    <b>${data.confidence}%</b>
+
+
+    <br><br>
+
+
+    Bot:
+
+    <br>
+
+    <b>${data.bot}</b>
+
+
+    <br><br>
+
+
+    Status:
+
+    <br>
+
+    <b>${data.status}</b>
+
+
+    <br><br>
+
+
+    Last Update:
+
+    <br>
+
+    <b>${data.time}</b>
+
+
+    </p>
+
+
+    <hr>
+
+
+    <h3>🤖 AI Analysis</h3>
+
+
+    <p>
+
+    Market data MT5 AI engine-с ирж байна.
+
+    <br><br>
+
+    System:
+
+    🟢 ONLINE
+
+    </p>
+
+
+    `;
 
 
 }
-
-
-
-
-
-let signalColor = "🟢";
-
-
-if(data.signal === "SELL"){
-
-signalColor="🔴";
-
-}
-
-
-if(data.signal === "WAIT"){
-
-signalColor="🟡";
-
-}
-
-
-
-
-document.getElementById("result").innerHTML = `
-
-
-
-<h2>🥇 XAUUSD AI ENGINE</h2>
-
-
-<hr>
-
-
-
-<p>
-
-
-Symbol:
-
-<br>
-
-<b>${data.symbol}</b>
-
-
-<br><br>
-
-
-
-PRICE:
-
-<br>
-
-<b>${data.price}</b>
-
-
-<br><br>
-
-
-
-SIGNAL:
-
-<br>
-
-<b>${signalColor} ${data.signal}</b>
-
-
-<br><br>
-
-
-
-Trend:
-
-<br>
-
-<b>${data.trend}</b>
-
-
-
-<br><br>
-
-
-
-AI Confidence:
-
-<br>
-
-<b>${data.confidence}%</b>
-
-
-
-<br><br>
-
-
-
-Bot:
-
-<br>
-
-<b>${data.bot}</b>
-
-
-
-<br><br>
-
-
-
-Status:
-
-<br>
-
-<b>${data.status}</b>
-
-
-
-<br><br>
-
-
-
-Last Update:
-
-<br>
-
-<b>${data.time}</b>
-
-
-
-</p>
-
-
-
-<hr>
-
-
-
-<h3>🤖 AI Analysis</h3>
-
-
-
-<p>
-
-
-Market data MT5 AI engine-с ирж байна.
-
-
-<br><br>
-
-
-System:
-
-🟢 ONLINE
-
-
-</p>
-
-
-
-`;
-
-
-
-}
-
 
 
 
@@ -241,19 +218,15 @@ System:
 function openCrypto(){
 
 
-
 document.getElementById("result").innerHTML = `
 
 
-
 <h2>₿ CRYPTO SCANNER</h2>
-
 
 <hr>
 
 
 <p>
-
 
 BTC / ETH / SOL monitoring...
 
@@ -277,9 +250,7 @@ Funding Monitor:
 </p>
 
 
-
 `;
-
 
 
 }
@@ -292,17 +263,13 @@ Funding Monitor:
 
 
 
-
 function openTelegram(){
-
 
 
 document.getElementById("result").innerHTML = `
 
 
-
 <h2>📱 TELEGRAM SIGNAL</h2>
-
 
 
 <p>
@@ -312,9 +279,7 @@ document.getElementById("result").innerHTML = `
 </p>
 
 
-
 <br>
-
 
 
 <button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
@@ -324,10 +289,7 @@ document.getElementById("result").innerHTML = `
 </button>
 
 
-
 <br><br>
-
-
 
 
 <button onclick="window.open('https://t.me/+FN8PsiLGr4JhY2Q1','_blank')">
@@ -337,9 +299,6 @@ document.getElementById("result").innerHTML = `
 </button>
 
 
-
 `;
-
-
 
 }
