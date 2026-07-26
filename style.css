@@ -1,221 +1,62 @@
-*{
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+async function loadSignal(){
 
 
-body{
+try {
 
-margin:0;
 
-min-height:100vh;
+const response = await fetch("signal.json?" + new Date().getTime());
 
-background:#050816;
 
-color:white;
-
-overflow-x:hidden;
-
-}
+const data = await response.json();
 
 
 
-/* Moving Grid Background */
-
-body::before{
-
-content:"";
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:100%;
-
-height:100%;
+return data;
 
 
-background:
-
-linear-gradient(
-rgba(255,255,255,0.04) 1px,
-transparent 1px
-),
-
-linear-gradient(
-90deg,
-rgba(255,255,255,0.04) 1px,
-transparent 1px
-);
-
-
-background-size:50px 50px;
-
-
-animation:gridMove 10s linear infinite;
-
-
-z-index:-2;
 
 }
 
+catch(error){
 
 
-@keyframes gridMove{
-
-from{
-
-background-position:0 0;
-
-}
-
-to{
-
-background-position:50px 50px;
-
-}
-
-}
+console.log("Signal error:", error);
 
 
-
-
-
-/* Live Chart */
-
-.live-chart{
-
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-
-width:100%;
-
-height:220px;
-
-
-opacity:.25;
-
-
-background:
-
-linear-gradient(
-90deg,
-transparent,
-#00ff99,
-transparent
-);
-
-
-clip-path:polygon(
-
-0 75%,
-10% 65%,
-20% 80%,
-30% 45%,
-40% 60%,
-50% 30%,
-60% 55%,
-70% 25%,
-80% 50%,
-90% 35%,
-100% 45%,
-100% 100%,
-0 100%
-
-);
-
-
-animation:chartMove 4s infinite alternate;
-
-
-z-index:-1;
+return null;
 
 
 }
 
 
 
-@keyframes chartMove{
-
-from{
-
-transform:translateX(-40px);
-
-}
-
-
-to{
-
-transform:translateX(40px);
-
-}
-
 }
 
 
 
 
-.container{
-
-
-max-width:1000px;
-
-margin:auto;
-
-padding:40px 20px;
-
-}
+async function openXAU(){
 
 
 
-
-h1{
-
-text-align:center;
-
-font-size:45px;
-
-}
+const data = await loadSignal();
 
 
 
-.subtitle{
-
-text-align:center;
-
-color:#9ca3af;
-
-font-size:18px;
-
-}
+if(!data){
 
 
+document.getElementById("result").innerHTML = `
 
-.status{
+<h2>🥇 XAUUSD AI ENGINE</h2>
 
+<p>
+❌ Signal олдсонгүй
+</p>
 
-margin:30px auto;
+`;
 
-width:max-content;
-
-
-padding:12px 25px;
-
-
-border-radius:30px;
-
-
-background:#064e3b;
-
-
-border:1px solid #10b981;
+return;
 
 
 }
@@ -224,182 +65,239 @@ border:1px solid #10b981;
 
 
 
-.cards{
+let signalColor = "🟢";
 
 
-display:grid;
+if(data.signal === "SELL"){
+
+signalColor="🔴";
+
+}
 
 
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+document.getElementById("result").innerHTML = `
 
 
-gap:20px;
+
+<h2>🥇 XAUUSD AI ENGINE</h2>
+
+
+<hr>
+
+
+<p>
+
+
+Symbol:
+
+<br>
+
+<b>${data.symbol}</b>
+
+
+<br><br>
+
+
+
+SIGNAL:
+
+<br>
+
+<b>${signalColor} ${data.signal}</b>
+
+
+<br><br>
+
+
+
+Trend:
+
+<br>
+
+<b>${data.trend}</b>
+
+
+
+<br><br>
+
+
+
+AI Confidence:
+
+<br>
+
+<b>${data.confidence}%</b>
+
+
+
+<br><br>
+
+
+
+Bot:
+
+<br>
+
+<b>${data.bot}</b>
+
+
+
+<br><br>
+
+
+
+Last Update:
+
+<br>
+
+<b>${data.time}</b>
+
+
+
+</p>
+
+
+
+<hr>
+
+
+
+<h3>🤖 AI Analysis</h3>
+
+
+
+<p>
+
+
+Market data Python engine-с ирж байна.
+
+
+<br><br>
+
+
+System:
+
+🟢 ONLINE
+
+
+</p>
+
+
+
+`;
+
 
 
 }
 
 
 
-.card{
 
 
-background:rgba(17,24,39,.85);
 
 
-border-radius:20px;
+
+function openCrypto(){
 
 
-padding:30px;
+
+document.getElementById("result").innerHTML = `
 
 
-cursor:pointer;
+
+<h2>₿ CRYPTO SCANNER</h2>
 
 
-border:1px solid #1f2937;
+<hr>
 
 
-transition:.3s;
+<p>
+
+
+BTC / ETH / SOL monitoring...
+
+
+<br><br>
+
+
+Arbitrage Engine:
+
+🟢 Running
+
+
+<br><br>
+
+
+Funding Monitor:
+
+🟢 Active
+
+
+</p>
+
+
+
+`;
+
 
 
 }
 
 
 
-.card:hover{
 
 
-transform:translateY(-10px);
 
 
-border-color:#22c55e;
 
+function openTelegram(){
 
-box-shadow:0 0 30px rgba(34,197,94,.3);
 
 
-}
+document.getElementById("result").innerHTML = `
 
 
 
+<h2>📱 TELEGRAM SIGNAL</h2>
 
-.icon{
 
 
-font-size:45px;
+<p>
 
-}
+Суваг сонгоно уу:
 
+</p>
 
 
 
-.result{
+<br>
 
 
-margin-top:40px;
 
+<button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
 
-background:rgba(15,23,42,.9);
+🥇 SWING SIGNAL
 
+</button>
 
-padding:30px;
 
 
-border-radius:20px;
+<br><br>
 
 
-border:1px solid #334155;
 
 
-min-height:200px;
+<button onclick="window.open('https://t.me/+FN8PsiLGr4JhY2Q1','_blank')">
 
+⚡ INTRADAY SIGNAL
 
-}
+</button>
 
 
 
-/* TELEGRAM ADMIN BUTTON */
+`;
 
 
-.telegram-float{
-
-
-position:fixed;
-
-
-right:25px;
-
-
-bottom:25px;
-
-
-background:#229ED9;
-
-
-color:white;
-
-
-text-decoration:none;
-
-
-padding:15px 22px;
-
-
-border-radius:50px;
-
-
-font-size:16px;
-
-
-font-weight:bold;
-
-
-box-shadow:0 0 25px rgba(34,158,217,.6);
-
-
-z-index:999;
-
-
-animation:telegramPulse 2s infinite;
-
-
-}
-
-
-
-.telegram-float:hover{
-
-
-transform:scale(1.08);
-
-
-background:#0088cc;
-
-
-}
-
-
-
-@keyframes telegramPulse{
-
-
-0%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
-
-
-50%{
-
-box-shadow:0 0 35px rgba(34,158,217,.9);
-
-}
-
-
-100%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
 
 }
