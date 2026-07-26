@@ -21,6 +21,18 @@ async function loadSignal(){
         }
 
 
+        const contentType = response.headers.get("content-type");
+
+
+        if(!contentType || !contentType.includes("application/json")){
+
+            throw new Error(
+                "Server returned HTML instead of JSON"
+            );
+
+        }
+
+
         const data = await response.json();
 
 
@@ -29,7 +41,9 @@ async function loadSignal(){
 
     }
 
+
     catch(error){
+
 
         console.log("Signal error:", error);
 
@@ -51,6 +65,7 @@ async function loadSignal(){
 
         return null;
 
+
     }
 
 }
@@ -65,7 +80,6 @@ async function openXAU(){
     const data = await loadSignal();
 
 
-
     if(!data){
 
         return;
@@ -74,7 +88,7 @@ async function openXAU(){
 
 
 
-    let signalColor = "🟢";
+    let signalColor="🟢";
 
 
     if(data.signal === "SELL"){
@@ -103,6 +117,7 @@ async function openXAU(){
 
     <p>
 
+
     Symbol:
 
     <br>
@@ -111,6 +126,7 @@ async function openXAU(){
 
 
     <br><br>
+
 
 
     PRICE:
@@ -123,6 +139,7 @@ async function openXAU(){
     <br><br>
 
 
+
     SIGNAL:
 
     <br>
@@ -131,6 +148,7 @@ async function openXAU(){
 
 
     <br><br>
+
 
 
     Trend:
@@ -143,6 +161,7 @@ async function openXAU(){
     <br><br>
 
 
+
     AI Confidence:
 
     <br>
@@ -151,6 +170,7 @@ async function openXAU(){
 
 
     <br><br>
+
 
 
     Bot:
@@ -163,6 +183,7 @@ async function openXAU(){
     <br><br>
 
 
+
     Status:
 
     <br>
@@ -171,6 +192,7 @@ async function openXAU(){
 
 
     <br><br>
+
 
 
     Last Update:
@@ -183,7 +205,9 @@ async function openXAU(){
     </p>
 
 
+
     <hr>
+
 
 
     <h3>🤖 AI Analysis</h3>
@@ -193,11 +217,14 @@ async function openXAU(){
 
     Market data MT5 AI engine-с ирж байна.
 
+
     <br><br>
+
 
     System:
 
     🟢 ONLINE
+
 
     </p>
 
@@ -213,8 +240,6 @@ async function openXAU(){
 
 
 
-
-
 function openCrypto(){
 
 
@@ -223,10 +248,12 @@ document.getElementById("result").innerHTML = `
 
 <h2>₿ CRYPTO SCANNER</h2>
 
+
 <hr>
 
 
 <p>
+
 
 BTC / ETH / SOL monitoring...
 
@@ -261,8 +288,6 @@ Funding Monitor:
 
 
 
-
-
 function openTelegram(){
 
 
@@ -282,6 +307,7 @@ document.getElementById("result").innerHTML = `
 <br>
 
 
+
 <button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
 
 🥇 SWING SIGNAL
@@ -292,6 +318,7 @@ document.getElementById("result").innerHTML = `
 <br><br>
 
 
+
 <button onclick="window.open('https://t.me/+FN8PsiLGr4JhY2Q1','_blank')">
 
 ⚡ INTRADAY SIGNAL
@@ -300,5 +327,6 @@ document.getElementById("result").innerHTML = `
 
 
 `;
+
 
 }
