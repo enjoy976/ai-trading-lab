@@ -4,12 +4,11 @@ async function loadSignal(){
 try {
 
 
-const response = await fetch(
-"signal.json?" + new Date().getTime()
-);
+const response = await fetch("https://disposal-exorcist-silly.ngrok-free.dev/signal?" + new Date().getTime());
 
 
 const data = await response.json();
+
 
 
 return data;
@@ -30,10 +29,8 @@ return null;
 }
 
 
+
 }
-
-
-
 
 
 
@@ -42,49 +39,22 @@ async function openXAU(){
 
 
 
-// HOME нуух
-
-document.getElementById("homePage").style.display="none";
-
-
-// XAU page гаргах
-
-document.getElementById("xauPage").style.display="block";
-
-
-
-
-
 const data = await loadSignal();
-
 
 
 
 if(!data){
 
 
-
 document.getElementById("result").innerHTML = `
 
-
-<div class="ai-card">
-
-
-<h2>
-🥇 XAUUSD AI ENGINE
-</h2>
-
+<h2>🥇 XAUUSD AI ENGINE</h2>
 
 <p>
 ❌ Signal олдсонгүй
 </p>
 
-
-</div>
-
-
 `;
-
 
 return;
 
@@ -95,38 +65,14 @@ return;
 
 
 
-let signalClass="wait";
-
-let signalEmoji="🟡";
+let signalColor = "🟢";
 
 
+if(data.signal === "SELL"){
 
-
-if(data.signal==="BUY"){
-
-
-signalClass="buy";
-
-signalEmoji="🟢";
-
+signalColor="🔴";
 
 }
-
-
-
-if(data.signal==="SELL"){
-
-
-signalClass="sell";
-
-signalEmoji="🔴";
-
-
-}
-
-
-
-
 
 
 
@@ -134,231 +80,97 @@ document.getElementById("result").innerHTML = `
 
 
 
-<div class="ai-card">
+<h2>🥇 XAUUSD AI ENGINE</h2>
 
 
+<hr>
 
-<div class="header">
 
+<p>
 
-<h2>
-🥇 XAUUSD AI ENGINE
-</h2>
 
+Symbol:
 
-<span class="online">
-● ONLINE
-</span>
+<br>
 
+<b>${data.symbol}</b>
 
-</div>
 
+<br><br>
 
 
 
+SIGNAL:
 
-<div class="price">
+<br>
 
-${data.price}
+<b>${signalColor} ${data.signal}</b>
 
-</div>
 
+<br><br>
 
 
 
+Trend:
 
-<div class="signal ${signalClass}">
+<br>
 
+<b>${data.trend}</b>
 
-${signalEmoji}
 
-${data.signal}
 
+<br><br>
 
-</div>
 
 
+AI Confidence:
 
+<br>
 
+<b>${data.confidence}%</b>
 
 
 
-<div class="info-box">
+<br><br>
 
 
 
-<div>
+Bot:
 
+<br>
 
-<span>
+<b>${data.bot}</b>
 
-Symbol
 
-</span>
 
+<br><br>
 
-<b>
 
-${data.symbol}
 
-</b>
+Last Update:
 
+<br>
 
-</div>
+<b>${data.time}</b>
 
 
 
+</p>
 
 
 
-<div>
+<hr>
 
 
-<span>
 
-Trend
-
-</span>
-
-
-<b>
-
-${data.trend}
-
-</b>
-
-
-</div>
-
-
-
-
-
-
-<div>
-
-
-<span>
-
-AI Confidence
-
-</span>
-
-
-<b>
-
-${data.confidence}%
-
-</b>
-
-
-</div>
-
-
-
-
-
-<div>
-
-
-<span>
-
-Bot
-
-</span>
-
-
-<b>
-
-${data.bot}
-
-</b>
-
-
-</div>
-
-
-
-
-<div>
-
-
-<span>
-
-Status
-
-</span>
-
-
-<b>
-
-🟢 ONLINE
-
-</b>
-
-
-</div>
-
-
-
-
-<div>
-
-
-<span>
-
-Update
-
-</span>
-
-
-<b>
-
-${data.time}
-
-</b>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="progress">
-
-
-<div style="width:${data.confidence}%"></div>
-
-
-</div>
-
-
-
-
-
-
-
-<h3>
-
-🤖 AI Analysis
-
-</h3>
-
-
+<h3>🤖 AI Analysis</h3>
 
 
 
 <p>
 
 
-Market data MT5 engine-с ирж байна.
+Market data Python engine-с ирж байна.
 
 
 <br><br>
@@ -373,12 +185,6 @@ System:
 
 
 
-
-
-</div>
-
-
-
 `;
 
 
@@ -392,39 +198,7 @@ System:
 
 
 
-
-function backHome(){
-
-
-// XAU page нуух
-
-document.getElementById("xauPage").style.display="none";
-
-
-// Home буцаах
-
-document.getElementById("homePage").style.display="block";
-
-
-}
-
-
-
-
-
-
-
-
-
 function openCrypto(){
-
-
-
-document.getElementById("homePage").style.display="none";
-
-
-document.getElementById("xauPage").style.display="block";
-
 
 
 
@@ -432,17 +206,10 @@ document.getElementById("result").innerHTML = `
 
 
 
-<div class="ai-card">
-
-
-<h2>
-₿ CRYPTO SCANNER
-</h2>
-
+<h2>₿ CRYPTO SCANNER</h2>
 
 
 <hr>
-
 
 
 <p>
@@ -471,10 +238,6 @@ Funding Monitor:
 
 
 
-</div>
-
-
-
 `;
 
 
@@ -488,17 +251,7 @@ Funding Monitor:
 
 
 
-
 function openTelegram(){
-
-
-
-document.getElementById("homePage").style.display="none";
-
-
-document.getElementById("xauPage").style.display="block";
-
-
 
 
 
@@ -506,15 +259,7 @@ document.getElementById("result").innerHTML = `
 
 
 
-<div class="ai-card">
-
-
-<h2>
-
-📱 TELEGRAM SIGNAL
-
-</h2>
-
+<h2>📱 TELEGRAM SIGNAL</h2>
 
 
 
@@ -530,7 +275,6 @@ document.getElementById("result").innerHTML = `
 
 
 
-
 <button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
 
 🥇 SWING SIGNAL
@@ -539,10 +283,7 @@ document.getElementById("result").innerHTML = `
 
 
 
-
-
 <br><br>
-
 
 
 
@@ -552,10 +293,6 @@ document.getElementById("result").innerHTML = `
 ⚡ INTRADAY SIGNAL
 
 </button>
-
-
-
-</div>
 
 
 
