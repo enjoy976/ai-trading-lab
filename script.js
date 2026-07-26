@@ -10,13 +10,15 @@ if(!data){
 
 document.getElementById("result").innerHTML = `
 
-<div class="ai-card">
-
 <h2>🥇 XAUUSD AI ENGINE</h2>
 
-<p>❌ Signal олдсонгүй</p>
+<hr>
 
-</div>
+<p>
+
+❌ Signal олдсонгүй
+
+</p>
 
 `;
 
@@ -27,24 +29,20 @@ return;
 
 
 
-let signalClass = "wait";
-let signalEmoji = "🟡";
 
+let signalColor = "🟡";
 
 
 if(data.signal === "BUY"){
 
-signalClass="buy";
-signalEmoji="🟢";
+signalColor="🟢";
 
 }
 
 
-
 if(data.signal === "SELL"){
 
-signalClass="sell";
-signalEmoji="🔴";
+signalColor="🔴";
 
 }
 
@@ -54,111 +52,120 @@ signalEmoji="🔴";
 document.getElementById("result").innerHTML = `
 
 
-<div class="ai-card">
+<h2>🥇 XAUUSD AI ENGINE</h2>
 
 
-<div class="header">
-
-
-<h2>🥇 XAUUSD AI</h2>
-
-
-<span class="online">
-
-● ONLINE
-
-</span>
-
-
-</div>
+<hr>
 
 
 
+<p>
 
 
-<div class="price">
+Symbol:
 
-$${data.price}
+<br>
 
-</div>
+<b>${data.symbol}</b>
+
+
+<br><br>
 
 
 
 
+SIGNAL:
 
-<div class="signal ${signalClass}">
+<br>
 
-${signalEmoji} ${data.signal}
-
-</div>
-
+<b>${signalColor} ${data.signal}</b>
 
 
 
+<br><br>
 
-<div class="info-box">
 
 
-<div>
 
-<span>Trend</span>
+Trend:
+
+<br>
 
 <b>${data.trend}</b>
 
-</div>
+
+
+<br><br>
 
 
 
 
-<div>
+AI Confidence:
 
-<span>Confidence</span>
+<br>
 
 <b>${data.confidence}%</b>
 
-</div>
+
+
+<br><br>
 
 
 
 
-<div>
+Price:
 
-<span>Bot</span>
+<br>
+
+<b>${data.price}</b>
+
+
+
+<br><br>
+
+
+
+
+Bot:
+
+<br>
 
 <b>${data.bot}</b>
 
-</div>
 
 
-
-</div>
-
-
+<br><br>
 
 
 
 
+Status:
 
-<div class="progress">
+<br>
 
-
-<div style="width:${data.confidence}%"></div>
-
-
-</div>
+<b>🟢 ${data.status}</b>
 
 
 
+<br><br>
 
 
-<p class="update">
 
-Last update:
 
-${data.time}
+Last Update:
+
+<br>
+
+<b>${data.time}</b>
+
+
 
 </p>
 
+
+
+
+<hr>
 
 
 
@@ -176,19 +183,16 @@ ${data.time}
 
 Market data Python engine-с ирж байна.
 
+
 <br><br>
+
 
 System:
 
 🟢 ONLINE
 
+
 </p>
-
-
-
-
-
-</div>
 
 
 `;
