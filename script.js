@@ -4,7 +4,15 @@ async function loadSignal(){
 try {
 
 
-const response = await fetch("https://disposal-exorcist-silly.ngrok-free.dev/signal?" + new Date().getTime());
+const response = await fetch(
+"https://disposal-exorcist-silly.ngrok-free.dev/signal",
+{
+    headers:{
+        "ngrok-skip-browser-warning":"true"
+    }
+}
+);
+
 
 
 const data = await response.json();
@@ -31,6 +39,8 @@ return null;
 
 
 }
+
+
 
 
 
@@ -76,6 +86,15 @@ signalColor="🔴";
 
 
 
+if(data.signal === "WAIT"){
+
+signalColor="🟡";
+
+}
+
+
+
+
 document.getElementById("result").innerHTML = `
 
 
@@ -94,6 +113,17 @@ Symbol:
 <br>
 
 <b>${data.symbol}</b>
+
+
+<br><br>
+
+
+
+PRICE:
+
+<br>
+
+<b>${data.price}</b>
 
 
 <br><br>
@@ -147,6 +177,18 @@ Bot:
 
 
 
+Status:
+
+<br>
+
+<b>${data.status}</b>
+
+
+
+<br><br>
+
+
+
 Last Update:
 
 <br>
@@ -170,7 +212,7 @@ Last Update:
 <p>
 
 
-Market data Python engine-с ирж байна.
+Market data MT5 AI engine-с ирж байна.
 
 
 <br><br>
@@ -190,6 +232,7 @@ System:
 
 
 }
+
 
 
 
@@ -251,6 +294,7 @@ Funding Monitor:
 
 
 
+
 function openTelegram(){
 
 
@@ -284,6 +328,7 @@ document.getElementById("result").innerHTML = `
 
 
 <br><br>
+
 
 
 
