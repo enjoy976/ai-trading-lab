@@ -2,31 +2,50 @@ async function loadSignal(){
 
 try {
 
+
 const response = await fetch(
-"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + new Date().getTime()
+"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + Date.now(),
+{
+headers:{
+"ngrok-skip-browser-warning":"true"
+}
+}
 );
+
+
+console.log("API STATUS:", response.status);
+
 
 const data = await response.json();
 
+
+console.log("LIVE SIGNAL:", data);
+
+
 return data;
+
 
 }
 
 catch(error){
 
+
 console.log("Signal error:", error);
+
 
 return null;
 
+
 }
 
 }
+
+
 
 
 
 
 async function openXAU(){
-
 
 
 const data = await loadSignal();
@@ -54,7 +73,6 @@ return;
 
 
 
-
 let signalColor = "🟢";
 
 
@@ -63,6 +81,14 @@ if(data.signal === "SELL"){
 signalColor="🔴";
 
 }
+
+
+if(data.signal === "WAIT"){
+
+signalColor="🟡";
+
+}
+
 
 
 
@@ -76,6 +102,7 @@ document.getElementById("result").innerHTML = `
 <hr>
 
 
+
 <p>
 
 
@@ -84,6 +111,7 @@ Symbol:
 <br>
 
 <b>${data.symbol}</b>
+
 
 
 <br><br>
@@ -95,6 +123,7 @@ SIGNAL:
 <br>
 
 <b>${signalColor} ${data.signal}</b>
+
 
 
 <br><br>
@@ -125,11 +154,35 @@ AI Confidence:
 
 
 
+Price:
+
+<br>
+
+<b>${data.price || "N/A"}</b>
+
+
+
+<br><br>
+
+
+
 Bot:
 
 <br>
 
 <b>${data.bot}</b>
+
+
+
+<br><br>
+
+
+
+Status:
+
+<br>
+
+<b>🟢 ${data.status || "ONLINE"}</b>
 
 
 
@@ -146,6 +199,7 @@ Last Update:
 
 
 </p>
+
 
 
 
@@ -188,6 +242,7 @@ System:
 
 
 
+
 function openCrypto(){
 
 
@@ -202,13 +257,16 @@ document.getElementById("result").innerHTML = `
 <hr>
 
 
+
 <p>
 
 
 BTC / ETH / SOL monitoring...
 
 
+
 <br><br>
+
 
 
 Arbitrage Engine:
@@ -216,12 +274,15 @@ Arbitrage Engine:
 🟢 Running
 
 
+
 <br><br>
+
 
 
 Funding Monitor:
 
 🟢 Active
+
 
 
 </p>
@@ -233,6 +294,7 @@ Funding Monitor:
 
 
 }
+
 
 
 
@@ -265,6 +327,7 @@ document.getElementById("result").innerHTML = `
 
 
 
+
 <button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
 
 🥇 SWING SIGNAL
@@ -274,6 +337,7 @@ document.getElementById("result").innerHTML = `
 
 
 <br><br>
+
 
 
 
