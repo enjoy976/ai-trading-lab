@@ -1,34 +1,24 @@
 async function loadSignal(){
 
-
 try {
 
-
-const response = await fetch("signal.json?" + new Date().getTime());
-
+const response = await fetch(
+"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + new Date().getTime()
+);
 
 const data = await response.json();
 
-
-
 return data;
-
-
 
 }
 
 catch(error){
 
-
 console.log("Signal error:", error);
-
 
 return null;
 
-
 }
-
-
 
 }
 
