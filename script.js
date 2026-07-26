@@ -48,7 +48,7 @@ if(!data){
 
 document.getElementById("result").innerHTML = `
 
-<h2>🥇 XAUUSD AI ENGINE</h2>
+<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
 
 <p>
 ❌ Signal олдсонгүй
@@ -170,7 +170,7 @@ Last Update:
 <p>
 
 
-Market data Python engine-с ирж байна.
+Market data MT5 engine-с ирж байна.
 
 
 <br><br>
