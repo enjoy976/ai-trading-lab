@@ -80,7 +80,7 @@ document.getElementById("result").innerHTML = `
 
 
 
-<h2>🥇 XAUUSD AI ENGINE</h2>
+<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
 
 
 <hr>
