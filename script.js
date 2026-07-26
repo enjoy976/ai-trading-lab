@@ -1,50 +1,3 @@
-async function loadSignal(){
-
-try {
-
-
-const response = await fetch(
-"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + Date.now(),
-{
-headers:{
-"ngrok-skip-browser-warning":"true"
-}
-}
-);
-
-
-console.log("API STATUS:", response.status);
-
-
-const data = await response.json();
-
-
-console.log("LIVE SIGNAL:", data);
-
-
-return data;
-
-
-}
-
-catch(error){
-
-
-console.log("Signal error:", error);
-
-
-return null;
-
-
-}
-
-}
-
-
-
-
-
-
 async function openXAU(){
 
 
@@ -57,301 +10,159 @@ if(!data){
 
 document.getElementById("result").innerHTML = `
 
+<div class="ai-card">
+
 <h2>🥇 XAUUSD AI ENGINE</h2>
 
-<p>
-❌ Signal олдсонгүй
-</p>
+<p>❌ Signal олдсонгүй</p>
+
+</div>
 
 `;
 
 return;
 
-
 }
 
 
 
+let signalClass = "wait";
+let signalEmoji = "🟡";
 
-let signalColor = "🟢";
+
+if(data.signal === "BUY"){
+
+signalClass="buy";
+signalEmoji="🟢";
+
+}
 
 
 if(data.signal === "SELL"){
 
-signalColor="🔴";
+signalClass="sell";
+signalEmoji="🔴";
 
 }
-
-
-if(data.signal === "WAIT"){
-
-signalColor="🟡";
-
-}
-
 
 
 
 document.getElementById("result").innerHTML = `
 
 
-
-<h2>🥇 XAUUSD AI ENGINE</h2>
-
-
-<hr>
+<div class="ai-card">
 
 
+<div class="header">
 
-<p>
+<h2>🥇 XAUUSD AI</h2>
 
+<span class="online">
+● ONLINE
+</span>
 
-Symbol:
-
-<br>
-
-<b>${data.symbol}</b>
+</div>
 
 
 
-<br><br>
+<div class="price">
+
+$${data.price}
+
+</div>
 
 
 
-SIGNAL:
+<div class="signal ${signalClass}">
 
-<br>
+${signalEmoji}
 
-<b>${signalColor} ${data.signal}</b>
+${data.signal}
 
-
-
-<br><br>
+</div>
 
 
 
-Trend:
+<div class="info-box">
 
-<br>
+
+<div>
+
+<span>Trend</span>
 
 <b>${data.trend}</b>
 
-
-
-<br><br>
+</div>
 
 
 
-AI Confidence:
+<div>
 
-<br>
+<span>Confidence</span>
 
 <b>${data.confidence}%</b>
 
-
-
-<br><br>
-
-
-
-Price:
-
-<br>
-
-<b>${data.price || "N/A"}</b>
+</div>
 
 
 
-<br><br>
+<div>
 
-
-
-Bot:
-
-<br>
+<span>Bot</span>
 
 <b>${data.bot}</b>
 
-
-
-<br><br>
-
-
-
-Status:
-
-<br>
-
-<b>🟢 ${data.status || "ONLINE"}</b>
+</div>
 
 
 
-<br><br>
+</div>
 
 
 
-Last Update:
 
-<br>
-
-<b>${data.time}</b>
+<div class="progress">
 
 
+<div 
+style="width:${data.confidence}%">
+</div>
+
+
+</div>
+
+
+
+<p class="update">
+
+Last update:
+${data.time}
 
 </p>
 
 
 
-
-<hr>
-
-
-
-<h3>🤖 AI Analysis</h3>
-
+<h3>
+🤖 AI Analysis
+</h3>
 
 
 <p>
-
 
 Market data Python engine-с ирж байна.
 
-
-<br><br>
-
-
-System:
-
-🟢 ONLINE
-
-
-</p>
-
-
-
-`;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function openCrypto(){
-
-
-
-document.getElementById("result").innerHTML = `
-
-
-
-<h2>₿ CRYPTO SCANNER</h2>
-
-
-<hr>
-
-
-
-<p>
-
-
-BTC / ETH / SOL monitoring...
-
-
-
-<br><br>
-
-
-
-Arbitrage Engine:
-
-🟢 Running
-
-
-
-<br><br>
-
-
-
-Funding Monitor:
-
-🟢 Active
-
-
-
-</p>
-
-
-
-`;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function openTelegram(){
-
-
-
-document.getElementById("result").innerHTML = `
-
-
-
-<h2>📱 TELEGRAM SIGNAL</h2>
-
-
-
-<p>
-
-Суваг сонгоно уу:
-
-</p>
-
-
-
 <br>
 
+System:
+🟢 ONLINE
+
+</p>
 
 
 
-<button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
-
-🥇 SWING SIGNAL
-
-</button>
-
-
-
-<br><br>
-
-
-
-
-
-<button onclick="window.open('https://t.me/+FN8PsiLGr4JhY2Q1','_blank')">
-
-⚡ INTRADAY SIGNAL
-
-</button>
-
+</div>
 
 
 `;
-
-
 
 }
