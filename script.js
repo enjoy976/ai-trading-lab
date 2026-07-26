@@ -5,12 +5,7 @@ try {
 
 
 const response = await fetch(
-"https://disposal-exorcist-silly.ngrok-free.dev/signal",
-{
-    headers:{
-        "ngrok-skip-browser-warning":"true"
-    }
-}
+"https://disposal-exorcist-silly.ngrok-free.dev/signal?" + Date.now()
 );
 
 
@@ -39,6 +34,7 @@ return null;
 
 
 }
+
 
 
 
@@ -85,7 +81,6 @@ signalColor="🔴";
 }
 
 
-
 if(data.signal === "WAIT"){
 
 signalColor="🟡";
@@ -103,6 +98,7 @@ document.getElementById("result").innerHTML = `
 
 
 <hr>
+
 
 
 <p>
@@ -241,6 +237,7 @@ System:
 
 
 
+
 function openCrypto(){
 
 
@@ -295,6 +292,7 @@ Funding Monitor:
 
 
 
+
 function openTelegram(){
 
 
@@ -328,7 +326,6 @@ document.getElementById("result").innerHTML = `
 
 
 <br><br>
-
 
 
 
