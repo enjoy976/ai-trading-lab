@@ -162,6 +162,7 @@ transform:translateX(40px);
 
 
 
+
 .container{
 
 
@@ -312,94 +313,5 @@ border:1px solid #334155;
 
 min-height:200px;
 
-
-}
-
-
-
-/* TELEGRAM ADMIN BUTTON */
-
-
-.telegram-float{
-
-
-position:fixed;
-
-
-right:25px;
-
-
-bottom:25px;
-
-
-background:#229ED9;
-
-
-color:white;
-
-
-text-decoration:none;
-
-
-padding:15px 22px;
-
-
-border-radius:50px;
-
-
-font-size:16px;
-
-
-font-weight:bold;
-
-
-box-shadow:0 0 25px rgba(34,158,217,.6);
-
-
-z-index:999;
-
-
-animation:telegramPulse 2s infinite;
-
-
-}
-
-
-
-.telegram-float:hover{
-
-
-transform:scale(1.08);
-
-
-background:#0088cc;
-
-
-}
-
-
-
-@keyframes telegramPulse{
-
-
-0%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
-
-
-50%{
-
-box-shadow:0 0 35px rgba(34,158,217,.9);
-
-}
-
-
-100%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
 
 }
