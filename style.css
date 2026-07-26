@@ -1,71 +1,33 @@
-.result{
-
-
-margin-top:40px;
-
-
-background:rgba(15,23,42,.9);
-
-
-padding:30px;
-
-
-border-radius:20px;
-
-
-border:1px solid #334155;
-
-
-min-height:200px;
-
-
-}
-
-
 /* TELEGRAM ADMIN BUTTON */
 
 
 .telegram-float{
 
-
 position:fixed;
-
 
 right:25px;
 
-
 bottom:25px;
-
 
 background:#229ED9;
 
-
 color:white;
-
 
 text-decoration:none;
 
-
 padding:15px 22px;
-
 
 border-radius:50px;
 
-
 font-size:16px;
-
 
 font-weight:bold;
 
-
 box-shadow:0 0 25px rgba(34,158,217,.6);
-
 
 z-index:999;
 
-
 animation:telegramPulse 2s infinite;
-
 
 }
 
@@ -73,12 +35,9 @@ animation:telegramPulse 2s infinite;
 
 .telegram-float:hover{
 
-
 transform:scale(1.08);
 
-
 background:#0088cc;
-
 
 }
 
@@ -116,7 +75,6 @@ box-shadow:0 0 10px rgba(34,158,217,.4);
 
 .ai-card{
 
-
 background:
 
 linear-gradient(
@@ -125,23 +83,15 @@ linear-gradient(
 #020617
 );
 
-
 border-radius:20px;
-
 
 padding:30px;
 
-
 border:1px solid #334155;
 
-
-box-shadow:
-
-0 0 30px rgba(0,255,150,.15);
-
+box-shadow:0 0 30px rgba(0,255,150,.15);
 
 color:white;
-
 
 }
 
@@ -149,9 +99,7 @@ color:white;
 
 .ai-card h2{
 
-
 margin-top:0;
-
 
 }
 
@@ -159,18 +107,13 @@ margin-top:0;
 
 .price{
 
-
 font-size:42px;
-
 
 font-weight:900;
 
-
 text-align:center;
 
-
 margin:20px 0;
-
 
 }
 
@@ -178,21 +121,15 @@ margin:20px 0;
 
 .signal{
 
-
 font-size:30px;
-
 
 font-weight:bold;
 
-
 text-align:center;
-
 
 padding:15px;
 
-
 border-radius:15px;
-
 
 }
 
@@ -200,15 +137,11 @@ border-radius:15px;
 
 .buy{
 
-
 color:#00ff88;
-
 
 background:rgba(0,255,120,.12);
 
-
 border:1px solid #00ff88;
-
 
 }
 
@@ -216,15 +149,11 @@ border:1px solid #00ff88;
 
 .sell{
 
-
 color:#ff5555;
-
 
 background:rgba(255,0,0,.12);
 
-
 border:1px solid #ff5555;
-
 
 }
 
@@ -232,15 +161,11 @@ border:1px solid #ff5555;
 
 .wait{
 
-
 color:#ffd000;
-
 
 background:rgba(255,200,0,.12);
 
-
 border:1px solid #ffd000;
-
 
 }
 
@@ -248,18 +173,13 @@ border:1px solid #ffd000;
 
 .info-box{
 
-
 display:grid;
-
 
 grid-template-columns:repeat(3,1fr);
 
-
 gap:15px;
 
-
 margin-top:20px;
-
 
 }
 
@@ -267,18 +187,13 @@ margin-top:20px;
 
 .info-box div{
 
-
 background:rgba(255,255,255,.05);
-
 
 padding:15px;
 
-
 border-radius:15px;
 
-
 text-align:center;
-
 
 }
 
@@ -286,21 +201,15 @@ text-align:center;
 
 .progress{
 
-
 height:10px;
-
 
 background:#1e293b;
 
-
 border-radius:20px;
-
 
 overflow:hidden;
 
-
 margin-top:20px;
-
 
 }
 
@@ -308,15 +217,11 @@ margin-top:20px;
 
 .progress div{
 
-
 height:100%;
-
 
 background:#00ff88;
 
-
 border-radius:20px;
-
 
 }
 
@@ -324,12 +229,19 @@ border-radius:20px;
 
 .online{
 
-
 color:#00ff88;
-
 
 font-weight:bold;
 
+}
+
+
+
+.update{
+
+color:#94a3b8;
+
+font-size:14px;
 
 }
 
@@ -337,14 +249,10 @@ font-weight:bold;
 
 @media(max-width:600px){
 
-
 .info-box{
-
 
 grid-template-columns:1fr;
 
-
 }
-
 
 }
