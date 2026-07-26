@@ -26,8 +26,10 @@ return;
 
 
 
+
 let signalClass = "wait";
 let signalEmoji = "🟡";
+
 
 
 if(data.signal === "BUY"){
@@ -36,6 +38,7 @@ signalClass="buy";
 signalEmoji="🟢";
 
 }
+
 
 
 if(data.signal === "SELL"){
@@ -47,6 +50,7 @@ signalEmoji="🔴";
 
 
 
+
 document.getElementById("result").innerHTML = `
 
 
@@ -55,13 +59,20 @@ document.getElementById("result").innerHTML = `
 
 <div class="header">
 
+
 <h2>🥇 XAUUSD AI</h2>
 
+
 <span class="online">
+
 ● ONLINE
+
 </span>
 
+
 </div>
+
+
 
 
 
@@ -73,13 +84,15 @@ $${data.price}
 
 
 
+
+
 <div class="signal ${signalClass}">
 
-${signalEmoji}
-
-${data.signal}
+${signalEmoji} ${data.signal}
 
 </div>
+
+
 
 
 
@@ -96,6 +109,7 @@ ${data.signal}
 
 
 
+
 <div>
 
 <span>Confidence</span>
@@ -103,6 +117,7 @@ ${data.signal}
 <b>${data.confidence}%</b>
 
 </div>
+
 
 
 
@@ -121,42 +136,55 @@ ${data.signal}
 
 
 
+
+
+
 <div class="progress">
 
 
-<div 
-style="width:${data.confidence}%">
-</div>
+<div style="width:${data.confidence}%"></div>
 
 
 </div>
+
+
 
 
 
 <p class="update">
 
 Last update:
+
 ${data.time}
 
 </p>
 
 
 
+
+
 <h3>
+
 🤖 AI Analysis
+
 </h3>
+
+
 
 
 <p>
 
 Market data Python engine-с ирж байна.
 
-<br>
+<br><br>
 
 System:
+
 🟢 ONLINE
 
 </p>
+
+
 
 
 
