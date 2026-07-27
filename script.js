@@ -80,7 +80,7 @@ document.getElementById("result").innerHTML = `
 
 
 
-<h2>🥇 XAUUSD AI ENGINE</h2>
+<h2>🥇 XAUUSD АЛТНЫ ЗАХ ЗЭЭЛИЙН ЧИГЛЭЛ</h2>
 
 
 <hr>
@@ -163,14 +163,14 @@ Last Update:
 
 
 
-<h3>🤖 AI Analysis</h3>
+<h3>🤖 Morningstar шинэжилгээ</h3>
 
 
 
 <p>
 
 
-Market data Python engine-с ирж байна.
+Market data MT5 engine-с ирж байна.
 
 
 <br><br>
