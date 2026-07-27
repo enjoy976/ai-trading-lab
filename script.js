@@ -48,7 +48,7 @@ if(!data){
 
 document.getElementById("result").innerHTML = `
 
-<h2>🥇 XAUUSD AI ENGINE</h2>
+<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
 
 <p>
 ❌ Signal олдсонгүй
@@ -80,7 +80,7 @@ document.getElementById("result").innerHTML = `
 
 
 
-<h2>🥇 XAUUSD АЛТНЫ ЗАХ ЗЭЭЛИЙН ЧИГЛЭЛ</h2>
+<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
 
 
 <hr>
@@ -163,7 +163,7 @@ Last Update:
 
 
 
-<h3>🤖 Morningstar шинэжилгээ</h3>
+<h3>🤖 AI Analysis</h3>
 
 
 
