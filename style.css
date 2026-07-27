@@ -4,7 +4,6 @@ font-family:Arial,sans-serif;
 }
 
 
-
 body{
 
 margin:0;
@@ -86,7 +85,6 @@ background-position:50px 50px;
 
 /* Live Chart */
 
-
 .live-chart{
 
 
@@ -115,7 +113,6 @@ transparent
 );
 
 
-
 clip-path:polygon(
 
 0 75%,
@@ -133,7 +130,6 @@ clip-path:polygon(
 0 100%
 
 );
-
 
 
 animation:chartMove 4s infinite alternate;
@@ -166,8 +162,8 @@ transform:translateX(40px);
 
 
 
-
 .container{
+
 
 max-width:1000px;
 
@@ -180,7 +176,6 @@ padding:40px 20px;
 
 
 
-
 h1{
 
 text-align:center;
@@ -188,8 +183,6 @@ text-align:center;
 font-size:45px;
 
 }
-
-
 
 
 
@@ -205,9 +198,8 @@ font-size:18px;
 
 
 
-
-
 .status{
+
 
 margin:30px auto;
 
@@ -234,7 +226,9 @@ border:1px solid #10b981;
 
 .cards{
 
+
 display:grid;
+
 
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 
@@ -243,8 +237,6 @@ gap:20px;
 
 
 }
-
-
 
 
 
@@ -273,8 +265,6 @@ transition:.3s;
 
 
 
-
-
 .card:hover{
 
 
@@ -292,7 +282,6 @@ box-shadow:0 0 30px rgba(34,197,94,.3);
 
 
 
-
 .icon{
 
 
@@ -303,122 +292,10 @@ font-size:45px;
 
 
 
-
-/* PAGE SWITCH */
-
-
-#homePage{
-
-display:block;
-
-}
-
-
-
-#xauPage{
-
-display:none;
-
-}
-
-
-
-
-
-.page{
-
-animation:fadePage .4s ease;
-
-}
-
-
-
-
-
-@keyframes fadePage{
-
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
-}
-
-
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-
-}
-
-
-
-
-
-
-/* BACK BUTTON */
-
-
-.back-btn{
-
-
-background:#111827;
-
-
-color:white;
-
-
-border:1px solid #334155;
-
-
-padding:12px 25px;
-
-
-border-radius:30px;
-
-
-font-size:16px;
-
-
-cursor:pointer;
-
-
-margin-bottom:25px;
-
-
-}
-
-
-
-.back-btn:hover{
-
-
-background:#22c55e;
-
-
-color:black;
-
-
-}
-
-
-
-
-
-/* RESULT BOX */
-
-
 .result{
 
 
-margin-top:20px;
+margin-top:40px;
 
 
 background:rgba(15,23,42,.9);
@@ -433,277 +310,10 @@ border-radius:20px;
 border:1px solid #334155;
 
 
-min-height:300px;
-
-
-box-shadow:0 0 30px rgba(0,255,150,.15);
+min-height:200px;
 
 
 }
-
-
-
-
-
-/* XAU AI CARD */
-
-
-.ai-card{
-
-
-background:
-
-linear-gradient(
-145deg,
-#111827,
-#020617
-);
-
-
-border-radius:20px;
-
-
-padding:30px;
-
-
-border:1px solid #334155;
-
-
-box-shadow:0 0 30px rgba(0,255,150,.15);
-
-
-}
-
-
-
-
-
-.header{
-
-
-display:flex;
-
-
-justify-content:space-between;
-
-
-align-items:center;
-
-
-}
-
-
-
-
-
-.price{
-
-
-font-size:42px;
-
-
-font-weight:900;
-
-
-text-align:center;
-
-
-margin:25px 0;
-
-
-}
-
-
-
-
-
-.signal{
-
-
-font-size:30px;
-
-
-font-weight:bold;
-
-
-text-align:center;
-
-
-padding:15px;
-
-
-border-radius:15px;
-
-
-}
-
-
-
-
-
-.buy{
-
-
-color:#00ff88;
-
-
-background:rgba(0,255,120,.12);
-
-
-border:1px solid #00ff88;
-
-
-}
-
-
-
-
-.sell{
-
-
-color:#ff5555;
-
-
-background:rgba(255,0,0,.12);
-
-
-border:1px solid #ff5555;
-
-
-}
-
-
-
-
-
-.wait{
-
-
-color:#ffd000;
-
-
-background:rgba(255,200,0,.12);
-
-
-border:1px solid #ffd000;
-
-
-}
-
-
-
-
-
-.info-box{
-
-
-display:grid;
-
-
-grid-template-columns:repeat(3,1fr);
-
-
-gap:15px;
-
-
-margin-top:20px;
-
-
-}
-
-
-
-
-
-.info-box div{
-
-
-background:rgba(255,255,255,.05);
-
-
-padding:15px;
-
-
-border-radius:15px;
-
-
-text-align:center;
-
-
-}
-
-
-
-
-
-.progress{
-
-
-height:10px;
-
-
-background:#1e293b;
-
-
-border-radius:20px;
-
-
-overflow:hidden;
-
-
-margin-top:20px;
-
-
-}
-
-
-
-
-
-.progress div{
-
-
-height:100%;
-
-
-background:#00ff88;
-
-
-}
-
-
-
-
-
-.online{
-
-
-color:#00ff88;
-
-
-font-weight:bold;
-
-
-}
-
-
-
-
-
-.update{
-
-
-color:#94a3b8;
-
-
-font-size:14px;
-
-
-}
-
-
-
-
 
 
 
@@ -756,8 +366,6 @@ animation:telegramPulse 2s infinite;
 
 
 
-
-
 .telegram-float:hover{
 
 
@@ -768,8 +376,6 @@ background:#0088cc;
 
 
 }
-
-
 
 
 
@@ -795,30 +401,5 @@ box-shadow:0 0 35px rgba(34,158,217,.9);
 box-shadow:0 0 10px rgba(34,158,217,.4);
 
 }
-
-}
-
-
-
-
-
-
-@media(max-width:600px){
-
-
-.info-box{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-h1{
-
-font-size:35px;
-
-}
-
 
 }
