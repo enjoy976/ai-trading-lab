@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Crypto Scanner | Gold Sniper</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+
+<div class="container">
+
+
+
+<h1>
+
+₿ CRYPTO AI SCANNER
+
+</h1>
+
+
+
+<p class="subtitle">
+
+BTC • ETH • SOL Market Intelligence
+
+</p>
+
+
+
+
+
+<div class="status">
+
+🟢 CRYPTO ENGINE ONLINE
+
+</div>
+
+
+
+
+
+
+
+<div class="result">
+
+
+
+<h2>
+
+🚀 LIVE CRYPTO MONITOR
+
+</h2>
+
+
+<hr>
+
+
+
+<p>
+
+
+Bitcoin (BTC)
+
+<br>
+
+<b id="btc">
+
+Loading...
+
+</b>
+
+
+
+<br><br>
+
+
+
+Ethereum (ETH)
+
+<br>
+
+<b id="eth">
+
+Loading...
+
+</b>
+
+
+
+<br><br>
+
+
+
+Solana (SOL)
+
+<br>
+
+<b id="sol">
+
+Loading...
+
+</b>
+
+
+
+<br><br>
+
+
+
+Market Status:
+
+<br>
+
+<b id="market">
+
+Scanning...
+
+</b>
+
+
+
+<br><br>
+
+
+
+AI Scanner:
+
+<br>
+
+<b>
+
+🟢 ACTIVE
+
+</b>
+
+
+
+</p>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<br>
+
+
+
+<a href="index.html" class="signup-btn">
+
+⬅ BACK HOME
+
+</a>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+
+// DEMO CRYPTO DISPLAY
+// Дараа нь жинхэнэ API холбоно
+
+
+
+function updateCrypto(){
+
+
+
+let btc =
+(115000 + Math.random()*2000).toFixed(2);
+
+
+
+let eth =
+(3800 + Math.random()*100).toFixed(2);
+
+
+
+let sol =
+(180 + Math.random()*10).toFixed(2);
+
+
+
+
+document.getElementById("btc").innerHTML =
+"$ " + btc;
+
+
+
+document.getElementById("eth").innerHTML =
+"$ " + eth;
+
+
+
+document.getElementById("sol").innerHTML =
+"$ " + sol;
+
+
+
+
+let status = [
+
+"🟢 Bullish Momentum",
+
+"🟡 Market Waiting",
+
+"🔴 High Volatility"
+
+];
+
+
+
+document.getElementById("market").innerHTML =
+status[Math.floor(Math.random()*status.length)];
+
+
+
+}
+
+
+
+updateCrypto();
+
+
+
+setInterval(updateCrypto,3000);
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
