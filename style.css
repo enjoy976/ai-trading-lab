@@ -1,7 +1,11 @@
 *{
+
 box-sizing:border-box;
+
 font-family:Arial,sans-serif;
+
 }
+
 
 
 body{
@@ -20,7 +24,9 @@ overflow-x:hidden;
 
 
 
-/* LOGIN / SIGN UP */
+
+
+/* AUTH BUTTONS */
 
 .auth-buttons{
 
@@ -39,6 +45,7 @@ z-index:1000;
 }
 
 
+
 .auth-buttons a{
 
 padding:10px 22px;
@@ -49,13 +56,14 @@ font-size:14px;
 
 font-weight:bold;
 
-letter-spacing:1px;
+text-decoration:none;
 
-cursor:pointer;
+letter-spacing:1px;
 
 transition:.3s;
 
 }
+
 
 
 .login-btn{
@@ -82,25 +90,16 @@ border:1px solid #00ff99;
 
 
 
-.login-btn:hover{
-
-box-shadow:
-0 0 10px #00ff99,
-0 0 25px #00ff99;
-
-transform:scale(1.05);
-
-}
-
-
-
+.login-btn:hover,
 .signup-btn:hover{
 
-box-shadow:
-0 0 15px #00ff99,
-0 0 35px #00ff99;
-
 transform:scale(1.05);
+
+box-shadow:
+
+0 0 15px #00ff99,
+
+0 0 35px #00ff99;
 
 }
 
@@ -109,7 +108,9 @@ transform:scale(1.05);
 
 
 
-/* Moving Grid Background */
+
+/* GRID BACKGROUND */
+
 
 body::before{
 
@@ -129,22 +130,20 @@ height:100%;
 background:
 
 linear-gradient(
-rgba(255,255,255,0.04) 1px,
+rgba(255,255,255,.04) 1px,
 transparent 1px
 ),
 
 linear-gradient(
 90deg,
-rgba(255,255,255,0.04) 1px,
+rgba(255,255,255,.04) 1px,
 transparent 1px
 );
 
 
 background-size:50px 50px;
 
-
 animation:gridMove 10s linear infinite;
-
 
 z-index:-2;
 
@@ -154,11 +153,13 @@ z-index:-2;
 
 @keyframes gridMove{
 
+
 from{
 
 background-position:0 0;
 
 }
+
 
 to{
 
@@ -166,6 +167,7 @@ background-position:50px 50px;
 
 }
 
+
 }
 
 
@@ -174,10 +176,12 @@ background-position:50px 50px;
 
 
 
-/* Live Chart */
+
+
+/* LIVE CHART */
+
 
 .live-chart{
-
 
 position:fixed;
 
@@ -185,11 +189,9 @@ bottom:0;
 
 left:0;
 
-
 width:100%;
 
 height:220px;
-
 
 opacity:.25;
 
@@ -225,11 +227,10 @@ clip-path:polygon(
 
 animation:chartMove 4s infinite alternate;
 
-
 z-index:-1;
 
-
 }
+
 
 
 
@@ -248,16 +249,22 @@ transform:translateX(40px);
 
 }
 
+
 }
 
 
 
 
 
+
+
+
+/* MAIN CONTAINER */
+
+
 .container{
 
-
-max-width:1000px;
+max-width:1100px;
 
 margin:auto;
 
@@ -275,6 +282,10 @@ text-align:center;
 
 font-size:45px;
 
+text-shadow:
+
+0 0 10px #00ff99;
+
 }
 
 
@@ -291,66 +302,69 @@ font-size:18px;
 
 
 
-.status{
 
+
+
+.status{
 
 margin:30px auto;
 
 width:max-content;
 
-
 padding:12px 25px;
-
 
 border-radius:30px;
 
-
 background:#064e3b;
-
 
 border:1px solid #10b981;
 
+box-shadow:
+
+0 0 20px rgba(16,185,129,.5);
 
 }
 
 
 
+
+
+
+
+
+/* CARDS */
 
 
 .cards{
 
-
 display:grid;
 
+grid-template-columns:
 
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
+repeat(auto-fit,minmax(250px,1fr));
 
 gap:20px;
 
-
 }
+
 
 
 
 
 .card{
 
+background:
 
-background:rgba(17,24,39,.85);
+rgba(17,24,39,.85);
 
 
 border-radius:20px;
 
-
 padding:30px;
-
 
 cursor:pointer;
 
-
 border:1px solid #1f2937;
-
 
 transition:.3s;
 
@@ -362,13 +376,17 @@ transition:.3s;
 .card:hover{
 
 
-transform:translateY(-10px);
+transform:
+
+translateY(-10px);
 
 
 border-color:#22c55e;
 
 
-box-shadow:0 0 30px rgba(34,197,94,.3);
+box-shadow:
+
+0 0 30px rgba(34,197,94,.3);
 
 
 }
@@ -379,7 +397,6 @@ box-shadow:0 0 30px rgba(34,197,94,.3);
 
 .icon{
 
-
 font-size:45px;
 
 }
@@ -389,13 +406,21 @@ font-size:45px;
 
 
 
+
+
+
+/* RESULT */
+
+
 .result{
 
 
 margin-top:40px;
 
 
-background:rgba(15,23,42,.9);
+background:
+
+rgba(15,23,42,.9);
 
 
 padding:30px;
@@ -407,7 +432,12 @@ border-radius:20px;
 border:1px solid #334155;
 
 
-min-height:200px;
+min-height:220px;
+
+
+box-shadow:
+
+0 0 25px rgba(0,255,153,.15);
 
 
 }
@@ -418,7 +448,153 @@ min-height:200px;
 
 
 
-/* TELEGRAM ADMIN BUTTON */
+
+
+/* LOGIN BOX */
+
+
+.login-box{
+
+
+width:400px;
+
+max-width:90%;
+
+margin:100px auto;
+
+
+background:
+
+rgba(15,23,42,.95);
+
+
+padding:40px;
+
+
+border-radius:20px;
+
+
+border:1px solid #00ff99;
+
+
+box-shadow:
+
+0 0 40px rgba(0,255,153,.3);
+
+
+text-align:center;
+
+
+}
+
+
+
+
+
+
+input{
+
+
+width:90%;
+
+
+padding:14px;
+
+
+background:#020617;
+
+
+color:white;
+
+
+border:1px solid #334155;
+
+
+border-radius:10px;
+
+
+outline:none;
+
+
+}
+
+
+
+input:focus{
+
+
+border-color:#00ff99;
+
+
+box-shadow:
+
+0 0 15px #00ff99;
+
+
+}
+
+
+
+
+
+
+
+button{
+
+
+padding:12px 25px;
+
+
+border-radius:10px;
+
+
+border:none;
+
+
+cursor:pointer;
+
+
+font-weight:bold;
+
+
+}
+
+
+
+.access-btn{
+
+
+background:#00ff99;
+
+
+color:#050816;
+
+
+}
+
+
+
+.access-btn:hover{
+
+
+box-shadow:
+
+0 0 20px #00ff99;
+
+
+transform:scale(1.05);
+
+
+}
+
+
+
+
+
+
+
+
+/* TELEGRAM */
 
 
 .telegram-float{
@@ -454,7 +630,9 @@ font-size:16px;
 font-weight:bold;
 
 
-box-shadow:0 0 25px rgba(34,158,217,.6);
+box-shadow:
+
+0 0 25px rgba(34,158,217,.6);
 
 
 z-index:999;
@@ -467,17 +645,14 @@ animation:telegramPulse 2s infinite;
 
 
 
-
 .telegram-float:hover{
 
 
 transform:scale(1.08);
 
 
-background:#0088cc;
-
-
 }
+
 
 
 
@@ -505,5 +680,6 @@ box-shadow:0 0 35px rgba(34,158,217,.9);
 box-shadow:0 0 10px rgba(34,158,217,.4);
 
 }
+
 
 }
