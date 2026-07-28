@@ -25,6 +25,7 @@ SUPABASE_KEY
 
 
 
+
 // ===============================
 // SIGN UP
 // ===============================
@@ -34,21 +35,16 @@ async function signupUser(){
 
 
 
-const email = 
-
-document.getElementById("signupEmail").value;
+const email = document.getElementById("signupEmail").value;
 
 
-
-const password = 
-
-document.getElementById("signupPassword").value;
+const password = document.getElementById("signupPassword").value;
 
 
 
 
 
-const {error} = await supabaseClient.auth.signUp({
+const {data,error} = await supabaseClient.auth.signUp({
 
 
 email:email,
@@ -91,17 +87,23 @@ document.getElementById("signupResult").innerHTML =
 
 🟢 ACCOUNT CREATED
 
+<br><br>
+
+Бүртгэл амжилттай үүслээ.
 
 <br><br>
 
+📩 Имэйл хаягаа шалгаад
 
-Имэйл баталгаажуулалтаа шалгана уу.
+<br>
 
+<strong>Confirm Email</strong>
+
+линк дээр дарна уу.
 
 <br><br>
 
-
-📩 Confirm Email линк дээр дарсны дараа Login хийнэ үү.
+Дараа нь Login хийнэ үү.
 
 
 `;
@@ -127,15 +129,11 @@ async function loginUser(){
 
 
 
-const email =
-
-document.getElementById("loginEmail").value;
+const email = document.getElementById("loginEmail").value;
 
 
+const password = document.getElementById("loginPassword").value;
 
-const password =
-
-document.getElementById("loginPassword").value;
 
 
 
@@ -155,6 +153,7 @@ password:password
 
 
 });
+
 
 
 
@@ -185,6 +184,54 @@ return;
 
 
 
+
+// CHECK EMAIL CONFIRM
+
+
+
+if(!data.user.email_confirmed_at){
+
+
+
+await supabaseClient.auth.signOut();
+
+
+
+document.getElementById("loginResult").innerHTML =
+
+
+
+`
+
+⚠️ EMAIL NOT CONFIRMED
+
+<br><br>
+
+📩 Эхлээд email баталгаажуулна уу.
+
+<br><br>
+
+Confirm Email линкээ шалгана уу.
+
+
+`;
+
+
+
+return;
+
+
+
+}
+
+
+
+
+
+
+
+
+
 document.getElementById("loginResult").innerHTML =
 
 
@@ -193,27 +240,20 @@ document.getElementById("loginResult").innerHTML =
 
 🟢 ACCESS GRANTED
 
-
 <br><br>
-
 
 Welcome:
 
-
 <br>
-
 
 ${data.user.email}
 
-
 <br><br>
-
 
 Opening Dashboard...
 
 
 `;
-
 
 
 
@@ -243,6 +283,8 @@ window.location.href="dashboard.html";
 
 
 
+
+
 // ===============================
 // LOGOUT
 // ===============================
@@ -252,21 +294,7 @@ async function logoutUser(){
 
 
 
-const {error} = await supabaseClient.auth.signOut();
-
-
-
-
-if(error){
-
-
-console.log(error);
-
-
-}
-
-
-
+await supabaseClient.auth.signOut();
 
 
 
