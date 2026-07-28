@@ -20,47 +20,6 @@ const supabaseClient = supabase.createClient(
 // SIGN UP
 // ===============================
 
-document.querySelector(".signup-btn").onclick = function(){
-
-
-document.getElementById("result").innerHTML = `
-
-
-<h2>🧬 CREATE ACCOUNT</h2>
-
-<hr>
-
-
-<p>Email</p>
-
-<input id="signupEmail" type="email" placeholder="Enter email">
-
-
-<br><br>
-
-
-<p>Password</p>
-
-<input id="signupPassword" type="password" placeholder="Enter password">
-
-
-<br><br>
-
-
-<button class="access-btn" onclick="signupUser()">
-
-CREATE ACCOUNT
-
-</button>
-
-
-`;
-
-};
-
-
-
-
 
 async function signupUser(){
 
@@ -74,7 +33,7 @@ document.getElementById("signupPassword").value;
 
 
 
-const {data,error} =
+const {error} =
 await supabaseClient.auth.signUp({
 
 email:email,
@@ -93,7 +52,9 @@ document.getElementById("result").innerHTML = `
 <h2>❌ SIGN UP ERROR</h2>
 
 <p>
+
 ${error.message}
+
 </p>
 
 `;
@@ -105,20 +66,32 @@ return;
 
 
 
-
 document.getElementById("result").innerHTML = `
 
 
-<h2>✅ ACCOUNT CREATED</h2>
+<h2>📩 EMAIL VERIFICATION REQUIRED</h2>
+
+
+<hr>
 
 
 <p>
 
-Registration successful.
+Бүртгэл амжилттай үүслээ.
 
 <br><br>
 
-Check your email if confirmation is enabled.
+Таны email хаяг руу баталгаажуулах линк илгээгдлээ.
+
+<br><br>
+
+📬 Mail inbox-оо шалгаад
+
+<br>
+
+<strong>Confirm Email</strong>
+
+товчийг дарна уу.
 
 </p>
 
@@ -141,64 +114,12 @@ Check your email if confirmation is enabled.
 // ===============================
 
 
-document.querySelector(".login-btn").onclick = function(){
-
-
-document.getElementById("result").innerHTML = `
-
-
-<h2>🔐 LOGIN ACCESS</h2>
-
-
-<hr>
-
-
-<p>Email</p>
-
-
-<input id="loginEmail" type="email" placeholder="Enter email">
-
-
-<br><br>
-
-
-
-<p>Password</p>
-
-
-<input id="loginPassword" type="password" placeholder="Enter password">
-
-
-<br><br>
-
-
-
-<button class="access-btn" onclick="loginUser()">
-
-CONNECT SYSTEM
-
-</button>
-
-
-
-`;
-
-};
-
-
-
-
-
-
-
-
 async function loginUser(){
 
 
 
 const email =
 document.getElementById("loginEmail").value;
-
 
 
 const password =
@@ -346,10 +267,6 @@ return data;
 }
 
 catch(error){
-
-
-console.log(error);
-
 
 
 document.getElementById("result").innerHTML = `
@@ -662,6 +579,155 @@ document.getElementById("result").innerHTML = `
 ⚡ INTRADAY SIGNAL
 
 </button>
+
+
+
+`;
+
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// FOREX EDUCATION
+// ===============================
+
+
+function openForex(){
+
+
+document.getElementById("result").innerHTML = `
+
+
+<h2>📚 FOREX ГЭЖ ЮУ ВЭ?</h2>
+
+
+<hr>
+
+
+<p>
+
+
+Forex (Foreign Exchange) гэдэг нь
+
+дэлхийн валютуудыг хооронд нь
+
+арилжаалдаг зах зээл юм.
+
+
+<br><br>
+
+
+Жишээ:
+
+EUR/USD
+
+GBP/USD
+
+USD/JPY
+
+
+<br><br>
+
+
+Forex зах зээл нь 24 цаг ажилладаг.
+
+Үнэ нь эдийн засгийн мэдээ,
+
+төв банкны шийдвэр,
+
+хүүгийн өөрчлөлтөөс хамаарч хөдөлдөг.
+
+
+</p>
+
+
+
+`;
+
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// NEWS MARKET
+// ===============================
+
+
+function openNews(){
+
+
+document.getElementById("result").innerHTML = `
+
+
+<h2>📰 NEWS MARKET</h2>
+
+
+<hr>
+
+
+<p>
+
+
+Томоохон мэдээ гарах үед
+
+зах зээл огцом хөдөлгөөн хийх боломжтой.
+
+
+<br><br>
+
+
+🔴 CPI
+
+<br>
+
+🔴 FOMC
+
+<br>
+
+🔴 NFP
+
+
+<br><br>
+
+
+Мэдээний үед:
+
+<br><br>
+
+
+🟢 Сайн мэдээлэл → өсөлт хийх боломж
+
+<br>
+
+🔴 Муу мэдээлэл → бууралт хийх боломж
+
+
+<br><br>
+
+
+⚠️ Гэхдээ эхний хөдөлгөөн
+
+ихэвчлэн хуурамч breakout байж болох тул
+
+баталгаажуулалт хүлээх хэрэгтэй.
+
+
+</p>
 
 
 
