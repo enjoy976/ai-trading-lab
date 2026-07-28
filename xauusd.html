@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>XAUUSD AI | Gold Sniper</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+
+<div class="container">
+
+
+
+<h1>
+🥇 XAUUSD AI ENGINE
+</h1>
+
+
+
+<p class="subtitle">
+
+Gold Market Intelligence System
+
+</p>
+
+
+
+
+
+<div class="status">
+
+🟢 MT5 AI CONNECTED
+
+</div>
+
+
+
+
+
+
+
+<div class="result">
+
+
+
+<h2>
+📊 LIVE GOLD ANALYSIS
+</h2>
+
+
+<hr>
+
+
+
+<p>
+
+
+Symbol:
+
+<br>
+
+<b id="symbol">
+
+Loading...
+
+</b>
+
+
+
+<br><br>
+
+
+
+PRICE:
+
+<br>
+
+<b id="price">
+
+Loading...
+
+</b>
+
+
+
+
+<br><br>
+
+
+
+SIGNAL:
+
+<br>
+
+<b id="signal">
+
+Loading...
+
+</b>
+
+
+
+
+<br><br>
+
+
+
+TREND:
+
+<br>
+
+<b id="trend">
+
+Loading...
+
+</b>
+
+
+
+
+<br><br>
+
+
+
+AI CONFIDENCE:
+
+<br>
+
+<b id="confidence">
+
+Loading...
+
+</b>
+
+
+
+
+<br><br>
+
+
+
+BOT:
+
+<br>
+
+<b id="bot">
+
+Loading...
+
+</b>
+
+
+
+<br><br>
+
+
+
+TIME:
+
+<br>
+
+<b id="time">
+
+Loading...
+
+</b>
+
+
+
+</p>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<br>
+
+
+
+<a href="index.html" class="signup-btn">
+
+⬅ BACK HOME
+
+</a>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+async function loadGold(){
+
+
+
+try{
+
+
+
+const response = await fetch(
+
+"https://disposal-exorcist-silly.ngrok-free.dev/signal?_=" + Date.now(),
+
+{
+
+cache:"no-store"
+
+}
+
+);
+
+
+
+
+
+const data = await response.json();
+
+
+
+
+
+document.getElementById("symbol").innerHTML =
+data.symbol;
+
+
+
+document.getElementById("price").innerHTML =
+data.price;
+
+
+
+document.getElementById("signal").innerHTML =
+data.signal;
+
+
+
+document.getElementById("trend").innerHTML =
+data.trend;
+
+
+
+document.getElementById("confidence").innerHTML =
+data.confidence + "%";
+
+
+
+document.getElementById("bot").innerHTML =
+data.bot;
+
+
+
+document.getElementById("time").innerHTML =
+data.time;
+
+
+
+}
+
+
+
+catch(error){
+
+
+
+document.getElementById("price").innerHTML =
+"❌ Connection Error";
+
+
+
+}
+
+
+
+}
+
+
+
+loadGold();
+
+
+setInterval(loadGold,5000);
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
