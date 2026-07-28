@@ -26,89 +26,6 @@ overflow-x:hidden;
 
 
 
-/* AUTH BUTTONS */
-
-.auth-buttons{
-
-position:fixed;
-
-top:25px;
-
-right:30px;
-
-display:flex;
-
-gap:12px;
-
-z-index:1000;
-
-}
-
-
-
-.auth-buttons a{
-
-padding:10px 22px;
-
-border-radius:8px;
-
-font-size:14px;
-
-font-weight:bold;
-
-text-decoration:none;
-
-letter-spacing:1px;
-
-transition:.3s;
-
-}
-
-
-
-.login-btn{
-
-background:transparent;
-
-color:#00ff99;
-
-border:1px solid #00ff99;
-
-}
-
-
-
-.signup-btn{
-
-background:#00ff99;
-
-color:#050816;
-
-border:1px solid #00ff99;
-
-}
-
-
-
-.login-btn:hover,
-.signup-btn:hover{
-
-transform:scale(1.05);
-
-box-shadow:
-
-0 0 15px #00ff99,
-
-0 0 35px #00ff99;
-
-}
-
-
-
-
-
-
-
 /* GRID BACKGROUND */
 
 
@@ -153,13 +70,11 @@ z-index:-2;
 
 @keyframes gridMove{
 
-
 from{
 
 background-position:0 0;
 
 }
-
 
 to{
 
@@ -167,7 +82,6 @@ background-position:50px 50px;
 
 }
 
-
 }
 
 
@@ -176,90 +90,7 @@ background-position:50px 50px;
 
 
 
-
-
-/* LIVE CHART */
-
-
-.live-chart{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-height:220px;
-
-opacity:.25;
-
-
-background:
-
-linear-gradient(
-90deg,
-transparent,
-#00ff99,
-transparent
-);
-
-
-clip-path:polygon(
-
-0 75%,
-10% 65%,
-20% 80%,
-30% 45%,
-40% 60%,
-50% 30%,
-60% 55%,
-70% 25%,
-80% 50%,
-90% 35%,
-100% 45%,
-100% 100%,
-0 100%
-
-);
-
-
-animation:chartMove 4s infinite alternate;
-
-z-index:-1;
-
-}
-
-
-
-
-@keyframes chartMove{
-
-from{
-
-transform:translateX(-40px);
-
-}
-
-
-to{
-
-transform:translateX(40px);
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-/* MAIN CONTAINER */
+/* CONTAINER */
 
 
 .container{
@@ -271,6 +102,7 @@ margin:auto;
 padding:40px 20px;
 
 }
+
 
 
 
@@ -305,6 +137,10 @@ font-size:18px;
 
 
 
+
+/* STATUS */
+
+
 .status{
 
 margin:30px auto;
@@ -332,144 +168,8 @@ box-shadow:
 
 
 
-/* DASHBOARD CARDS */
 
-
-.cards{
-
-display:grid;
-
-grid-template-columns:
-
-repeat(auto-fit,minmax(260px,1fr));
-
-
-gap:25px;
-
-
-margin-top:40px;
-
-
-}
-
-
-
-
-
-.card{
-
-
-display:block;
-
-
-text-decoration:none;
-
-
-color:white;
-
-
-
-background:
-
-linear-gradient(
-
-145deg,
-
-rgba(17,24,39,.95),
-
-rgba(15,23,42,.85)
-
-);
-
-
-
-border-radius:20px;
-
-
-padding:30px;
-
-
-cursor:pointer;
-
-
-border:1px solid #1f2937;
-
-
-transition:.35s;
-
-
-min-height:220px;
-
-
-}
-
-
-
-
-
-.card h2{
-
-color:white;
-
-margin-top:15px;
-
-}
-
-
-
-
-
-.card p{
-
-color:#9ca3af;
-
-line-height:1.6;
-
-}
-
-
-
-
-
-.card:hover{
-
-
-transform:
-
-translateY(-12px);
-
-
-border-color:#00ff99;
-
-
-box-shadow:
-
-0 0 20px rgba(0,255,153,.4),
-
-0 0 50px rgba(0,255,153,.15);
-
-
-}
-
-
-
-
-
-.icon{
-
-font-size:45px;
-
-}
-
-
-
-
-
-
-
-
-
-/* RESULT */
+/* RESULT BOX */
 
 
 .result{
@@ -492,9 +192,6 @@ border-radius:20px;
 border:1px solid #334155;
 
 
-min-height:220px;
-
-
 box-shadow:
 
 0 0 25px rgba(0,255,153,.15);
@@ -510,7 +207,309 @@ box-shadow:
 
 
 
-/* LOGIN BOX */
+/* FOREX GRID */
+
+
+.forex-grid{
+
+
+display:grid;
+
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(250px,1fr));
+
+
+gap:20px;
+
+
+margin-top:30px;
+
+
+}
+
+
+
+
+
+
+
+/* FOREX CARD */
+
+
+.forex-card{
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(17,24,39,.95),
+
+rgba(15,23,42,.85)
+
+);
+
+
+
+border:1px solid #1f2937;
+
+
+border-radius:20px;
+
+
+padding:25px;
+
+
+text-align:center;
+
+
+transition:.35s;
+
+
+box-shadow:
+
+0 0 20px rgba(0,255,153,.08);
+
+
+}
+
+
+
+.forex-card:hover{
+
+
+transform:
+
+translateY(-8px);
+
+
+border-color:#00ff99;
+
+
+box-shadow:
+
+0 0 25px rgba(0,255,153,.35);
+
+
+}
+
+
+
+
+
+
+
+/* PAIR */
+
+
+.pair{
+
+
+font-size:22px;
+
+
+font-weight:bold;
+
+
+color:#00ff99;
+
+
+letter-spacing:2px;
+
+
+}
+
+
+
+
+
+
+
+/* PRICE */
+
+
+.price{
+
+
+font-size:38px;
+
+
+font-weight:bold;
+
+
+margin:20px 0;
+
+
+text-shadow:
+
+0 0 15px rgba(0,255,153,.7);
+
+
+}
+
+
+
+
+
+
+
+/* LIVE STATUS */
+
+
+.market-live{
+
+
+display:inline-block;
+
+
+padding:8px 18px;
+
+
+border-radius:20px;
+
+
+background:#064e3b;
+
+
+border:1px solid #10b981;
+
+
+color:#10ff99;
+
+
+font-weight:bold;
+
+
+}
+
+
+
+
+
+
+
+/* UPDATE */
+
+
+.update{
+
+
+margin-top:15px;
+
+
+color:#9ca3af;
+
+
+font-size:14px;
+
+
+}
+
+
+
+
+
+
+
+
+/* BUTTONS */
+
+
+.signup-btn{
+
+
+display:inline-block;
+
+
+background:#00ff99;
+
+color:#050816;
+
+border:1px solid #00ff99;
+
+
+padding:10px 22px;
+
+
+border-radius:8px;
+
+
+font-weight:bold;
+
+
+text-decoration:none;
+
+
+transition:.3s;
+
+
+}
+
+
+
+.signup-btn:hover{
+
+
+transform:scale(1.05);
+
+
+box-shadow:
+
+0 0 15px #00ff99,
+
+0 0 35px #00ff99;
+
+
+}
+
+
+
+
+
+
+
+/* AUTH BUTTONS */
+
+
+.auth-buttons{
+
+position:fixed;
+
+top:25px;
+
+right:30px;
+
+display:flex;
+
+gap:12px;
+
+z-index:1000;
+
+}
+
+
+
+.login-btn{
+
+
+background:transparent;
+
+color:#00ff99;
+
+border:1px solid #00ff99;
+
+
+}
+
+
+
+
+
+/* LOGIN */
 
 
 .login-box{
@@ -537,12 +536,12 @@ border-radius:20px;
 border:1px solid #00ff99;
 
 
+text-align:center;
+
+
 box-shadow:
 
 0 0 40px rgba(0,255,153,.3);
-
-
-text-align:center;
 
 
 }
@@ -557,23 +556,15 @@ input{
 
 width:90%;
 
-
 padding:14px;
-
 
 background:#020617;
 
-
 color:white;
-
 
 border:1px solid #334155;
 
-
 border-radius:10px;
-
-
-outline:none;
 
 
 }
@@ -598,21 +589,16 @@ box-shadow:
 
 
 
-
 button{
 
 
 padding:12px 25px;
 
-
 border-radius:10px;
-
 
 border:none;
 
-
 cursor:pointer;
-
 
 font-weight:bold;
 
@@ -621,11 +607,13 @@ font-weight:bold;
 
 
 
+
+
+
 .access-btn{
 
 
 background:#00ff99;
-
 
 color:#050816;
 
@@ -634,28 +622,11 @@ color:#050816;
 
 
 
-.access-btn:hover{
-
-
-box-shadow:
-
-0 0 20px #00ff99;
-
-
-transform:scale(1.05);
-
-
-}
 
 
 
 
-
-
-
-
-
-/* TELEGRAM ADMIN */
+/* TELEGRAM */
 
 
 .telegram-float{
@@ -699,10 +670,10 @@ box-shadow:
 z-index:999;
 
 
-animation:telegramPulse 2s infinite;
-
-
 }
+
+
+
 
 
 
@@ -719,50 +690,41 @@ transform:scale(1.08);
 
 
 
-@keyframes telegramPulse{
+
+/* MOBILE */
 
 
-0%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
+@media(max-width:600px){
 
 
-50%{
+h1{
 
-box-shadow:0 0 35px rgba(34,158,217,.9);
-
-}
-
-
-100%{
-
-box-shadow:0 0 10px rgba(34,158,217,.4);
-
-}
-
+font-size:32px;
 
 }
 
 
 
+.price{
 
-
-
-/* LINK FIX */
-
-
-a{
-
-outline:none;
+font-size:30px;
 
 }
 
 
 
-.card:visited{
+.container{
 
-color:white;
+padding:25px 15px;
+
+}
+
+
+.forex-grid{
+
+grid-template-columns:1fr;
+
+}
+
 
 }
