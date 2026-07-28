@@ -1,303 +1,80 @@
-async function loadSignal(){
+// LOGIN SYSTEM UI
 
-
-try {
-
-
-const response = await fetch("signal.json?" + new Date().getTime());
-
-
-const data = await response.json();
-
-
-
-return data;
-
-
-
-}
-
-catch(error){
-
-
-console.log("Signal error:", error);
-
-
-return null;
-
-
-}
-
-
-
-}
-
-
-
-
-async function openXAU(){
-
-
-
-const data = await loadSignal();
-
-
-
-if(!data){
-
+document.querySelector(".login-btn").onclick = function(){
 
 document.getElementById("result").innerHTML = `
 
-<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
+<h2>🔐 LOGIN ACCESS</h2>
+
+<hr>
 
 <p>
-❌ Signal олдсонгүй
+Email:
 </p>
+
+<input type="email" placeholder="Enter email">
+
+<br><br>
+
+<p>
+Password:
+</p>
+
+<input type="password" placeholder="Enter password">
+
+<br><br>
+
+<button class="access-btn">
+CONNECT SYSTEM
+</button>
 
 `;
 
-return;
-
-
-}
+};
 
 
 
 
 
-let signalColor = "🟢";
-
-
-if(data.signal === "SELL"){
-
-signalColor="🔴";
-
-}
-
-
+document.querySelector(".signup-btn").onclick = function(){
 
 document.getElementById("result").innerHTML = `
 
-
-
-<h2>🥇 АЛТНЫ ЧИГЛЭЛ ХӨДӨЛГӨӨН</h2>
-
+<h2>🧬 CREATE ACCOUNT</h2>
 
 <hr>
 
 
 <p>
-
-
-Symbol:
-
-<br>
-
-<b>${data.symbol}</b>
-
-
-<br><br>
-
-
-
-SIGNAL:
-
-<br>
-
-<b>${signalColor} ${data.signal}</b>
-
-
-<br><br>
-
-
-
-Trend:
-
-<br>
-
-<b>${data.trend}</b>
-
-
-
-<br><br>
-
-
-
-AI Confidence:
-
-<br>
-
-<b>${data.confidence}%</b>
-
-
-
-<br><br>
-
-
-
-Bot:
-
-<br>
-
-<b>${data.bot}</b>
-
-
-
-<br><br>
-
-
-
-Last Update:
-
-<br>
-
-<b>${data.time}</b>
-
-
-
+Register new AI Trader account
 </p>
 
 
-
-<hr>
-
-
-
-<h3>🤖 AI Analysis</h3>
-
-
-
-<p>
-
-
-Market data MT5 engine-с ирж байна.
+<input type="text" placeholder="Username">
 
 
 <br><br>
 
 
-System:
-
-🟢 ONLINE
-
-
-</p>
-
-
-
-`;
-
-
-
-}
-
-
-
-
-
-
-
-
-function openCrypto(){
-
-
-
-document.getElementById("result").innerHTML = `
-
-
-
-<h2>₿ CRYPTO SCANNER</h2>
-
-
-<hr>
-
-
-<p>
-
-
-BTC / ETH / SOL monitoring...
+<input type="email" placeholder="Email">
 
 
 <br><br>
 
 
-Arbitrage Engine:
-
-🟢 Running
+<input type="password" placeholder="Password">
 
 
 <br><br>
 
 
-Funding Monitor:
+<button class="access-btn">
 
-🟢 Active
-
-
-</p>
-
-
-
-`;
-
-
-
-}
-
-
-
-
-
-
-
-
-function openTelegram(){
-
-
-
-document.getElementById("result").innerHTML = `
-
-
-
-<h2>📱 TELEGRAM SIGNAL</h2>
-
-
-
-<p>
-
-Суваг сонгоно уу:
-
-</p>
-
-
-
-<br>
-
-
-
-<button onclick="window.open('https://t.me/+BKi-tuWKLtdlMDhl','_blank')">
-
-🥇 SWING SIGNAL
+CREATE ACCOUNT
 
 </button>
 
 
-
-<br><br>
-
-
-
-
-<button onclick="window.open('https://t.me/+FN8PsiLGr4JhY2Q1','_blank')">
-
-⚡ INTRADAY SIGNAL
-
-</button>
-
-
-
 `;
 
-
-
-}
+};
