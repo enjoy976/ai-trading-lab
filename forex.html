@@ -432,9 +432,9 @@ AI систем нь шийдвэр гаргалтад
 
 
 
-<a href="index.html" class="signup-btn">
+<a href="dashboard.html" class="signup-btn">
 
-⬅ BACK HOME
+⬅ BACK DASHBOARD
 
 </a>
 
@@ -443,6 +443,63 @@ AI систем нь шийдвэр гаргалтад
 
 
 </div>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="auth.js"></script>
+
+
+
+
+
+
+
+<script>
+
+
+// ===============================
+// CHECK LOGIN SESSION
+// ===============================
+
+
+async function checkAccess(){
+
+
+const {data} = await supabaseClient.auth.getSession();
+
+
+
+if(!data.session){
+
+
+window.location.href="login.html";
+
+
+return;
+
+
+}
+
+
+}
+
+
+
+checkAccess();
+
+
+
+</script>
+
 
 
 
