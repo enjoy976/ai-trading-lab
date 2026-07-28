@@ -59,7 +59,7 @@ document.getElementById("signupResult").innerHTML =
 
 <br><br>
 
-Check your email confirmation.
+Имэйл баталгаажуулалтаа шалгана уу..
 
 `;
 
