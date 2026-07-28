@@ -53,41 +53,18 @@ Real Time Currency Monitor
 
 
 
-<table style="width:100%;">
-
-<thead>
-
-<tr>
-
-<th>PAIR</th>
-
-<th>PRICE</th>
-
-<th>UPDATE</th>
-
-</tr>
-
-</thead>
+<div id="market" class="forex-grid">
 
 
-<tbody id="market">
-
-
-<tr>
-
-<td colspan="3">
+<div class="forex-card">
 
 Loading...
 
-</td>
-
-</tr>
+</div>
 
 
-</tbody>
+</div>
 
-
-</table>
 
 
 </div>
@@ -110,6 +87,7 @@ Loading...
 
 
 </div>
+
 
 
 
@@ -162,6 +140,7 @@ checkAccess();
 
 
 
+
 // ===============================
 // FOREX API
 // ===============================
@@ -186,6 +165,8 @@ const pairs = [
 
 
 
+
+
 async function loadForex(){
 
 
@@ -204,7 +185,7 @@ const data = await response.json();
 
 
 
-let html="";
+let html = "";
 
 
 
@@ -229,6 +210,7 @@ price = data.rates[quote];
 
 }
 
+
 else if(quote==="USD"){
 
 
@@ -236,6 +218,7 @@ price = 1 / data.rates[base];
 
 
 }
+
 
 else{
 
@@ -248,38 +231,53 @@ price = data.rates[quote] / data.rates[base];
 
 
 
+
 let decimals = pair.includes("JPY") ? 3 : 5;
+
 
 
 
 html += `
 
 
-<tr>
+<div class="forex-card">
 
 
-<td>
+<div class="pair">
 
-<b>${pair}</b>
+${pair}
 
-</td>
+</div>
 
 
-<td>
+
+<div class="price">
 
 ${price.toFixed(decimals)}
 
-</td>
+</div>
 
 
-<td>
+
+<div class="market-live">
+
+🟢 LIVE
+
+</div>
+
+
+
+<div class="update">
+
+Last Update:
 
 ${new Date().toLocaleTimeString()}
 
-</td>
+</div>
 
 
-</tr>
+
+</div>
 
 
 `;
@@ -305,19 +303,17 @@ catch(error){
 console.log(error);
 
 
+
 document.getElementById("market").innerHTML =
+
 
 `
 
-<tr>
-
-<td colspan="3">
+<div class="forex-card">
 
 ❌ API Connection Error
 
-</td>
-
-</tr>
+</div>
 
 `;
 
@@ -332,6 +328,8 @@ document.getElementById("market").innerHTML =
 
 
 
+
+
 loadForex();
 
 
@@ -341,6 +339,8 @@ setInterval(loadForex,60000);
 
 
 </script>
+
+
 
 
 
