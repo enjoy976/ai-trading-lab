@@ -1196,3 +1196,102 @@ grid-template-columns:1fr;
 
 
 }
+
+/* TELEGRAM SIGNAL INTRO */
+
+
+.ai-line{
+
+display:inline-block;
+
+margin:15px 0;
+
+padding:8px 18px;
+
+border-radius:20px;
+
+background:#064e3b;
+
+border:1px solid #00ff99;
+
+color:#00ff99;
+
+font-weight:bold;
+
+box-shadow:
+
+0 0 15px rgba(0,255,153,.4);
+
+}
+
+
+
+.signal-text{
+
+font-size:17px;
+
+line-height:1.9;
+
+color:#cbd5e1;
+
+}
+
+
+
+
+.feature-list{
+
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+
+gap:15px;
+
+
+}
+
+
+
+.feature-list div{
+
+
+background:
+
+rgba(17,24,39,.8);
+
+
+padding:18px;
+
+
+border-radius:15px;
+
+
+border:1px solid #334155;
+
+
+transition:.3s;
+
+
+}
+
+
+
+.feature-list div:hover{
+
+
+transform:translateY(-5px);
+
+
+border-color:#00ff99;
+
+
+box-shadow:
+
+0 0 20px rgba(0,255,153,.3);
+
+
+}
