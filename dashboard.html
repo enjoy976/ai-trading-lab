@@ -390,24 +390,44 @@ class="telegram-float">
 <script>
 
 
-const email = localStorage.getItem("userEmail");
+// ===============================
+// CHECK LOGIN SESSION
+// ===============================
 
 
-if(email){
+async function checkUser(){
 
 
-document.getElementById("userEmail").innerHTML = email;
+const {data} = await supabaseClient.auth.getSession();
 
 
-}
 
-else{
+if(!data.session){
 
 
 window.location.href="login.html";
 
 
+return;
+
+
 }
+
+
+
+document.getElementById("userEmail").innerHTML =
+
+data.session.user.email;
+
+
+
+}
+
+
+
+
+
+checkUser();
 
 
 
