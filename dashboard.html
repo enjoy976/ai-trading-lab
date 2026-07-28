@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gold Sniper AI Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="auth-buttons">
+
+
+<button 
+class="signup-btn"
+onclick="logoutUser()">
+
+LOGOUT
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="live-chart"></div>
+
+
+
+
+
+<div class="container">
+
+
+
+<h1>
+
+🤖 GOLD SNIPER AI
+
+</h1>
+
+
+
+<p class="subtitle">
+
+AI Trading Terminal Dashboard
+
+</p>
+
+
+
+
+
+
+
+<div class="status">
+
+🟢 SYSTEM ONLINE
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+👤 USER ACCOUNT
+
+</h2>
+
+
+<hr>
+
+
+<p>
+
+Email:
+
+<br>
+
+<b id="userEmail">
+
+Loading...
+
+</b>
+
+
+<br><br>
+
+
+Status:
+
+🟢 Active
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="cards">
+
+
+
+
+
+<a href="xauusd.html" class="card">
+
+
+<div class="icon">
+
+📊
+
+</div>
+
+
+<h2>
+
+XAUUSD AI
+
+</h2>
+
+
+<p>
+
+Gold market AI analysis
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="crypto.html" class="card">
+
+
+<div class="icon">
+
+₿
+
+</div>
+
+
+<h2>
+
+Crypto Scanner
+
+</h2>
+
+
+<p>
+
+BTC / ETH monitor
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="telegram.html" class="card">
+
+
+<div class="icon">
+
+📱
+
+</div>
+
+
+<h2>
+
+Telegram Signal
+
+</h2>
+
+
+<p>
+
+SWING & INTRADAY alerts
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="forex.html" class="card">
+
+
+<div class="icon">
+
+📚
+
+</div>
+
+
+<h2>
+
+FOREX
+
+</h2>
+
+
+<p>
+
+Trading education
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="news.html" class="card">
+
+
+<div class="icon">
+
+📰
+
+</div>
+
+
+<h2>
+
+NEWS MARKET
+
+</h2>
+
+
+<p>
+
+Economic news analysis
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+🚀 AI ENGINE STATUS
+
+</h2>
+
+
+<hr>
+
+
+<p>
+
+MT5 Connection:
+
+🟢 ONLINE
+
+
+<br><br>
+
+
+AI Signal Engine:
+
+🟢 READY
+
+
+<br><br>
+
+
+Market Scanner:
+
+🟢 ACTIVE
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<a 
+
+href="https://t.me/goldzonetrader9"
+
+target="_blank"
+
+class="telegram-float">
+
+
+📱 Админтай холбогдох
+
+
+</a>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="auth.js"></script>
+
+
+
+
+
+<script>
+
+
+const email = localStorage.getItem("userEmail");
+
+
+if(email){
+
+
+document.getElementById("userEmail").innerHTML = email;
+
+
+}
+
+else{
+
+
+window.location.href="login.html";
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
