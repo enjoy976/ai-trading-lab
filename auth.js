@@ -1,3 +1,4 @@
+
 // ===============================
 // SUPABASE CONFIG
 // ===============================
@@ -28,7 +29,7 @@ const password = document.getElementById("signupPassword").value;
 
 
 
-const {data,error} = await supabaseClient.auth.signUp({
+const {error} = await supabaseClient.auth.signUp({
 
 email: email,
 
@@ -55,11 +56,16 @@ return;
 document.getElementById("signupResult").innerHTML =
 
 `
+
 🟢 ACCOUNT CREATED
 
 <br><br>
 
-Имэйл баталгаажуулалтаа шалгана уу..
+Имэйл баталгаажуулалтаа шалгана уу.
+
+<br><br>
+
+📩 Confirm Email линк дээр дарсны дараа Login хийнэ үү.
 
 `;
 
@@ -117,6 +123,17 @@ return;
 
 
 
+// SAVE USER SESSION INFO
+
+localStorage.setItem(
+"userEmail",
+data.user.email
+);
+
+
+
+
+
 document.getElementById("loginResult").innerHTML =
 
 `
@@ -133,19 +150,45 @@ ${data.user.email}
 
 <br><br>
 
-Redirecting...
+Opening Dashboard...
 
 `;
 
 
 
 
+
 setTimeout(()=>{
 
-window.location.href="index.html";
 
-},2000);
+window.location.href="dashboard.html";
 
+
+},1500);
+
+
+
+}
+
+
+
+
+
+
+// ===============================
+// LOGOUT
+// ===============================
+
+async function logoutUser(){
+
+
+await supabaseClient.auth.signOut();
+
+
+localStorage.removeItem("userEmail");
+
+
+window.location.href="login.html";
 
 
 }
