@@ -996,3 +996,203 @@ font-size:30px;
 
 
 }
+
+/* ============================= */
+/* TELEGRAM PREMIUM PRICING */
+/* ============================= */
+
+
+.pricing-box{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(280px,1fr));
+
+
+gap:25px;
+
+
+margin-top:30px;
+
+
+}
+
+
+
+
+.price-card{
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(17,24,39,.95),
+
+rgba(15,23,42,.85)
+
+);
+
+
+border:1px solid #334155;
+
+
+border-radius:25px;
+
+
+padding:30px;
+
+
+text-align:center;
+
+
+transition:.35s;
+
+
+box-shadow:
+
+0 0 25px rgba(0,255,153,.12);
+
+
+}
+
+
+
+.price-card:hover{
+
+
+transform:
+
+translateY(-10px);
+
+
+border-color:#00ff99;
+
+
+box-shadow:
+
+0 0 30px rgba(0,255,153,.35);
+
+
+}
+
+
+
+.price-card h3{
+
+
+color:#00ff99;
+
+
+font-size:22px;
+
+
+}
+
+
+
+.price-card h1{
+
+
+font-size:42px;
+
+
+margin:20px 0;
+
+
+color:white;
+
+
+text-shadow:
+
+0 0 15px #00ff99;
+
+
+}
+
+
+
+.price-card p{
+
+
+color:#cbd5e1;
+
+
+line-height:1.8;
+
+
+}
+
+
+
+
+/* VIP GOLD STYLE */
+
+
+.price-card.vip{
+
+
+border-color:#facc15;
+
+
+box-shadow:
+
+0 0 25px rgba(250,204,21,.2);
+
+
+}
+
+
+
+
+.price-card.vip h3{
+
+
+color:#facc15;
+
+
+}
+
+
+
+.price-card.vip h1{
+
+
+text-shadow:
+
+0 0 20px rgba(250,204,21,.8);
+
+
+}
+
+
+
+
+.price-card.vip:hover{
+
+
+box-shadow:
+
+0 0 40px rgba(250,204,21,.5);
+
+
+}
+
+
+
+
+@media(max-width:600px){
+
+
+.pricing-box{
+
+grid-template-columns:1fr;
+
+}
+
+
+}
