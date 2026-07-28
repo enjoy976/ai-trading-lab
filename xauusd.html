@@ -30,13 +30,11 @@ Real Time Currency Monitor
 </p>
 
 
-
 <div class="status">
 
 🟢 MARKET DATA ONLINE
 
 </div>
-
 
 
 
@@ -70,19 +68,16 @@ Real Time Currency Monitor
 </thead>
 
 
-<tbody id="market">
 
+<tbody id="market">
 
 <tr>
 
 <td colspan="3">
-
 Loading...
-
 </td>
 
 </tr>
-
 
 </tbody>
 
@@ -90,8 +85,8 @@ Loading...
 </table>
 
 
-</div>
 
+</div>
 
 
 
@@ -105,7 +100,6 @@ Loading...
 ⬅ BACK DASHBOARD
 
 </a>
-
 
 
 
@@ -123,21 +117,16 @@ Loading...
 
 
 
-
-
 <script>
 
 
-// ===============================
 // LOGIN CHECK
-// ===============================
 
 
 async function checkAccess(){
 
 
 const {data} = await supabaseClient.auth.getSession();
-
 
 
 if(!data.session){
@@ -155,7 +144,6 @@ return;
 }
 
 
-
 checkAccess();
 
 
@@ -163,30 +151,7 @@ checkAccess();
 
 
 
-
-// ===============================
-// FOREX MARKET DATA
-// ===============================
-
-
-const pairs = [
-
-"EURUSD",
-"GBPUSD",
-"USDJPY",
-"AUDUSD",
-"USDCAD",
-"USDCHF",
-"NZDUSD",
-"EURGBP",
-"EURJPY",
-"GBPJPY"
-
-];
-
-
-
-
+// FOREX DATA FROM YOUR SERVER
 
 
 async function loadForex(){
@@ -197,7 +162,11 @@ try{
 
 const response = await fetch(
 
-"https://api.frankfurter.app/latest?from=USD"
+"https://disposal-exorcist-silly.ngrok-free.dev/forex?_=" + Date.now(),
+
+{
+cache:"no-store"
+}
 
 );
 
@@ -211,100 +180,12 @@ let html = "";
 
 
 
-
-pairs.forEach(pair=>{
-
-
-let base = pair.substring(0,3);
-
-let quote = pair.substring(3,6);
-
-
-
-let price = null;
-
-
-
-// USD to other currency
-
-if(base === "USD"){
-
-
-if(data.rates[quote]){
-
-
-price = data.rates[quote];
-
-
-}
-
-
-
-}
-
-
-
-// other currency to USD
-
-else if(quote === "USD"){
-
-
-
-if(data.rates[base]){
-
-
-price = 1 / data.rates[base];
-
-
-}
-
-
-
-}
-
-
-
-// Cross currency
-
-else{
-
-
-if(data.rates[base] && data.rates[quote]){
-
-
-price = data.rates[quote] / data.rates[base];
-
-
-}
-
-
-
-}
-
-
-
-
-if(price !== null){
-
-
-
-let decimals = 5;
-
-
-
-if(pair.includes("JPY")){
-
-decimals = 3;
-
-}
-
+for(let pair in data){
 
 
 html += `
 
-
 <tr>
-
 
 <td>
 
@@ -315,33 +196,25 @@ html += `
 
 <td>
 
-${price.toFixed(decimals)}
+${data[pair].price}
 
 </td>
 
 
 <td>
 
-${new Date().toLocaleTimeString()}
+${data[pair].time}
 
 </td>
 
 
 </tr>
 
-
 `;
 
 
 
 }
-
-
-
-});
-
-
-
 
 
 
@@ -359,9 +232,7 @@ catch(error){
 console.log(error);
 
 
-
 document.getElementById("market").innerHTML =
-
 
 `
 
@@ -369,7 +240,7 @@ document.getElementById("market").innerHTML =
 
 <td colspan="3">
 
-❌ Connection Error
+❌ Server Connection Error
 
 </td>
 
@@ -382,9 +253,7 @@ document.getElementById("market").innerHTML =
 }
 
 
-
 }
-
 
 
 
@@ -392,9 +261,7 @@ document.getElementById("market").innerHTML =
 loadForex();
 
 
-
-setInterval(loadForex,60000);
-
+setInterval(loadForex,10000);
 
 
 
