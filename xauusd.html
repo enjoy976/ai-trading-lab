@@ -195,9 +195,9 @@ Loading...
 
 
 
-<a href="index.html" class="signup-btn">
+<a href="dashboard.html" class="signup-btn">
 
-⬅ BACK HOME
+⬅ BACK DASHBOARD
 
 </a>
 
@@ -213,7 +213,59 @@ Loading...
 
 
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="auth.js"></script>
+
+
+
+
+
 <script>
+
+
+// ===============================
+// CHECK LOGIN SESSION
+// ===============================
+
+
+async function checkAccess(){
+
+
+const {data} = await supabaseClient.auth.getSession();
+
+
+
+if(!data.session){
+
+
+window.location.href="login.html";
+
+
+return;
+
+
+}
+
+
+}
+
+
+
+checkAccess();
+
+
+
+
+
+
+
+// ===============================
+// LOAD XAUUSD DATA
+// ===============================
 
 
 async function loadGold(){
@@ -247,37 +299,37 @@ const data = await response.json();
 
 
 document.getElementById("symbol").innerHTML =
-data.symbol;
+data.symbol || "N/A";
 
 
 
 document.getElementById("price").innerHTML =
-data.price;
+data.price || "N/A";
 
 
 
 document.getElementById("signal").innerHTML =
-data.signal;
+data.signal || "WAIT";
 
 
 
 document.getElementById("trend").innerHTML =
-data.trend;
+data.trend || "N/A";
 
 
 
 document.getElementById("confidence").innerHTML =
-data.confidence + "%";
+(data.confidence || 0) + "%";
 
 
 
 document.getElementById("bot").innerHTML =
-data.bot;
+data.bot || "MT5 AI";
 
 
 
 document.getElementById("time").innerHTML =
-data.time;
+data.time || "N/A";
 
 
 
