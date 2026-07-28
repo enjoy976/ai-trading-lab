@@ -40,6 +40,7 @@ Real Time Currency Monitor
 
 
 
+
 <div class="result">
 
 
@@ -67,7 +68,6 @@ Real Time Currency Monitor
 </tr>
 
 </thead>
-
 
 
 <tbody id="market">
@@ -99,11 +99,13 @@ Loading...
 <br>
 
 
+
 <a href="dashboard.html" class="signup-btn">
 
 ⬅ BACK DASHBOARD
 
 </a>
+
 
 
 
@@ -115,11 +117,10 @@ Loading...
 
 
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="auth.js"></script>
+
 
 
 
@@ -154,6 +155,7 @@ return;
 }
 
 
+
 checkAccess();
 
 
@@ -163,9 +165,8 @@ checkAccess();
 
 
 // ===============================
-// FOREX LIVE DATA
+// FOREX MARKET DATA
 // ===============================
-
 
 
 const pairs = [
@@ -210,6 +211,7 @@ let html = "";
 
 
 
+
 pairs.forEach(pair=>{
 
 
@@ -219,11 +221,16 @@ let quote = pair.substring(3,6);
 
 
 
-let price;
+let price = null;
 
 
 
-if(base==="USD"){
+// USD to other currency
+
+if(base === "USD"){
+
+
+if(data.rates[quote]){
 
 
 price = data.rates[quote];
@@ -231,7 +238,19 @@ price = data.rates[quote];
 
 }
 
-else if(quote==="USD"){
+
+
+}
+
+
+
+// other currency to USD
+
+else if(quote === "USD"){
+
+
+
+if(data.rates[base]){
 
 
 price = 1 / data.rates[base];
@@ -239,11 +258,25 @@ price = 1 / data.rates[base];
 
 }
 
+
+
+}
+
+
+
+// Cross currency
+
 else{
 
 
-price = 
-(1 / data.rates[base]) * data.rates[quote];
+if(data.rates[base] && data.rates[quote]){
+
+
+price = data.rates[quote] / data.rates[base];
+
+
+}
+
 
 
 }
@@ -251,12 +284,27 @@ price =
 
 
 
-if(price){
+if(price !== null){
+
+
+
+let decimals = 5;
+
+
+
+if(pair.includes("JPY")){
+
+decimals = 3;
+
+}
+
 
 
 html += `
 
+
 <tr>
+
 
 <td>
 
@@ -267,10 +315,9 @@ html += `
 
 <td>
 
-${price.toFixed(5)}
+${price.toFixed(decimals)}
 
 </td>
-
 
 
 <td>
@@ -282,7 +329,9 @@ ${new Date().toLocaleTimeString()}
 
 </tr>
 
+
 `;
+
 
 
 }
@@ -293,6 +342,9 @@ ${new Date().toLocaleTimeString()}
 
 
 
+
+
+
 document.getElementById("market").innerHTML = html;
 
 
@@ -300,7 +352,12 @@ document.getElementById("market").innerHTML = html;
 }
 
 
+
 catch(error){
+
+
+console.log(error);
+
 
 
 document.getElementById("market").innerHTML =
@@ -331,10 +388,13 @@ document.getElementById("market").innerHTML =
 
 
 
+
 loadForex();
 
 
+
 setInterval(loadForex,60000);
+
 
 
 
