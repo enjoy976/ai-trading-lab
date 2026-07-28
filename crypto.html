@@ -164,9 +164,9 @@ AI Scanner:
 
 
 
-<a href="index.html" class="signup-btn">
+<a href="dashboard.html" class="signup-btn">
 
-⬅ BACK HOME
+⬅ BACK DASHBOARD
 
 </a>
 
@@ -183,11 +183,61 @@ AI Scanner:
 
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="auth.js"></script>
+
+
+
+
+
+
+
 <script>
 
 
+// ===============================
+// CHECK LOGIN SESSION
+// ===============================
+
+
+async function checkAccess(){
+
+
+const {data} = await supabaseClient.auth.getSession();
+
+
+
+if(!data.session){
+
+
+window.location.href="login.html";
+
+
+return;
+
+
+}
+
+
+}
+
+
+
+checkAccess();
+
+
+
+
+
+
+
+
+// ===============================
 // DEMO CRYPTO DISPLAY
-// Дараа нь жинхэнэ API холбоно
+// ===============================
 
 
 
