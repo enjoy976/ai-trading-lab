@@ -130,8 +130,6 @@ Status:
 
 
 
-
-
 <a href="xauusd.html" class="card">
 
 
@@ -289,8 +287,6 @@ Economic news analysis
 
 
 
-
-
 </div>
 
 
@@ -391,21 +387,26 @@ class="telegram-float">
 
 
 // ===============================
-// CHECK LOGIN SESSION
+// AUTH CHECK
 // ===============================
 
 
 async function checkUser(){
 
 
-const {data} = await supabaseClient.auth.getSession();
+
+const { data: { session } } = 
+
+await supabaseClient.auth.getSession();
 
 
 
-if(!data.session){
 
 
-window.location.href="login.html";
+if(!session){
+
+
+window.location.replace("login.html");
 
 
 return;
@@ -415,9 +416,11 @@ return;
 
 
 
+
+
 document.getElementById("userEmail").innerHTML =
 
-data.session.user.email;
+session.user.email;
 
 
 
