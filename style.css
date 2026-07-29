@@ -37,11 +37,14 @@ content:"";
 
 position:fixed;
 
+
 top:0;
 
 left:0;
 
+
 width:100%;
+
 
 height:100%;
 
@@ -60,6 +63,7 @@ transparent 1px
 );
 
 
+
 background-size:50px 50px;
 
 
@@ -68,7 +72,10 @@ animation:gridMove 10s linear infinite;
 
 z-index:-2;
 
+
 }
+
+
 
 
 
@@ -95,12 +102,16 @@ background-position:50px 50px;
 
 
 
+
+
+
 /* ================= */
 /* AI CODE MATRIX */
 /* ================= */
 
 
 body::after{
+
 
 content:
 
@@ -114,10 +125,12 @@ content:
 010101 NEURAL NETWORK";
 
 
+
 position:fixed;
 
 
 top:-40%;
+
 
 left:0;
 
@@ -126,6 +139,7 @@ width:100%;
 
 
 height:200%;
+
 
 
 font-family:"Courier New",monospace;
@@ -143,7 +157,9 @@ letter-spacing:5px;
 line-height:55px;
 
 
+
 color:rgba(0,255,153,.10);
+
 
 
 white-space:pre-wrap;
@@ -155,10 +171,13 @@ overflow:hidden;
 pointer-events:none;
 
 
+
 z-index:-1;
 
 
+
 animation:aiCodeMove 20s linear infinite;
+
 
 
 }
@@ -191,9 +210,13 @@ transform:translateY(40%);
 
 
 
+
+
+
 /* ================= */
 /* GOLD SNIPER LIVE TICKER */
 /* ================= */
+
 
 
 .live-ticker{
@@ -208,22 +231,28 @@ top:15px;
 left:15px;
 
 
-right:170px;
+right:180px;
+
 
 
 background:rgba(0,0,0,.85);
 
 
+
 border:1px solid #facc15;
+
 
 
 border-radius:12px;
 
 
+
 padding:10px;
 
 
+
 z-index:999;
+
 
 
 box-shadow:
@@ -231,7 +260,9 @@ box-shadow:
 0 0 20px rgba(250,204,21,.4);
 
 
+
 overflow:hidden;
+
 
 
 }
@@ -254,7 +285,10 @@ font-weight:bold;
 letter-spacing:1px;
 
 
+
 }
+
+
 
 
 
@@ -269,17 +303,28 @@ letter-spacing:1px;
 
 .container{
 
+
 max-width:1100px;
+
 
 margin:auto;
 
+
 padding:90px 20px 40px;
+
+
 
 position:relative;
 
+
 z-index:2;
 
+
+
 }
+
+
+
 
 
 
@@ -287,27 +332,45 @@ z-index:2;
 
 h1{
 
+
 text-align:center;
+
 
 font-size:45px;
 
+
+
 text-shadow:
+
 
 0 0 10px #00ff99;
 
+
+
 }
+
+
+
+
 
 
 
 .subtitle{
 
+
 text-align:center;
+
 
 color:#9ca3af;
 
+
 font-size:18px;
 
+
+
 }
+
+
 
 
 
@@ -320,24 +383,41 @@ font-size:18px;
 /* ================= */
 
 
+
 .status{
+
 
 margin:30px auto;
 
+
 width:max-content;
+
+
 
 padding:12px 25px;
 
+
+
 border-radius:30px;
 
+
+
 background:#064e3b;
+
+
 
 border:1px solid #10b981;
 
 
+
+
 box-shadow:
 
+
+
 0 0 20px rgba(16,185,129,.5);
+
+
 
 }
 
@@ -348,20 +428,28 @@ box-shadow:
 
 .cards{
 
+
 display:grid;
+
 
 grid-template-columns:
 
 repeat(auto-fit,minmax(260px,1fr));
 
 
+
 gap:25px;
+
 
 
 margin-top:40px;
 
 
+
 }
+
+
+
 
 
 
@@ -378,7 +466,9 @@ text-decoration:none;
 color:white;
 
 
+
 background:
+
 
 linear-gradient(
 
@@ -395,46 +485,72 @@ rgba(15,23,42,.85)
 border-radius:20px;
 
 
+
 padding:30px;
+
 
 
 cursor:pointer;
 
 
+
 border:1px solid #1f2937;
+
 
 
 transition:.35s;
 
 
+
 min-height:220px;
+
 
 
 position:relative;
 
+
+
 z-index:2;
 
+
+
 }
+
+
 
 
 
 .card h2{
 
+
 color:white;
+
 
 margin-top:15px;
 
+
+
 }
+
+
 
 
 
 .card p{
 
+
 color:#9ca3af;
+
 
 line-height:1.6;
 
+
+
 }
+
+
+
+
 
 
 
@@ -443,28 +559,43 @@ line-height:1.6;
 
 transform:
 
+
 translateY(-12px);
+
+
 
 
 border-color:#00ff99;
 
 
+
+
+
 box-shadow:
 
+
 0 0 20px rgba(0,255,153,.4),
+
 
 0 0 50px rgba(0,255,153,.15);
 
 
+
 }
+
+
 
 
 
 .icon{
 
+
 font-size:45px;
 
+
+
 }
+
 
 
 
@@ -481,35 +612,53 @@ font-size:45px;
 .result{
 
 
+
 margin-top:40px;
+
 
 
 background:
 
+
 rgba(15,23,42,.9);
+
+
+
 
 
 padding:30px;
 
 
+
 border-radius:20px;
+
+
 
 
 border:1px solid #334155;
 
 
+
+
 box-shadow:
 
+
 0 0 25px rgba(0,255,153,.15);
+
+
+
 
 
 position:relative;
 
 
+
 z-index:2;
 
 
+
 }
+
 
 
 
@@ -523,24 +672,33 @@ z-index:2;
 /* ================= */
 
 
+
 .forex-grid{
 
 
 display:grid;
 
 
+
 grid-template-columns:
 
+
 repeat(auto-fit,minmax(250px,1fr));
+
 
 
 gap:20px;
 
 
+
 margin-top:30px;
 
 
+
 }
+
+
+
 
 
 
@@ -550,6 +708,7 @@ margin-top:30px;
 
 
 background:
+
 
 linear-gradient(
 
@@ -563,27 +722,38 @@ rgba(15,23,42,.85)
 
 
 
+
+
 border:1px solid #1f2937;
+
 
 
 border-radius:20px;
 
 
+
 padding:25px;
+
 
 
 text-align:center;
 
 
+
 transition:.35s;
+
 
 
 box-shadow:
 
+
 0 0 20px rgba(0,255,153,.08);
 
 
+
 }
+
+
 
 
 
@@ -594,18 +764,28 @@ box-shadow:
 
 transform:
 
+
 translateY(-8px);
+
+
 
 
 border-color:#00ff99;
 
 
+
+
+
 box-shadow:
+
 
 0 0 25px rgba(0,255,153,.35);
 
 
+
 }
+
+
 
 
 
@@ -617,16 +797,23 @@ box-shadow:
 font-size:22px;
 
 
+
 font-weight:bold;
+
 
 
 color:#00ff99;
 
 
+
 letter-spacing:2px;
 
 
+
 }
+
+
+
 
 
 
@@ -638,18 +825,25 @@ letter-spacing:2px;
 font-size:38px;
 
 
+
 font-weight:bold;
+
 
 
 margin:20px 0;
 
 
+
 text-shadow:
+
 
 0 0 15px rgba(0,255,153,.7);
 
 
+
 }
+
+
 
 
 
@@ -666,31 +860,42 @@ text-shadow:
 .signup-btn{
 
 
+
 display:inline-block;
+
 
 
 background:#00ff99;
 
 
+
 color:#050816;
+
 
 
 border:1px solid #00ff99;
 
 
+
+
 padding:10px 22px;
+
 
 
 border-radius:8px;
 
 
+
 font-weight:bold;
+
 
 
 text-decoration:none;
 
 
+
 transition:.3s;
+
 
 
 }
@@ -699,17 +904,30 @@ transition:.3s;
 
 
 
+
+
+
 .signup-btn:hover{
 
 
-transform:scale(1.05);
+
+transform:
+
+
+scale(1.05);
+
+
+
 
 
 box-shadow:
 
+
 0 0 15px #00ff99,
 
+
 0 0 35px #00ff99;
+
 
 
 }
@@ -731,16 +949,108 @@ top:25px;
 right:30px;
 
 
+
 display:flex;
+
 
 
 gap:12px;
 
 
+
 z-index:10000;
 
 
+
 }
+
+
+
+
+
+
+
+
+
+/* ================= */
+/* LOGIN BOX PREMIUM */
+/* ================= */
+
+
+.login-box{
+
+
+width:400px;
+
+
+
+max-width:90%;
+
+
+
+margin:100px auto;
+
+
+
+background:
+
+
+rgba(15,23,42,.95);
+
+
+
+padding:40px;
+
+
+
+border-radius:20px;
+
+
+
+border:1px solid #00ff99;
+
+
+
+box-shadow:
+
+
+0 0 40px rgba(0,255,153,.3);
+
+
+
+text-align:center;
+
+
+
+position:relative;
+
+
+
+z-index:2;
+
+
+
+}
+
+
+
+
+
+
+
+
+.login-box h1{
+
+
+text-shadow:
+
+
+0 0 15px #00ff99;
+
+
+
+}
+
 
 
 
@@ -759,25 +1069,33 @@ z-index:10000;
 background:transparent;
 
 
+
 color:#00ff99;
+
 
 
 border:1px solid #00ff99;
 
 
+
 padding:10px 22px;
+
 
 
 border-radius:8px;
 
 
+
 font-weight:bold;
+
 
 
 text-decoration:none;
 
 
+
 transition:.3s;
+
 
 
 }
@@ -792,15 +1110,85 @@ transition:.3s;
 background:#00ff99;
 
 
+
 color:#050816;
+
 
 
 box-shadow:
 
+
 0 0 20px #00ff99;
 
 
+
 }
+
+
+
+
+
+
+
+
+
+/* ================= */
+/* ACCESS BUTTON */
+/* ================= */
+
+
+.access-btn{
+
+
+background:#00ff99;
+
+
+
+color:#050816;
+
+
+
+border:none;
+
+
+
+padding:12px 25px;
+
+
+
+border-radius:10px;
+
+
+
+font-weight:bold;
+
+
+
+cursor:pointer;
+
+
+
+}
+
+
+
+
+
+
+
+
+.access-btn:hover{
+
+
+box-shadow:
+
+
+0 0 20px #00ff99;
+
+
+
+}
+
 
 
 
@@ -820,25 +1208,35 @@ input{
 width:90%;
 
 
+
 padding:14px;
+
 
 
 background:#020617;
 
 
+
 color:white;
+
 
 
 border:1px solid #334155;
 
 
+
 border-radius:10px;
+
 
 
 outline:none;
 
 
+
 }
+
+
+
 
 
 
@@ -850,9 +1248,12 @@ input:focus{
 border-color:#00ff99;
 
 
+
 box-shadow:
 
+
 0 0 15px #00ff99;
+
 
 
 }
@@ -876,42 +1277,58 @@ box-shadow:
 position:fixed;
 
 
+
 right:25px;
+
 
 
 bottom:25px;
 
 
+
 background:#229ED9;
+
 
 
 color:white;
 
 
+
 text-decoration:none;
+
 
 
 padding:15px 22px;
 
 
+
 border-radius:50px;
+
 
 
 font-size:16px;
 
 
+
 font-weight:bold;
+
 
 
 box-shadow:
 
+
 0 0 25px rgba(34,158,217,.6);
+
 
 
 z-index:999;
 
 
+
 }
+
+
+
 
 
 
@@ -923,15 +1340,8 @@ z-index:999;
 transform:scale(1.08);
 
 
+
 }
-
-
-
-
-
-
-
-
 
 /* ================= */
 /* PRICING BOX */
@@ -944,18 +1354,24 @@ transform:scale(1.08);
 display:grid;
 
 
+
 grid-template-columns:
 
+
 repeat(auto-fit,minmax(280px,1fr));
+
 
 
 gap:25px;
 
 
+
 margin-top:30px;
 
 
+
 }
+
 
 
 
@@ -967,6 +1383,7 @@ margin-top:30px;
 
 
 background:
+
 
 linear-gradient(
 
@@ -983,24 +1400,34 @@ rgba(15,23,42,.85)
 border:1px solid #334155;
 
 
+
 border-radius:25px;
+
 
 
 padding:30px;
 
 
+
 text-align:center;
+
 
 
 transition:.35s;
 
 
+
 box-shadow:
+
 
 0 0 25px rgba(0,255,153,.12);
 
 
+
 }
+
+
+
 
 
 
@@ -1011,15 +1438,20 @@ box-shadow:
 
 transform:
 
+
 translateY(-10px);
+
 
 
 border-color:#00ff99;
 
 
+
 box-shadow:
 
+
 0 0 30px rgba(0,255,153,.35);
+
 
 
 }
@@ -1037,10 +1469,15 @@ box-shadow:
 color:#00ff99;
 
 
+
 font-size:22px;
 
 
+
 }
+
+
+
 
 
 
@@ -1052,18 +1489,25 @@ font-size:22px;
 font-size:42px;
 
 
+
 margin:20px 0;
+
 
 
 color:white;
 
 
+
 text-shadow:
+
 
 0 0 15px #00ff99;
 
 
+
 }
+
+
 
 
 
@@ -1076,10 +1520,14 @@ text-shadow:
 color:#cbd5e1;
 
 
+
 line-height:1.8;
 
 
+
 }
+
+
 
 
 
@@ -1098,7 +1546,9 @@ line-height:1.8;
 margin-top:35px;
 
 
+
 background:
+
 
 linear-gradient(
 
@@ -1115,24 +1565,34 @@ rgba(17,24,39,.85)
 border-radius:25px;
 
 
+
 padding:35px;
+
 
 
 border:1px solid #00ff99;
 
 
+
 box-shadow:
 
+
 0 0 30px rgba(0,255,153,.2);
+
 
 
 text-align:center;
 
 
+
 transition:.35s;
 
 
+
 }
+
+
+
 
 
 
@@ -1141,19 +1601,27 @@ transition:.35s;
 .payment-info:hover{
 
 
-transform:translateY(-5px);
+transform:
+
+
+translateY(-5px);
+
 
 
 box-shadow:
 
+
 0 0 40px rgba(0,255,153,.35);
+
 
 
 }
 
-/* ================= */
-/* PAYMENT TEXT */
-/* ================= */
+
+
+
+
+
 
 
 .payment-info h2{
@@ -1162,15 +1630,23 @@ box-shadow:
 color:#00ff99;
 
 
+
 font-size:28px;
+
 
 
 text-shadow:
 
+
 0 0 15px rgba(0,255,153,.8);
 
 
+
 }
+
+
+
+
 
 
 
@@ -1181,13 +1657,19 @@ text-shadow:
 font-size:17px;
 
 
+
 line-height:2;
+
 
 
 color:#cbd5e1;
 
 
+
 }
+
+
+
 
 
 
@@ -1199,15 +1681,22 @@ color:#cbd5e1;
 color:white;
 
 
+
 font-size:20px;
+
 
 
 text-shadow:
 
+
 0 0 10px rgba(0,255,153,.7);
 
 
+
 }
+
+
+
 
 
 
@@ -1219,33 +1708,44 @@ text-shadow:
 content:"💳 SECURE PAYMENT";
 
 
+
 display:inline-block;
+
 
 
 margin-bottom:15px;
 
 
+
 padding:8px 18px;
+
 
 
 border-radius:20px;
 
 
+
 background:#064e3b;
+
 
 
 border:1px solid #10b981;
 
 
+
 color:#00ff99;
+
 
 
 font-weight:bold;
 
 
+
 box-shadow:
 
+
 0 0 15px rgba(0,255,153,.4);
+
 
 
 }
@@ -1272,7 +1772,9 @@ h1{
 font-size:32px;
 
 
+
 }
+
 
 
 
@@ -1283,7 +1785,9 @@ font-size:32px;
 padding:80px 15px 25px;
 
 
+
 }
+
 
 
 
@@ -1294,7 +1798,9 @@ padding:80px 15px 25px;
 grid-template-columns:1fr;
 
 
+
 }
+
 
 
 
@@ -1305,7 +1811,9 @@ grid-template-columns:1fr;
 grid-template-columns:1fr;
 
 
+
 }
+
 
 
 
@@ -1314,6 +1822,7 @@ grid-template-columns:1fr;
 
 
 font-size:30px;
+
 
 
 }
@@ -1328,13 +1837,17 @@ font-size:30px;
 left:5px;
 
 
+
 right:5px;
+
 
 
 top:10px;
 
 
+
 }
+
 
 
 
@@ -1343,6 +1856,7 @@ top:10px;
 
 
 font-size:12px;
+
 
 
 }
@@ -1357,7 +1871,26 @@ font-size:12px;
 top:15px;
 
 
+
 right:15px;
+
+
+
+}
+
+
+
+
+
+.login-box{
+
+
+margin:80px auto;
+
+
+
+padding:30px;
+
 
 
 }
@@ -1372,13 +1905,17 @@ right:15px;
 right:15px;
 
 
+
 bottom:15px;
+
 
 
 font-size:14px;
 
 
+
 padding:12px 18px;
+
 
 
 }
