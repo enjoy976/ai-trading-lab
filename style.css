@@ -189,7 +189,6 @@ transform:translateY(40%);
 
 
 
-
 /* ================= */
 /* GOLD SNIPER LIVE TICKER */
 /* ================= */
@@ -270,7 +269,7 @@ max-width:1100px;
 
 margin:auto;
 
-padding:40px 20px;
+padding:90px 20px 40px;
 
 position:relative;
 
@@ -508,8 +507,10 @@ z-index:2;
 
 
 
+
+
 /* ================= */
-/* FOREX */
+/* FOREX CARDS */
 /* ================= */
 
 
@@ -531,6 +532,7 @@ margin-top:30px;
 
 
 }
+
 
 
 
@@ -597,11 +599,15 @@ box-shadow:
 
 .pair{
 
+
 font-size:22px;
+
 
 font-weight:bold;
 
+
 color:#00ff99;
+
 
 }
 
@@ -609,13 +615,19 @@ color:#00ff99;
 
 .price{
 
+
 font-size:38px;
+
 
 font-weight:bold;
 
+
 margin:20px 0;
 
+
 }
+
+
 
 
 
@@ -660,6 +672,8 @@ transition:.3s;
 
 
 
+
+
 .signup-btn:hover{
 
 
@@ -672,6 +686,7 @@ box-shadow:
 
 
 }
+
 
 
 
@@ -712,8 +727,9 @@ z-index:1000;
 
 
 
+
 /* ================= */
-/* TELEGRAM BUTTON */
+/* TELEGRAM FLOAT */
 /* ================= */
 
 
@@ -778,6 +794,7 @@ transform:scale(1.08);
 
 
 
+
 /* ================= */
 /* INPUT */
 /* ================= */
@@ -808,6 +825,8 @@ outline:none;
 
 
 }
+
+
 
 
 
@@ -848,7 +867,7 @@ font-size:32px;
 
 .container{
 
-padding:25px 15px;
+padding:80px 15px 25px;
 
 }
 
@@ -859,6 +878,7 @@ padding:25px 15px;
 font-size:30px;
 
 }
+
 
 
 
