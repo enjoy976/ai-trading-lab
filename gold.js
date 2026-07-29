@@ -1,38 +1,28 @@
-// =====================================
-// GOLD SNIPER XAUUSD LIVE PRICE
-// =====================================
-
-
 async function loadGoldPrice(){
-
 
 try{
 
 
 const response = await fetch(
-"https://api.metals.live/v1/spot/gold"
+"https://api.gold-api.com/price/XAU"
 );
 
 
 const data = await response.json();
 
 
-// Gold price
 
-const goldPrice = data[0].price;
+const price = data.price;
 
 
 
 document.getElementById("gold-price").innerHTML =
-"$" + goldPrice.toFixed(2);
-
-
+"$" + price.toFixed(2);
 
 
 
 document.getElementById("gold-status").innerHTML =
 "🟢 MARKET DATA ONLINE";
-
 
 
 }
@@ -54,12 +44,7 @@ document.getElementById("gold-status").innerHTML =
 
 
 
-
-// first load
-
 loadGoldPrice();
 
-
-// update every 60 seconds
 
 setInterval(loadGoldPrice,60000);
