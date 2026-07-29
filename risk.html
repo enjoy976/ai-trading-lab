@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Risk Calculator | Gold Sniper</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+
+<h1>
+
+🧮 GOLD SNIPER RISK CALCULATOR
+
+</h1>
+
+
+
+<p class="subtitle">
+
+Professional Risk Management Tool
+
+</p>
+
+
+
+
+
+<div class="status">
+
+🟢 CALCULATOR ONLINE
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+📊 TRADE PARAMETERS
+
+</h2>
+
+
+<hr>
+
+
+
+<div class="input-box">
+
+
+<label>
+
+💰 Account Balance ($)
+
+</label>
+
+
+<br>
+
+
+<input id="balance" type="number" value="1000">
+
+
+<br><br>
+
+
+
+<label>
+
+⚠️ Risk Percentage (%)
+
+</label>
+
+
+<br>
+
+
+<input id="risk" type="number" value="2">
+
+
+<br><br>
+
+
+
+<label>
+
+🛑 Stop Loss (Pips)
+
+</label>
+
+
+<br>
+
+
+<input id="stoploss" type="number" value="200">
+
+
+<br><br>
+
+
+
+<button class="signup-btn" onclick="calculateRisk()">
+
+CALCULATE
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+🎯 CALCULATION RESULT
+
+</h2>
+
+
+<hr>
+
+
+
+<p>
+
+
+💵 Risk Amount:
+
+<br>
+
+<b id="risk-money">
+
+$0
+
+</b>
+
+
+
+<br><br>
+
+
+
+📈 Recommended Lot Size:
+
+<br>
+
+<b id="lot-size">
+
+0.00
+
+</b>
+
+
+
+<br><br>
+
+
+
+🥇 Symbol:
+
+<br>
+
+<b>
+
+XAUUSD
+
+</b>
+
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+🛡 RISK MANAGEMENT RULE
+
+</h2>
+
+
+<hr>
+
+
+
+<p>
+
+
+✅ Нэг арилжаанд нийт хөрөнгийн
+
+1-2% эрсдэл ашиглах нь түгээмэл.
+
+
+<br><br>
+
+
+❌ Бүх хөрөнгөө нэг trade дээр
+
+эрсдэлд оруулахгүй.
+
+
+<br><br>
+
+
+✅ Stop Loss үргэлж ашиглах.
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+<a href="dashboard.html" class="signup-btn">
+
+⬅ BACK DASHBOARD
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+
+
+<script src="risk.js"></script>
+
+
+
+</body>
+
+</html>
