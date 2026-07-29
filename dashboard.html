@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gold Sniper AI Dashboard</title>
+<title>Gold Sniper Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -15,6 +15,7 @@
 
 
 <body>
+
 
 
 <div class="auth-buttons">
@@ -32,10 +33,6 @@ LOGOUT
 </div>
 
 
-
-
-
-<div class="live-chart"></div>
 
 
 
@@ -124,6 +121,90 @@ Status:
 
 
 
+
+
+<!-- ========================= -->
+<!-- XAUUSD LIVE MARKET -->
+<!-- ========================= -->
+
+
+<div class="result">
+
+
+<h2>
+
+🥇 XAUUSD LIVE MARKET
+
+</h2>
+
+
+<hr>
+
+
+
+
+<div class="forex-grid">
+
+
+
+<div class="forex-card">
+
+
+<div class="pair">
+
+XAUUSD
+
+</div>
+
+
+
+
+<div class="price" id="gold-price">
+
+Loading...
+
+</div>
+
+
+
+
+<div class="market-live" id="gold-status">
+
+Checking...
+
+</div>
+
+
+
+<p class="update">
+
+Live Gold Market Price
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- DASHBOARD CARDS -->
+<!-- ========================= -->
 
 
 <div class="cards">
@@ -221,11 +302,6 @@ SWING & INTRADAY alerts
 </a>
 
 
-
-
-
-
-
 <a href="forex.html" class="card">
 
 
@@ -277,7 +353,7 @@ FOREX
 
 <p>
 
-Эдийн засгийн мэдээний дүн шинжилгээ
+Economic News & Market Analysis
 
 </p>
 
@@ -287,7 +363,73 @@ FOREX
 
 
 
+
+
+
+<a href="sessions.html" class="card">
+
+
+<div class="icon">
+
+🌍
+
 </div>
+
+
+<h2>
+
+MARKET SESSIONS
+
+</h2>
+
+
+<p>
+
+Global Trading Session Monitor
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="academy.html" class="card">
+
+
+<div class="icon">
+
+🎓
+
+</div>
+
+
+<h2>
+
+TRADING ACADEMY
+
+</h2>
+
+
+<p>
+
+Trading Education & Strategy
+
+</p>
+
+
+</a>
+
+
+
+
+
+</div>
+
 
 
 
@@ -332,6 +474,14 @@ Market Scanner:
 🟢 ACTIVE
 
 
+<br><br>
+
+
+Gold Price:
+
+🟢 LIVE DATA
+
+
 </p>
 
 
@@ -345,6 +495,7 @@ Market Scanner:
 
 
 </div>
+
 
 
 
@@ -374,10 +525,16 @@ class="telegram-float">
 
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script src="auth.js"></script>
+
+
+<script src="gold.js"></script>
+
+
 
 
 
@@ -435,6 +592,8 @@ checkUser();
 
 
 </script>
+
+
 
 
 
