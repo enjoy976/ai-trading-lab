@@ -1,99 +1,80 @@
 // =====================================
-// GOLD SNIPER RISK CALCULATOR
+// GOLD SNIPER REAL XAUUSD RISK CALCULATOR
 // =====================================
 
 
 function calculateRisk(){
 
 
-    let balance = Number(document.getElementById("balance").value);
+let balance = Number(document.getElementById("balance").value);
 
-    let riskPercent = Number(document.getElementById("risk").value);
+let riskPercent = Number(document.getElementById("risk").value);
 
-    let stopLoss = Number(document.getElementById("stoploss").value);
+let entry = Number(document.getElementById("entry").value);
 
-
-
-    if(balance <= 0 || riskPercent <= 0 || stopLoss <= 0){
-
-        alert("Утгуудаа зөв оруулна уу");
-
-        return;
-
-    }
+let stopLoss = Number(document.getElementById("stoploss").value);
 
 
 
-    // ==========================
-    // Эрсдэлийн мөнгө
-    // ==========================
+if(balance <=0 || riskPercent<=0 || entry<=0 || stopLoss<=0){
 
+alert("Утгуудаа зөв оруулна уу");
 
-    let riskMoney = balance * (riskPercent / 100);
+return;
 
-
-
-
-    // ==========================
-    // XAUUSD LOT CALCULATION
-    // ==========================
-
-    // Ойролцоогоор:
-    // 1.00 lot XAUUSD ≈ $1 / pip хөдөлгөөн
-
-
-    let pipValuePerLot = 1;
+}
 
 
 
-    let lot = riskMoney / (stopLoss * pipValuePerLot);
+// Risk money
+
+let riskMoney = balance * (riskPercent / 100);
 
 
 
+// Price difference
 
-    // ==========================
-    // LOT ХАМГААЛАЛТ
-    // ==========================
-
-
-    if(lot > 5){
-
-        lot = 5;
-
-    }
-
-
-    if(lot < 0.01){
-
-        lot = 0.01;
-
-    }
+let priceDistance = Math.abs(entry - stopLoss);
 
 
 
-    // 0.01 алхамтай болгох
+// XAUUSD contract
 
-    lot = Math.floor(lot * 100) / 100;
+// 1 lot = 100 oz
 
-
-
-
-
-    // ==========================
-    // ҮР ДҮН ХАРУУЛАХ
-    // ==========================
-
-
-    document.getElementById("risk-money").innerHTML =
-
-    "$" + riskMoney.toFixed(2);
+let lossPerLot = priceDistance * 100;
 
 
 
+// Lot size
 
-    document.getElementById("lot-size").innerHTML =
+let lot = riskMoney / lossPerLot;
 
-    lot.toFixed(2) + " lot";
+
+
+// broker minimum
+
+if(lot < 0.01){
+
+lot = 0.01;
+
+}
+
+
+
+lot = Math.floor(lot * 100) / 100;
+
+
+
+document.getElementById("risk-money").innerHTML =
+
+"$" + riskMoney.toFixed(2);
+
+
+
+document.getElementById("lot-size").innerHTML =
+
+lot.toFixed(2) + " lot";
 
 
 
