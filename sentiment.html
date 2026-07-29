@@ -246,14 +246,6 @@ Smart Money:
 
 </div>
 
-
-
-
-
-
-
-
-
 <div class="result">
 
 
@@ -455,7 +447,14 @@ try{
 
 const response = await fetch(
 
-"https://disposal-exorcist-silly.ngrok-free.dev/signal"
+"https://disposal-exorcist-silly.ngrok-free.dev/signal",
+
+{
+    method:"GET",
+    headers:{
+        "ngrok-skip-browser-warning":"true"
+    }
+}
 
 );
 
@@ -488,10 +487,6 @@ signalColor = "#ff4444";
 
 
 }
-
-
-
-
 
 
 
@@ -550,12 +545,7 @@ ${data.time}
 
 `;
 
-
-
-
-
-
-
+id="part3"
 
 document.getElementById("confidence").innerHTML =
 
@@ -715,10 +705,23 @@ ${data.status}
 catch(error){
 
 
+console.log("AI SERVER ERROR:",error);
+
+
+
 document.getElementById("trend-analysis").innerHTML =
 
 
-"❌ AI SERVER CONNECTION FAILED";
+`
+
+❌ AI SERVER CONNECTION FAILED
+
+<br><br>
+
+${error.message}
+
+`;
+
 
 
 }
@@ -726,9 +729,6 @@ document.getElementById("trend-analysis").innerHTML =
 
 
 }
-
-
-
 
 
 
@@ -748,4 +748,3 @@ setInterval(loadAISentiment,10000);
 </body>
 
 </html>
-
