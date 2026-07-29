@@ -6,9 +6,25 @@ try{
 
 const response = await fetch(
 
-"https://disposal-exorcist-silly.ngrok-free.dev/signal"
+"https://disposal-exorcist-silly.ngrok-free.dev/signal",
+
+{
+method:"GET",
+headers:{
+"ngrok-skip-browser-warning":"true"
+}
+}
 
 );
+
+
+
+if(!response.ok){
+
+throw new Error("API STATUS: " + response.status);
+
+}
+
 
 
 const data = await response.json();
@@ -33,6 +49,8 @@ color="#ff4444";
 
 
 
+
+
 document.getElementById("market-bias").innerHTML =
 
 
@@ -43,6 +61,7 @@ document.getElementById("market-bias").innerHTML =
 ${data.signal}
 
 </h3>
+
 
 
 <p>
@@ -103,10 +122,23 @@ ${data.time}
 catch(error){
 
 
+console.log("AI ERROR:",error);
+
+
+
 document.getElementById("market-bias").innerHTML=
 
 
-"❌ AI SERVER CONNECTION FAILED";
+`
+
+❌ AI SERVER CONNECTION FAILED
+
+<br><br>
+
+${error.message}
+
+`;
+
 
 
 }
@@ -114,11 +146,12 @@ document.getElementById("market-bias").innerHTML=
 
 
 }
+
+
 
 
 
 loadMarketBias();
-
 
 
 setInterval(loadMarketBias,10000);
