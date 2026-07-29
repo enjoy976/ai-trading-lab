@@ -189,6 +189,8 @@ transform:translateY(40%);
 
 
 
+
+
 /* ================= */
 /* GOLD SNIPER LIVE TICKER */
 /* ================= */
@@ -253,6 +255,8 @@ letter-spacing:1px;
 
 
 }
+
+
 
 
 
@@ -336,6 +340,12 @@ box-shadow:
 0 0 20px rgba(16,185,129,.5);
 
 }
+
+
+
+
+
+
 
 /* ================= */
 /* DASHBOARD CARDS */
@@ -462,10 +472,6 @@ font-size:45px;
 
 }
 
-
-
-
-
 /* ================= */
 /* RESULT BOX */
 /* ================= */
@@ -497,6 +503,7 @@ box-shadow:
 
 
 position:relative;
+
 
 z-index:2;
 
@@ -553,6 +560,7 @@ rgba(15,23,42,.85)
 );
 
 
+
 border:1px solid #1f2937;
 
 
@@ -577,6 +585,8 @@ box-shadow:
 
 
 
+
+
 .forex-card:hover{
 
 
@@ -597,6 +607,8 @@ box-shadow:
 
 
 
+
+
 .pair{
 
 
@@ -609,7 +621,12 @@ font-weight:bold;
 color:#00ff99;
 
 
+letter-spacing:2px;
+
+
 }
+
+
 
 
 
@@ -625,7 +642,13 @@ font-weight:bold;
 margin:20px 0;
 
 
+text-shadow:
+
+0 0 15px rgba(0,255,153,.7);
+
+
 }
+
 
 
 
@@ -682,7 +705,9 @@ transform:scale(1.05);
 
 box-shadow:
 
-0 0 15px #00ff99;
+0 0 15px #00ff99,
+
+0 0 35px #00ff99;
 
 
 }
@@ -695,7 +720,7 @@ box-shadow:
 
 
 /* ================= */
-/* AUTH */
+/* LOGOUT LEFT TOP */
 /* ================= */
 
 
@@ -705,10 +730,10 @@ box-shadow:
 position:fixed;
 
 
-top:25px;
+top:20px;
 
 
-right:30px;
+left:20px;
 
 
 display:flex;
@@ -717,10 +742,12 @@ display:flex;
 gap:12px;
 
 
-z-index:1000;
+z-index:10000;
 
 
 }
+
+
 
 
 
@@ -849,6 +876,7 @@ box-shadow:
 
 
 
+
 /* ================= */
 /* MOBILE */
 /* ================= */
@@ -859,25 +887,36 @@ box-shadow:
 
 h1{
 
+
 font-size:32px;
 
+
 }
+
+
 
 
 
 .container{
 
+
 padding:80px 15px 25px;
 
+
 }
+
+
 
 
 
 .price{
 
+
 font-size:30px;
 
+
 }
+
 
 
 
@@ -887,12 +926,16 @@ font-size:30px;
 
 left:5px;
 
+
 right:5px;
+
 
 top:10px;
 
 
 }
+
+
 
 
 
@@ -903,6 +946,23 @@ font-size:12px;
 
 
 }
+
+
+
+
+
+.auth-buttons{
+
+
+top:15px;
+
+
+left:15px;
+
+
+}
+
+
 
 
 
