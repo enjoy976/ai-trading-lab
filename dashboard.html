@@ -1,3 +1,19 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gold Sniper Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
 <body>
 
 
@@ -5,63 +21,701 @@
 <!-- GOLD SNIPER LIVE TICKER -->
 <!-- ========================= -->
 
+
 <div class="live-ticker">
+
 
 <marquee behavior="scroll" direction="left">
 
+
 📊 GOLD SNIPER LIVE
+
 &nbsp;&nbsp; | &nbsp;&nbsp;
+
 👥 Бүртгэлтэй хэрэглэгч: 27
+
 &nbsp;&nbsp; | &nbsp;&nbsp;
+
 🟢 Онлайн: 3
+
 &nbsp;&nbsp; | &nbsp;&nbsp;
+
 🤖 AI шинжилгээ: 248 удаа
+
 &nbsp;&nbsp; | &nbsp;&nbsp;
+
 🥇 XAUUSD 🟢 LIVE
+
 
 </marquee>
 
+
 </div>
 
-/* ================================= */
-/* GOLD SNIPER LIVE TICKER */
-/* ================================= */
 
 
-.live-ticker{
 
 
-position: fixed;
+<div class="auth-buttons">
 
 
-top: 15px;
+<button 
+class="signup-btn"
+onclick="logoutUser()">
+
+LOGOUT
+
+</button>
 
 
-left: 15px;
+</div>
 
 
-right: 15px;
 
 
-background: rgba(0,0,0,0.85);
 
 
-border: 1px solid gold;
+
+<div class="container">
 
 
-border-radius: 12px;
+
+<h1>
+
+🤖 MORNING STAR GOLD SNIPER ZONE
+
+</h1>
 
 
-padding: 10px;
+
+<p class="subtitle">
+
+Trading SYSTEM Terminal Dashboard
+
+</p>
 
 
-z-index: 9999;
 
 
-box-shadow: 0 0 15px rgba(255,215,0,0.5);
 
 
-overflow: hidden;
+
+<div class="status">
+
+🟢 SYSTEM ИДЭВХИТЭЙ
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+👤 USER ACCOUNT
+
+</h2>
+
+
+<hr>
+
+
+<p>
+
+Email:
+
+<br>
+
+<b id="userEmail">
+
+Loading...
+
+</b>
+
+
+<br><br>
+
+
+Status:
+
+🟢 Active
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- XAUUSD LIVE MARKET -->
+<!-- ========================= -->
+
+
+<div class="result">
+
+
+<h2>
+
+🥇 XAUUSD LIVE MARKET
+
+</h2>
+
+
+<hr>
+
+
+
+
+<div class="forex-grid">
+
+
+
+<div class="forex-card">
+
+
+<div class="pair">
+
+XAUUSD
+
+</div>
+
+
+
+
+<div class="price" id="gold-price">
+
+Loading...
+
+</div>
+
+
+
+
+<div class="market-live" id="gold-status">
+
+Checking...
+
+</div>
+
+
+
+<p class="update">
+
+Live Gold Market Price
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- TRADINGVIEW CHART -->
+<!-- ========================= -->
+
+
+<div class="result">
+
+
+<h2>
+
+📈 XAUUSD LIVE CHART
+
+</h2>
+
+
+<hr>
+
+
+<div style="height:600px;">
+
+
+<iframe
+
+src="https://www.tradingview.com/widgetembed/?symbol=OANDA%3AXAUUSD&interval=15&hidesidetoolbar=0&theme=dark&style=1"
+
+style="width:100%;height:100%;border:none;"
+
+allowtransparency="true"
+
+scrolling="no">
+
+
+</iframe>
+
+
+</div>
+
+
+</div>
+
+<!-- ========================= -->
+<!-- DASHBOARD CARDS -->
+<!-- ========================= -->
+
+
+<div class="cards">
+
+
+
+<a href="xauusd.html" class="card">
+
+
+<div class="icon">
+
+📊
+
+</div>
+
+
+<h2>
+
+FOREX ХОСЛОЛ
+
+</h2>
+
+
+<p>
+
+LIVE ЗАХ ЗЭЭЛИЙН ҮНИЙН ХӨДӨЛГӨӨН
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="crypto.html" class="card">
+
+
+<div class="icon">
+
+₿
+
+</div>
+
+
+<h2>
+
+Crypto Scanner
+
+</h2>
+
+
+<p>
+
+MONITOR
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="telegram.html" class="card">
+
+
+<div class="icon">
+
+📱
+
+</div>
+
+
+<h2>
+
+Telegram Signal
+
+</h2>
+
+
+<p>
+
+SWING & INTRADAY alerts
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+
+<a href="sentiment.html" class="card">
+
+
+<div class="icon">
+
+🤖
+
+</div>
+
+
+<h2>
+
+ЗАХ ЗЭЭЛИЙН ЧИГ ХАНДЛАГА
+
+</h2>
+
+
+<p>
+
+XAUUSD AI чиглэл, Market Bias, Confidence Analysis
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+
+<a href="risk.html" class="card">
+
+
+<div class="icon">
+
+🧮
+
+</div>
+
+
+<h2>
+
+RISK CALCULATOR
+
+</h2>
+
+
+<p>
+
+Lot Size & Risk Management
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+
+<a href="forex.html" class="card">
+
+
+<div class="icon">
+
+📚
+
+</div>
+
+
+<h2>
+
+FOREX
+
+</h2>
+
+
+<p>
+
+АРИЛЖААНЫ БОЛОВСРОЛ
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+<a href="news.html" class="card">
+
+
+<div class="icon">
+
+📰
+
+</div>
+
+
+<h2>
+
+МЭДЭЭНИЙ ЗАХ ЗЭЭЛ
+
+</h2>
+
+
+<p>
+
+Economic News & Market Analysis
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="sessions.html" class="card">
+
+
+<div class="icon">
+
+🌍
+
+</div>
+
+
+<h2>
+
+MARKET SESSIONS
+
+</h2>
+
+
+<p>
+
+Global Trading Session Monitor
+
+</p>
+
+
+</a>
+
+
+
+
+
+
+
+<a href="academy.html" class="card">
+
+
+<div class="icon">
+
+🎓
+
+</div>
+
+
+<h2>
+
+TRADING ACADEMY
+
+</h2>
+
+
+<p>
+
+Trading Education & Strategy
+
+</p>
+
+
+</a>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="result">
+
+
+<h2>
+
+🚀 Төлөв байдал
+
+</h2>
+
+
+<hr>
+
+
+<p>
+
+MT5 Connection:
+
+🟢 ONLINE
+
+
+<br><br>
+
+
+SIGNAL ДОХИО:
+
+🟢 READY
+
+
+<br><br>
+
+
+Market Scanner:
+
+🟢 ACTIVE
+
+
+<br><br>
+
+
+Gold Price:
+
+🟢 LIVE DATA
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<a 
+
+href="https://t.me/goldzonetrader9"
+
+target="_blank"
+
+class="telegram-float">
+
+
+📱 Админтай холбогдох
+
+
+</a>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="auth.js"></script>
+
+
+<script src="gold.js"></script>
+
+
+
+
+
+
+
+<script>
+
+
+// ===============================
+// AUTH CHECK
+// ===============================
+
+
+async function checkUser(){
+
+
+
+const { data: { session } } = 
+
+await supabaseClient.auth.getSession();
+
+
+
+
+
+if(!session){
+
+
+window.location.replace("login.html");
+
+
+return;
 
 
 }
@@ -70,19 +724,28 @@ overflow: hidden;
 
 
 
-.live-ticker marquee{
+document.getElementById("userEmail").innerHTML =
 
+session.user.email;
 
-color: #ffd700;
-
-
-font-size: 15px;
-
-
-font-weight: bold;
-
-
-letter-spacing: 1px;
 
 
 }
+
+
+
+
+
+checkUser();
+
+
+
+</script>
+
+
+
+
+
+</body>
+
+</html>
