@@ -1,103 +1,58 @@
-
 // =====================================
-// GOLD SNIPER RISK CALCULATOR
+// GOLD SNIPER SIMPLE RISK CALCULATOR
 // =====================================
 
 
 function calculateRisk(){
 
 
+    let balance = Number(document.getElementById("balance").value);
 
-// Get values
+    let riskPercent = Number(document.getElementById("risk").value);
 
-let balance = Number(document.getElementById("balance").value);
-
-let riskPercent = Number(document.getElementById("risk").value);
-
-let stopLoss = Number(document.getElementById("stoploss").value);
+    let stopLoss = Number(document.getElementById("stoploss").value);
 
 
 
+    if(!balance || !riskPercent || !stopLoss){
 
+        alert("Утгуудаа бүрэн оруулна уу");
 
-// Check input
+        return;
 
-if(balance <= 0 || riskPercent <= 0 || stopLoss <= 0){
-
-
-alert("Утгуудаа зөв оруулна уу");
-
-
-return;
-
-
-}
+    }
 
 
 
+    // Эрсдэлийн мөнгө
 
-
-// Calculate risk money
-
-let riskMoney = balance * (riskPercent / 100);
-
+    let riskMoney = balance * (riskPercent / 100);
 
 
 
+    // Lot тооцоо
+    // XAUUSD энгийн тооцоо
+
+    let lot = riskMoney / stopLoss;
 
 
 
-// XAUUSD lot calculation
-
-// Approximation:
-// 1.00 lot gold = $1 per 0.01 price movement (approx)
-// Used for educational calculator
+    // Үр дүн харуулах
 
 
-let lot = riskMoney / (stopLoss * 1);
+    document.getElementById("risk-money").innerHTML =
+
+    "$" + riskMoney.toFixed(2);
 
 
 
+    document.getElementById("lot-size").innerHTML =
 
-
-
-// Limit decimals
-
-lot = lot.toFixed(2);
-
-
-
-
-
-// Display result
-
-
-document.getElementById("risk-money").innerHTML =
-
-"$" + riskMoney.toFixed(2);
-
-
-
-
-
-document.getElementById("lot-size").innerHTML =
-
-lot + " lot";
-
+    lot.toFixed(2) + " lot";
 
 
 
 }
 
 
-
-
-// Auto calculate when page opens
-
-window.onload = function(){
-
-
-calculateRisk();
-
-
-}
+// Тооцоолох товч дарахад ажиллана
