@@ -16,7 +16,12 @@ let stopLoss = Number(document.getElementById("stoploss").value);
 
 
 
-if(balance <=0 || riskPercent<=0 || entry<=0 || stopLoss<=0){
+if(
+    balance <= 0 ||
+    riskPercent <= 0 ||
+    entry <= 0 ||
+    stopLoss <= 0
+){
 
 alert("Утгуудаа зөв оруулна уу");
 
@@ -26,21 +31,31 @@ return;
 
 
 
-// Risk money
+// ===============================
+// Risk Money
+// ===============================
+
 
 let riskMoney = balance * (riskPercent / 100);
 
 
 
-// Price difference
+
+// ===============================
+// XAUUSD Calculation
+// ===============================
+
+
+// Entry ба Stop Loss хоорондын зай
 
 let priceDistance = Math.abs(entry - stopLoss);
 
 
 
-// XAUUSD contract
-
+// XAUUSD:
 // 1 lot = 100 oz
+// $1 хөдөлгөөн = $100 / lot
+
 
 let lossPerLot = priceDistance * 100;
 
@@ -52,18 +67,37 @@ let lot = riskMoney / lossPerLot;
 
 
 
-// broker minimum
+// ===============================
+// Protection
+// ===============================
+
 
 if(lot < 0.01){
 
-lot = 0.01;
+    lot = 0.01;
+
+}
+
+
+if(lot > 100){
+
+    lot = 100;
 
 }
 
 
 
+// 0.01 алхам
+
 lot = Math.floor(lot * 100) / 100;
 
+
+
+
+
+// ===============================
+// Display
+// ===============================
 
 
 document.getElementById("risk-money").innerHTML =
