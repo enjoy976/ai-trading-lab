@@ -1,5 +1,5 @@
 // =====================================
-// GOLD SNIPER SIMPLE RISK CALCULATOR
+// GOLD SNIPER RISK CALCULATOR
 // =====================================
 
 
@@ -14,9 +14,9 @@ function calculateRisk(){
 
 
 
-    if(!balance || !riskPercent || !stopLoss){
+    if(balance <= 0 || riskPercent <= 0 || stopLoss <= 0){
 
-        alert("Утгуудаа бүрэн оруулна уу");
+        alert("Утгуудаа зөв оруулна уу");
 
         return;
 
@@ -24,25 +24,70 @@ function calculateRisk(){
 
 
 
+    // ==========================
     // Эрсдэлийн мөнгө
+    // ==========================
+
 
     let riskMoney = balance * (riskPercent / 100);
 
 
 
-    // Lot тооцоо
-    // XAUUSD энгийн тооцоо
 
-    let lot = riskMoney / stopLoss;
+    // ==========================
+    // XAUUSD LOT CALCULATION
+    // ==========================
+
+    // Ойролцоогоор:
+    // 1.00 lot XAUUSD ≈ $1 / pip хөдөлгөөн
+
+
+    let pipValuePerLot = 1;
 
 
 
-    // Үр дүн харуулах
+    let lot = riskMoney / (stopLoss * pipValuePerLot);
+
+
+
+
+    // ==========================
+    // LOT ХАМГААЛАЛТ
+    // ==========================
+
+
+    if(lot > 5){
+
+        lot = 5;
+
+    }
+
+
+    if(lot < 0.01){
+
+        lot = 0.01;
+
+    }
+
+
+
+    // 0.01 алхамтай болгох
+
+    lot = Math.floor(lot * 100) / 100;
+
+
+
+
+
+    // ==========================
+    // ҮР ДҮН ХАРУУЛАХ
+    // ==========================
 
 
     document.getElementById("risk-money").innerHTML =
 
     "$" + riskMoney.toFixed(2);
+
 
 
 
@@ -53,6 +98,3 @@ function calculateRisk(){
 
 
 }
-
-
-// Тооцоолох товч дарахад ажиллана
