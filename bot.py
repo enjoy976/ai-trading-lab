@@ -6,23 +6,37 @@ import pandas as pd
 
 
 
+# =====================================
+# GOLD SNIPER AI v2
+# MT5 SMC ENGINE
+# PART 1/4
+# =====================================
+
+
+
 # ===============================
 # MT5 CONNECT
 # ===============================
 
+
 if not mt5.initialize():
 
     print("❌ MT5 connection failed")
+
     quit()
+
 
 
 print("✅ MT5 Connected")
 
 
 
+
+
 # ===============================
 # SYMBOL
 # ===============================
+
 
 symbol = "XAUUSDm"
 
@@ -31,7 +45,9 @@ symbol = "XAUUSDm"
 if not mt5.symbol_select(symbol, True):
 
     print("❌ Symbol select failed:", symbol)
+
     quit()
+
 
 
 print("✅ Symbol ready:", symbol)
@@ -40,12 +56,13 @@ print("✅ Symbol ready:", symbol)
 
 
 
+
 # ===============================
-# INDICATORS
+# GET MARKET DATA
 # ===============================
 
 
-def get_candles(timeframe, count=200):
+def get_candles(timeframe, count=300):
 
 
     rates = mt5.copy_rates_from_pos(
@@ -61,12 +78,16 @@ def get_candles(timeframe, count=200):
     )
 
 
+
     if rates is None:
 
         return None
 
 
+
+
     df = pd.DataFrame(rates)
+
 
 
     return df
@@ -75,7 +96,15 @@ def get_candles(timeframe, count=200):
 
 
 
+
+
+# ===============================
+# EMA
+# ===============================
+
+
 def calculate_ema(series, period):
+
 
     return series.ewm(
 
@@ -89,19 +118,29 @@ def calculate_ema(series, period):
 
 
 
+
+
+# ===============================
+# RSI
+# ===============================
+
+
 def calculate_rsi(series, period=14):
 
 
     delta = series.diff()
 
 
+
     gain = delta.clip(lower=0)
+
 
     loss = -delta.clip(upper=0)
 
 
 
     avg_gain = gain.rolling(period).mean()
+
 
     avg_loss = loss.rolling(period).mean()
 
@@ -114,39 +153,111 @@ def calculate_rsi(series, period=14):
     rsi = 100 - (100 / (1 + rs))
 
 
+
     return rsi
 
 
 
 
 
+
+
 # ===============================
-# AI ANALYSIS
+# ATR VOLATILITY
 # ===============================
 
 
-def analyze_market():
+def calculate_atr(df, period=14):
 
 
-    confidence = 0
+    high_low = df["high"] - df["low"]
 
 
-    trend = "SIDEWAYS"
+    high_close = abs(
+
+        df["high"] - df["close"].shift()
+
+    )
 
 
-    momentum = "NEUTRAL"
+    low_close = abs(
+
+        df["low"] - df["close"].shift()
+
+    )
 
 
-    liquidity = "WAIT"
+
+    ranges = pd.concat(
+
+        [
+
+            high_low,
+
+            high_close,
+
+            low_close
+
+        ],
+
+        axis=1
+
+    )
 
 
 
-    # -------- M15 TREND --------
+    true_range = ranges.max(axis=1)
 
 
-    m15 = get_candles(
 
-        mt5.TIMEFRAME_M15,
+    atr = true_range.rolling(period).mean()
+
+
+
+    return atr
+
+    # =====================================
+# AI MARKET STRUCTURE ENGINE
+# PART 2/4
+# =====================================
+
+
+
+# ===============================
+# H1 BIAS
+# ===============================
+
+
+def analyze_h1_bias():
+
+
+    h1 = get_candles(
+
+        mt5.TIMEFRAME_H1,
+
+        300
+
+    )
+
+
+    if h1 is None:
+
+        return "UNKNOWN"
+
+
+
+    h1["EMA50"] = calculate_ema(
+
+        h1["close"],
+
+        50
+
+    )
+
+
+    h1["EMA200"] = calculate_ema(
+
+        h1["close"],
 
         200
 
@@ -154,9 +265,55 @@ def analyze_market():
 
 
 
+    last = h1.iloc[-1]
+
+
+
+    if last["EMA50"] > last["EMA200"]:
+
+
+        return "BULLISH"
+
+
+
+    elif last["EMA50"] < last["EMA200"]:
+
+
+        return "BEARISH"
+
+
+
+    return "SIDEWAYS"
+
+
+
+
+
+
+
+
+# ===============================
+# M15 TREND
+# ===============================
+
+
+def analyze_m15_trend():
+
+
+    m15 = get_candles(
+
+        mt5.TIMEFRAME_M15,
+
+        300
+
+    )
+
+
+
     if m15 is None:
 
-        return trend, confidence, momentum, liquidity
+        return "UNKNOWN"
+
 
 
 
@@ -179,39 +336,49 @@ def analyze_market():
 
 
 
-    last15 = m15.iloc[-1]
+    last = m15.iloc[-1]
 
 
 
 
-    if last15["EMA50"] > last15["EMA200"]:
+
+    if last["EMA50"] > last["EMA200"]:
 
 
-        trend = "BULLISH"
-
-        confidence += 40
-
-
-
-    elif last15["EMA50"] < last15["EMA200"]:
-
-
-        trend = "BEARISH"
-
-        confidence += 40
+        return "BULLISH"
 
 
 
+    elif last["EMA50"] < last["EMA200"]:
 
-    # -------- M5 MOMENTUM --------
 
+        return "BEARISH"
+
+
+
+    return "SIDEWAYS"
+
+
+
+
+
+
+
+
+
+# ===============================
+# M5 MOMENTUM
+# ===============================
+
+
+def analyze_m5_momentum():
 
 
     m5 = get_candles(
 
         mt5.TIMEFRAME_M5,
 
-        100
+        200
 
     )
 
@@ -219,7 +386,8 @@ def analyze_market():
 
     if m5 is None:
 
-        return trend, confidence, momentum, liquidity
+        return "NEUTRAL",0
+
 
 
 
@@ -241,76 +409,174 @@ def analyze_market():
 
 
 
-    last5 = m5.iloc[-1]
+    last = m5.iloc[-1]
+
+
+
+    score = 0
+
+
+
+    if last["close"] > last["EMA20"]:
+
+
+        score += 20
+
+
+
+    elif last["close"] < last["EMA20"]:
+
+
+        score -= 20
 
 
 
 
 
-    if last5["close"] > last5["EMA20"]:
+
+    if last["RSI"] > 55:
 
 
-        momentum = "POSITIVE"
-
-        confidence += 30
+        score += 20
 
 
 
-    elif last5["close"] < last5["EMA20"]:
+    elif last["RSI"] < 45:
 
 
-        momentum = "NEGATIVE"
-
-        confidence += 30
+        score -= 20
 
 
 
 
 
-    # -------- RSI --------
+
+    if score > 0:
+
+
+        return "POSITIVE", score
 
 
 
-    rsi = last5["RSI"]
+    elif score < 0:
+
+
+        return "NEGATIVE", score
 
 
 
-    if rsi > 55:
-
-
-        confidence += 30
-
-
-
-    elif rsi < 45:
-
-
-        confidence += 30
-
+    return "NEUTRAL", score
 
 
 
 
-    # -------- LIQUIDITY --------
 
+
+
+
+
+
+# ===============================
+# MARKET STRUCTURE
+# BOS / CHoCH
+# ===============================
+
+
+def analyze_structure():
+
+
+    m5 = get_candles(
+
+        mt5.TIMEFRAME_M5,
+
+        100
+
+    )
+
+
+
+    if m5 is None:
+
+        return "NONE"
+
+
+
+
+    current = m5.iloc[-1]
+
+
+    previous = m5.iloc[-2]
+
+
+
+
+
+    if current["high"] > previous["high"] and current["close"] > previous["close"]:
+
+
+        return "BOS UP"
+
+
+
+
+
+    elif current["low"] < previous["low"] and current["close"] < previous["close"]:
+
+
+        return "BOS DOWN"
+
+
+
+
+
+    return "RANGE"
+
+    # =====================================
+# AI SCORING ENGINE
+# PART 3/4
+# =====================================
+
+
+
+# ===============================
+# LIQUIDITY ANALYSIS
+# ===============================
+
+
+def analyze_liquidity(trend, momentum, structure):
 
 
     if trend == "BULLISH" and momentum == "POSITIVE":
 
 
-        liquidity = "BUY SIDE"
+        return "BUY SIDE"
 
 
 
     elif trend == "BEARISH" and momentum == "NEGATIVE":
 
 
-        liquidity = "SELL SIDE"
+        return "SELL SIDE"
 
 
 
+    elif structure == "BOS UP":
 
-    return trend, min(confidence,100), momentum, liquidity
+
+        return "BUY SIDE"
+
+
+
+    elif structure == "BOS DOWN":
+
+
+        return "SELL SIDE"
+
+
+
+    return "WAIT"
+
+
 
 
 
@@ -318,12 +584,224 @@ def analyze_market():
 
 
 # ===============================
+# AI MARKET SCORE
+# ===============================
+
+
+def analyze_ai():
+
+
+    score = 0
+
+
+
+    # -------------------------
+    # H1 BIAS
+    # -------------------------
+
+
+    h1 = analyze_h1_bias()
+
+
+
+    if h1 == "BULLISH":
+
+
+        score += 25
+
+
+
+    elif h1 == "BEARISH":
+
+
+        score -= 25
+
+
+
+
+
+
+    # -------------------------
+    # M15 TREND
+    # -------------------------
+
+
+    m15 = analyze_m15_trend()
+
+
+
+    if m15 == "BULLISH":
+
+
+        score += 25
+
+
+
+    elif m15 == "BEARISH":
+
+
+        score -= 25
+
+
+
+
+
+
+    # -------------------------
+    # M5 MOMENTUM
+    # -------------------------
+
+
+    momentum, momentum_score = analyze_m5_momentum()
+
+
+
+    score += momentum_score
+
+
+
+
+
+
+    # -------------------------
+    # STRUCTURE
+    # -------------------------
+
+
+    structure = analyze_structure()
+
+
+
+    if structure == "BOS UP":
+
+
+        score += 15
+
+
+
+    elif structure == "BOS DOWN":
+
+
+        score -= 15
+
+
+
+
+
+
+    # -------------------------
+    # FINAL
+    # -------------------------
+
+
+    liquidity = analyze_liquidity(
+
+        h1,
+
+        momentum,
+
+        structure
+
+    )
+
+
+
+
+
+    confidence = abs(score)
+
+
+
+    if score >= 60:
+
+
+        signal = "BUY"
+
+
+
+    elif score <= -60:
+
+
+        signal = "SELL"
+
+
+
+    else:
+
+
+        signal = "WAIT"
+
+
+
+
+
+
+
+    # Risk calculation
+
+
+    if confidence >= 80:
+
+
+        risk = "LOW"
+
+
+
+    elif confidence >= 50:
+
+
+        risk = "MEDIUM"
+
+
+
+    else:
+
+
+        risk = "HIGH"
+
+
+
+
+
+
+
+    return {
+
+
+        "signal": signal,
+
+
+        "confidence": min(confidence,100),
+
+
+        "h1_bias": h1,
+
+
+        "m15_trend": m15,
+
+
+        "momentum": momentum,
+
+
+        "structure": structure,
+
+
+        "liquidity": liquidity,
+
+
+        "risk": risk
+
+
+    }
+
+    # =====================================
 # MAIN LOOP
-# ===============================
+# PART 4/4
+# =====================================
+
 
 
 while True:
-
 
 
     tick = mt5.symbol_info_tick(symbol)
@@ -343,39 +821,23 @@ while True:
 
 
 
+    # ===============================
+    # REAL PRICE
+    # ===============================
+
+
     price = tick.bid
 
 
 
 
 
-    trend, confidence, momentum, liquidity = analyze_market()
+    # ===============================
+    # AI ANALYSIS
+    # ===============================
 
 
-
-
-
-    # SIGNAL
-
-
-    if trend == "BULLISH" and momentum == "POSITIVE" and confidence >= 70:
-
-
-        signal = "BUY"
-
-
-
-    elif trend == "BEARISH" and momentum == "NEGATIVE" and confidence >= 70:
-
-
-        signal = "SELL"
-
-
-
-    else:
-
-
-        signal = "WAIT"
+    ai = analyze_ai()
 
 
 
@@ -385,31 +847,53 @@ while True:
     signal_data = {
 
 
+
         "symbol": symbol,
+
 
 
         "price": round(price,3),
 
 
-        "signal": signal,
+
+        "signal": ai["signal"],
 
 
-        "trend": trend,
+
+        "confidence": ai["confidence"],
 
 
-        "confidence": confidence,
+
+        "trend": ai["m15_trend"],
 
 
-        "momentum": momentum,
+
+        "h1_bias": ai["h1_bias"],
 
 
-        "liquidity": liquidity,
+
+        "momentum": ai["momentum"],
 
 
-        "bot": "MT5 AI M15+M5",
+
+        "structure": ai["structure"],
+
+
+
+        "liquidity": ai["liquidity"],
+
+
+
+        "risk": ai["risk"],
+
+
+
+        "bot": "GOLD SNIPER AI v2",
+
 
 
         "status": "ONLINE",
+
 
 
         "time": datetime.now().strftime(
@@ -419,6 +903,7 @@ while True:
         )
 
 
+
     }
 
 
@@ -426,7 +911,10 @@ while True:
 
 
 
+
+    # ===============================
     # SAVE JSON
+    # ===============================
 
 
     with open(
@@ -458,13 +946,102 @@ while True:
 
 
 
-    print("======================")
+    # ===============================
+    # TERMINAL DISPLAY
+    # ===============================
 
-    print("🤖 MT5 AI UPDATE")
 
-    print(signal_data)
+    print("==============================")
 
-    print("======================")
+    print("🥇 GOLD SNIPER AI UPDATE")
+
+    print("==============================")
+
+
+    print(
+
+        "Signal:",
+
+        signal_data["signal"]
+
+    )
+
+
+    print(
+
+        "Price:",
+
+        signal_data["price"]
+
+    )
+
+
+    print(
+
+        "Confidence:",
+
+        signal_data["confidence"],
+
+        "%"
+
+    )
+
+
+    print(
+
+        "H1:",
+
+        signal_data["h1_bias"]
+
+    )
+
+
+    print(
+
+        "M15:",
+
+        signal_data["trend"]
+
+    )
+
+
+    print(
+
+        "Momentum:",
+
+        signal_data["momentum"]
+
+    )
+
+
+    print(
+
+        "Structure:",
+
+        signal_data["structure"]
+
+    )
+
+
+    print(
+
+        "Liquidity:",
+
+        signal_data["liquidity"]
+
+    )
+
+
+    print(
+
+        "Risk:",
+
+        signal_data["risk"]
+
+    )
+
+
+    print("==============================")
 
 
 
