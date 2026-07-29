@@ -17,7 +17,6 @@
 <body>
 
 
-
 <div class="container">
 
 
@@ -81,41 +80,17 @@ Gold Sniper Artificial Intelligence Analysis
 </h3>
 
 
-<h1>
+<h1 id="trend-signal">
 
-🟢 BULLISH
+⏳ Loading...
 
 </h1>
 
 
-<p>
-
-🤖 AI ШИНЖИЛГЭЭ:
-
-<br><br>
+<p id="trend-analysis">
 
 
-• Худалдан авагчид давамгайлж байна
-
-
-<br><br>
-
-
-• Higher Timeframe бүтэц:
-
-<br>
-
-🟢 ӨСӨХ
-
-
-<br><br>
-
-
-• Momentum:
-
-<br>
-
-Эерэг хөдөлгөөнтэй
+AI шинжилгээ ачааллаж байна...
 
 
 </p>
@@ -143,9 +118,9 @@ Gold Sniper Artificial Intelligence Analysis
 </h3>
 
 
-<h1>
+<h1 id="confidence">
 
-78%
+--
 
 </h1>
 
@@ -159,19 +134,27 @@ Gold Sniper Artificial Intelligence Analysis
 <br><br>
 
 
-🟢 Хүчтэй
+<span id="signal-strength">
+
+Шалгаж байна...
+
+</span>
 
 
 <br><br>
 
 
-Зах зээлийн нийцэл:
+Зах зээлийн төлөв:
 
 
 <br>
 
 
-Өндөр
+<span id="market-status">
+
+--
+
+</span>
 
 
 <br><br>
@@ -183,14 +166,13 @@ Gold Sniper Artificial Intelligence Analysis
 <br>
 
 
-🟡 Дунд
+🟡 Dynamic Risk
 
 
 </p>
 
 
 </div>
-
 
 
 
@@ -211,9 +193,9 @@ Gold Sniper Artificial Intelligence Analysis
 </h3>
 
 
-<h1>
+<h1 id="liquidity-flow">
 
-BUY SIDE
+--
 
 </h1>
 
@@ -227,7 +209,11 @@ Liquidity нөхцөл:
 <br><br>
 
 
-• Худалдан авах liquidity илэрлээ
+<span id="liquidity-status">
+
+Шалгаж байна...
+
+</span>
 
 
 <br><br>
@@ -239,7 +225,11 @@ Smart Money:
 <br>
 
 
-🟢 Идэвхтэй
+<span id="smart-money">
+
+--
+
+</span>
 
 
 </p>
@@ -341,56 +331,10 @@ Gold Sniper AI нь:
 <hr>
 
 
-<p>
+<p id="current-condition">
 
 
-🥇 XAUUSD:
-
-
-<br>
-
-
-🟢 Bullish Bias (Өсөх хандлага)
-
-
-<br><br>
-
-
-📈 Trend:
-
-
-<br>
-
-
-Uptrend Structure
-
-(Өсөх бүтэц)
-
-
-<br><br>
-
-
-⚡ Momentum:
-
-
-<br>
-
-
-Positive
-
-(Эерэг)
-
-
-<br><br>
-
-
-⚠️ News Risk:
-
-
-<br>
-
-
-Economic Calendar шалгах
+AI мэдээлэл ачааллаж байна...
 
 
 </p>
@@ -472,6 +416,7 @@ AI sentiment нь зөвхөн
 
 
 
+
 <br>
 
 
@@ -490,6 +435,317 @@ AI sentiment нь зөвхөн
 
 
 
+
+
+
+
+<script>
+
+
+// ===============================
+// MT5 AI REAL DATA CONNECTION
+// ===============================
+
+
+async function loadAISentiment(){
+
+
+try{
+
+
+const response = await fetch(
+
+"https://disposal-exorcist-silly.ngrok-free.dev/signal"
+
+);
+
+
+
+const data = await response.json();
+
+
+
+
+
+let signalColor = "#94a3b8";
+
+
+
+if(data.signal === "BUY"){
+
+
+signalColor = "#00ff99";
+
+
+}
+
+
+
+if(data.signal === "SELL"){
+
+
+signalColor = "#ff4444";
+
+
+}
+
+
+
+
+
+
+
+document.getElementById("trend-signal").innerHTML =
+
+
+`
+
+<span style="color:${signalColor}">
+
+${data.signal}
+
+</span>
+
+`;
+
+
+
+
+
+
+
+document.getElementById("trend-analysis").innerHTML =
+
+
+`
+
+🤖 AI ШИНЖИЛГЭЭ:
+
+<br><br>
+
+• Trend:
+
+<b>${data.trend}</b>
+
+
+<br><br>
+
+• XAUUSD бодит үнэ:
+
+<b>${data.price}</b>
+
+
+<br><br>
+
+• AI Status:
+
+<b>${data.status}</b>
+
+
+<br><br>
+
+• Update:
+
+${data.time}
+
+`;
+
+
+
+
+
+
+
+
+document.getElementById("confidence").innerHTML =
+
+
+data.confidence + "%";
+
+
+
+
+
+
+
+
+document.getElementById("signal-strength").innerHTML =
+
+
+data.confidence >= 70 ?
+
+"🟢 Хүчтэй" :
+
+data.confidence >= 40 ?
+
+"🟡 Дунд" :
+
+"⚪ Сул";
+
+
+
+
+
+
+
+
+document.getElementById("market-status").innerHTML =
+
+
+data.trend;
+
+
+
+
+
+
+
+
+document.getElementById("liquidity-flow").innerHTML =
+
+
+data.signal === "BUY" ?
+
+"BUY SIDE" :
+
+data.signal === "SELL" ?
+
+"SELL SIDE" :
+
+"WAIT";
+
+
+
+
+
+
+
+
+document.getElementById("liquidity-status").innerHTML =
+
+
+data.signal === "WAIT" ?
+
+"Liquidity хүлээж байна" :
+
+"Liquidity хөдөлгөөн илэрлээ";
+
+
+
+
+
+
+
+
+document.getElementById("smart-money").innerHTML =
+
+
+data.status === "ONLINE" ?
+
+"🟢 Идэвхтэй" :
+
+"🔴 Offline";
+
+
+
+
+
+
+
+
+document.getElementById("current-condition").innerHTML =
+
+
+`
+
+🥇 XAUUSD:
+
+<br>
+
+<b>${data.signal}</b>
+
+
+<br><br>
+
+
+📈 Trend:
+
+<br>
+
+${data.trend}
+
+
+<br><br>
+
+
+💰 Price:
+
+<br>
+
+${data.price}
+
+
+<br><br>
+
+
+🎯 Confidence:
+
+<br>
+
+${data.confidence}%
+
+
+<br><br>
+
+
+🤖 AI:
+
+${data.status}
+
+
+`;
+
+
+
+
+
+}
+
+
+catch(error){
+
+
+document.getElementById("trend-analysis").innerHTML =
+
+
+"❌ AI SERVER CONNECTION FAILED";
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+loadAISentiment();
+
+
+setInterval(loadAISentiment,10000);
+
+
+
+</script>
+
+
+
+
+
 </body>
 
 </html>
+
