@@ -208,7 +208,7 @@ top:15px;
 left:15px;
 
 
-right:15px;
+right:170px;
 
 
 background:rgba(0,0,0,.85);
@@ -223,7 +223,7 @@ border-radius:12px;
 padding:10px;
 
 
-z-index:9999;
+z-index:999;
 
 
 box-shadow:
@@ -340,12 +340,6 @@ box-shadow:
 0 0 20px rgba(16,185,129,.5);
 
 }
-
-
-
-
-
-
 
 /* ================= */
 /* DASHBOARD CARDS */
@@ -472,6 +466,13 @@ font-size:45px;
 
 }
 
+
+
+
+
+
+
+
 /* ================= */
 /* RESULT BOX */
 /* ================= */
@@ -509,6 +510,7 @@ z-index:2;
 
 
 }
+
 
 
 
@@ -712,15 +714,8 @@ box-shadow:
 
 }
 
-
-
-
-
-
-
-
 /* ================= */
-/* LOGOUT LEFT TOP */
+/* AUTH BUTTONS */
 /* ================= */
 
 
@@ -730,10 +725,10 @@ box-shadow:
 position:fixed;
 
 
-top:20px;
+top:25px;
 
 
-left:20px;
+right:30px;
 
 
 display:flex;
@@ -743,6 +738,121 @@ gap:12px;
 
 
 z-index:10000;
+
+
+}
+
+
+
+
+
+
+
+/* ================= */
+/* LOGIN BUTTON */
+/* ================= */
+
+
+.login-btn{
+
+
+background:transparent;
+
+
+color:#00ff99;
+
+
+border:1px solid #00ff99;
+
+
+padding:10px 22px;
+
+
+border-radius:8px;
+
+
+font-weight:bold;
+
+
+text-decoration:none;
+
+
+transition:.3s;
+
+
+}
+
+
+
+
+
+.login-btn:hover{
+
+
+background:#00ff99;
+
+
+color:#050816;
+
+
+box-shadow:
+
+0 0 20px #00ff99;
+
+
+}
+
+
+
+
+
+
+
+
+/* ================= */
+/* INPUT */
+/* ================= */
+
+
+input{
+
+
+width:90%;
+
+
+padding:14px;
+
+
+background:#020617;
+
+
+color:white;
+
+
+border:1px solid #334155;
+
+
+border-radius:10px;
+
+
+outline:none;
+
+
+}
+
+
+
+
+
+input:focus{
+
+
+border-color:#00ff99;
+
+
+box-shadow:
+
+0 0 15px #00ff99;
 
 
 }
@@ -822,33 +932,27 @@ transform:scale(1.08);
 
 
 
+
 /* ================= */
-/* INPUT */
+/* PRICING BOX */
 /* ================= */
 
 
-input{
+.pricing-box{
 
 
-width:90%;
+display:grid;
 
 
-padding:14px;
+grid-template-columns:
+
+repeat(auto-fit,minmax(280px,1fr));
 
 
-background:#020617;
+gap:25px;
 
 
-color:white;
-
-
-border:1px solid #334155;
-
-
-border-radius:10px;
-
-
-outline:none;
+margin-top:30px;
 
 
 }
@@ -857,13 +961,104 @@ outline:none;
 
 
 
-input:focus{
+
+
+.price-card{
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(17,24,39,.95),
+
+rgba(15,23,42,.85)
+
+);
+
+
+
+border:1px solid #334155;
+
+
+border-radius:25px;
+
+
+padding:30px;
+
+
+text-align:center;
+
+
+transition:.35s;
+
+
+box-shadow:
+
+0 0 25px rgba(0,255,153,.12);
+
+
+}
+
+
+
+
+
+.price-card:hover{
+
+
+transform:
+
+translateY(-10px);
 
 
 border-color:#00ff99;
 
 
 box-shadow:
+
+0 0 30px rgba(0,255,153,.35);
+
+
+}
+
+
+
+
+
+
+
+
+.price-card h3{
+
+
+color:#00ff99;
+
+
+font-size:22px;
+
+
+}
+
+
+
+
+
+.price-card h1{
+
+
+font-size:42px;
+
+
+margin:20px 0;
+
+
+color:white;
+
+
+text-shadow:
 
 0 0 15px #00ff99;
 
@@ -875,14 +1070,200 @@ box-shadow:
 
 
 
+.price-card p{
+
+
+color:#cbd5e1;
+
+
+line-height:1.8;
+
+
+}
+
+
+
+
+
 
 
 /* ================= */
-/* MOBILE */
+/* PAYMENT INFO */
+/* ================= */
+
+
+.payment-info{
+
+
+margin-top:35px;
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(15,23,42,.95),
+
+rgba(17,24,39,.85)
+
+);
+
+
+
+border-radius:25px;
+
+
+padding:35px;
+
+
+border:1px solid #00ff99;
+
+
+box-shadow:
+
+0 0 30px rgba(0,255,153,.2);
+
+
+text-align:center;
+
+
+transition:.35s;
+
+
+}
+
+
+
+
+
+.payment-info:hover{
+
+
+transform:translateY(-5px);
+
+
+box-shadow:
+
+0 0 40px rgba(0,255,153,.35);
+
+
+}
+
+/* ================= */
+/* PAYMENT TEXT */
+/* ================= */
+
+
+.payment-info h2{
+
+
+color:#00ff99;
+
+
+font-size:28px;
+
+
+text-shadow:
+
+0 0 15px rgba(0,255,153,.8);
+
+
+}
+
+
+
+
+.payment-info p{
+
+
+font-size:17px;
+
+
+line-height:2;
+
+
+color:#cbd5e1;
+
+
+}
+
+
+
+
+
+.payment-info b{
+
+
+color:white;
+
+
+font-size:20px;
+
+
+text-shadow:
+
+0 0 10px rgba(0,255,153,.7);
+
+
+}
+
+
+
+
+
+.payment-info::before{
+
+
+content:"💳 SECURE PAYMENT";
+
+
+display:inline-block;
+
+
+margin-bottom:15px;
+
+
+padding:8px 18px;
+
+
+border-radius:20px;
+
+
+background:#064e3b;
+
+
+border:1px solid #10b981;
+
+
+color:#00ff99;
+
+
+font-weight:bold;
+
+
+box-shadow:
+
+0 0 15px rgba(0,255,153,.4);
+
+
+}
+
+
+
+
+
+
+
+
+/* ================= */
+/* MOBILE RESPONSIVE */
 /* ================= */
 
 
 @media(max-width:600px){
+
 
 
 h1{
@@ -896,7 +1277,6 @@ font-size:32px;
 
 
 
-
 .container{
 
 
@@ -905,6 +1285,27 @@ padding:80px 15px 25px;
 
 }
 
+
+
+
+.cards{
+
+
+grid-template-columns:1fr;
+
+
+}
+
+
+
+
+.forex-grid{
+
+
+grid-template-columns:1fr;
+
+
+}
 
 
 
@@ -938,7 +1339,6 @@ top:10px;
 
 
 
-
 .live-ticker marquee{
 
 
@@ -957,12 +1357,31 @@ font-size:12px;
 top:15px;
 
 
-left:15px;
+right:15px;
 
 
 }
 
 
+
+
+
+.telegram-float{
+
+
+right:15px;
+
+
+bottom:15px;
+
+
+font-size:14px;
+
+
+padding:12px 18px;
+
+
+}
 
 
 
