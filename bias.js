@@ -228,7 +228,7 @@ ${data.price}
 
 <p>
 
-🤖 AI Status:
+🤖 Status:
 
 <b>
 
