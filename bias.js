@@ -51,7 +51,29 @@ color="#ff4444";
 
 
 
+let strength="🟡 Дунд";
+
+
+if(data.confidence>=80){
+
+strength="🟢 Хүчтэй";
+
+}
+
+else if(data.confidence<50){
+
+strength="🔴 Сул";
+
+}
+
+
+
+
+
+
+
 document.getElementById("market-bias").innerHTML =
+
 
 
 `
@@ -66,7 +88,7 @@ ${data.signal}
 
 <p>
 
-📈 Trend:
+📈 Тренд чиглэл:
 
 <b>${data.trend}</b>
 
@@ -74,9 +96,52 @@ ${data.signal}
 
 
 
+<hr>
+
+
+
 <p>
 
-💰 Price:
+🤖 AI ШИНЖИЛГЭЭ:
+
+</p>
+
+
+<p>
+
+• M15 Bias:
+
+<b>${data.m15_bias || "WAIT"}</b>
+
+</p>
+
+
+
+<p>
+
+• M5 Momentum:
+
+<b>${data.m5_momentum || "WAIT"}</b>
+
+</p>
+
+
+
+<p>
+
+• M1 Entry:
+
+<b>${data.m1_entry || "WAIT"}</b>
+
+</p>
+
+
+
+
+
+<p>
+
+💰 XAUUSD бодит үнэ:
 
 <b>${data.price}</b>
 
@@ -84,9 +149,23 @@ ${data.signal}
 
 
 
+
+
 <p>
 
-🎯 Confidence:
+🤖 AI Status:
+
+<b>${data.ai_status || "ONLINE"}</b>
+
+</p>
+
+
+
+
+
+<p>
+
+🎯 AI CONFIDENCE:
 
 <b>${data.confidence}%</b>
 
@@ -94,13 +173,29 @@ ${data.signal}
 
 
 
+
+
 <p>
 
-🤖 AI Status:
+Дохионы хүч:
 
-<b>${data.status}</b>
+${strength}
 
 </p>
+
+
+
+
+
+<p>
+
+💧 LIQUIDITY FLOW:
+
+<b>${data.liquidity || "WAIT"}</b>
+
+</p>
+
+
 
 
 
