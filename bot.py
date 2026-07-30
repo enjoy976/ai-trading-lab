@@ -1,10 +1,10 @@
 # =====================================
-# GOLD SNIPER AI v3
+# GOLD SNIPER AI v4
 #
-# PURE SMC MARKET ENGINE
+# PURE CHoCH ENGINE
 #
-# M15 CHoCH BIAS
-# M5 MOMENTUM
+# M15 BIAS
+# M5 CONFIRMATION
 # M1 ENTRY
 #
 # PART 1/4
@@ -17,6 +17,7 @@ import json
 import time
 
 from datetime import datetime
+
 
 
 
@@ -47,15 +48,15 @@ symbol = "XAUUSDm"
 
 
 
-if not mt5.symbol_select(symbol,True):
+if not mt5.symbol_select(symbol, True):
 
-    print("❌ Symbol error")
+    print("❌ Symbol select failed")
 
     quit()
 
 
 
-print("✅ Symbol:",symbol)
+print("✅ Symbol ready:", symbol)
 
 
 
@@ -64,11 +65,11 @@ print("✅ Symbol:",symbol)
 
 
 # =====================================
-# GET MARKET DATA
+# GET CANDLES
 # =====================================
 
 
-def get_candles(timeframe,count=300):
+def get_candles(timeframe, count=300):
 
 
     rates = mt5.copy_rates_from_pos(
@@ -84,7 +85,6 @@ def get_candles(timeframe,count=300):
     )
 
 
-
     if rates is None:
 
         return None
@@ -92,7 +92,6 @@ def get_candles(timeframe,count=300):
 
 
     df = pd.DataFrame(rates)
-
 
 
     return df
@@ -104,85 +103,59 @@ def get_candles(timeframe,count=300):
 
 
 # =====================================
-# SMC STRUCTURE ENGINE
+# CHoCH DETECTION
 #
-# BOS = CONTINUATION
-# CHoCH = REVERSAL
+# MARKET STRUCTURE REVERSAL
 # =====================================
 
 
-def detect_structure(df,lookback=5):
+def detect_choch(df):
 
 
     if df is None:
 
-        return "NONE"
+        return "WAIT"
 
 
 
-    if len(df) < lookback*3:
+    if len(df) < 30:
 
-        return "NONE"
-
-
-
-
-
-    last = df.iloc[-1]
+        return "WAIT"
 
 
 
 
 
-    recent_high = df["high"].iloc[
-
-        -lookback:-1
-
-    ].max()
-
-
-
-    recent_low = df["low"].iloc[
-
-        -lookback:-1
-
-    ].min()
+    current = df.iloc[-1]
 
 
 
 
+    recent_high = df["high"].iloc[-10:-1].max()
 
 
-    previous_high = df["high"].iloc[
-
-        -lookback*2:-lookback
-
-    ].max()
+    recent_low = df["low"].iloc[-10:-1].min()
 
 
 
-    previous_low = df["low"].iloc[
+    previous_high = df["high"].iloc[-20:-10].max()
 
-        -lookback*2:-lookback
 
-    ].min()
+    previous_low = df["low"].iloc[-20:-10].min()
 
 
 
 
 
 
-
-    # =============================
-    # CHoCH UP
-    #
-    # Bearish -> Bullish reversal
-    # =============================
+    # ==========================
+    # BULLISH CHoCH
+    # ==========================
 
 
     if (
 
-        last["close"] > recent_high
+        current["close"] > recent_high
 
         and
 
@@ -199,16 +172,14 @@ def detect_structure(df,lookback=5):
 
 
 
-    # =============================
-    # CHoCH DOWN
-    #
-    # Bullish -> Bearish reversal
-    # =============================
+    # ==========================
+    # BEARISH CHoCH
+    # ==========================
 
 
     if (
 
-        last["close"] < recent_low
+        current["close"] < recent_low
 
         and
 
@@ -223,52 +194,15 @@ def detect_structure(df,lookback=5):
 
 
 
-
-
-
-    # =============================
-    # BOS UP
-    #
-    # continuation
-    # =============================
-
-
-    if last["close"] > recent_high:
-
-
-        return "BOS UP"
-
-
-
-
-
-
-
-
-    # =============================
-    # BOS DOWN
-    #
-    # continuation
-    # =============================
-
-
-    if last["close"] < recent_low:
-
-
-        return "BOS DOWN"
-
-
-
-
-
-
-    return "RANGE"
+    return "WAIT"
 
     # =====================================
 # PART 2/4
 #
-# M15 BIAS ENGINE
-# M5 MOMENTUM
+# MTF CHoCH ENGINE
+#
+# M15 BIAS
+# M5 CONFIRMATION
 # M1 ENTRY
 # =====================================
 
@@ -277,17 +211,12 @@ def detect_structure(df,lookback=5):
 
 
 # =====================================
-# LAST CHoCH STORAGE
+# LAST M15 CHoCH STORAGE
 # =====================================
 
 
-last_choch = {
+last_m15_choch = "WAIT"
 
-
-    "M15":"NONE"
-
-
-}
 
 
 
@@ -297,6 +226,8 @@ last_choch = {
 
 # =====================================
 # FIND LAST CHoCH
+#
+# Latest structure change
 # =====================================
 
 
@@ -305,11 +236,13 @@ def find_last_choch(df):
 
     if df is None:
 
-        return "NONE"
+        return "WAIT"
 
 
 
-    # хамгийн сүүлийн structure хайна
+
+
+    # хамгийн сүүлийн 100 candle дотроос хайна
 
     for i in range(len(df)-1,30,-1):
 
@@ -317,28 +250,19 @@ def find_last_choch(df):
         temp = df.iloc[:i+1]
 
 
-
-        structure = detect_structure(temp)
-
-
-
-        if structure == "CHoCH UP":
-
-
-            return "CHoCH UP"
+        result = detect_choch(temp)
 
 
 
+        if result != "WAIT":
 
-        elif structure == "CHoCH DOWN":
 
-
-            return "CHoCH DOWN"
+            return result
 
 
 
 
-    return "NONE"
+    return "WAIT"
 
 
 
@@ -355,10 +279,10 @@ def find_last_choch(df):
 # =====================================
 
 
-def analyze_m15_bias():
+def analyze_m15_choch():
 
 
-    global last_choch
+    global last_m15_choch
 
 
 
@@ -379,29 +303,25 @@ def analyze_m15_bias():
 
 
 
+
     choch = find_last_choch(m15)
 
 
 
 
 
-    if choch != "NONE":
+    if choch != "WAIT":
 
 
-        last_choch["M15"] = choch
-
-
-
+        last_m15_choch = choch
 
 
 
 
-    # ==========================
-    # MARKET DIRECTION
-    # ==========================
 
 
-    if last_choch["M15"] == "CHoCH UP":
+
+    if last_m15_choch == "CHoCH UP":
 
 
         return "BULLISH"
@@ -409,7 +329,8 @@ def analyze_m15_bias():
 
 
 
-    elif last_choch["M15"] == "CHoCH DOWN":
+
+    elif last_m15_choch == "CHoCH DOWN":
 
 
         return "BEARISH"
@@ -429,13 +350,11 @@ def analyze_m15_bias():
 
 
 # =====================================
-# M5 MOMENTUM
-#
-# BOS CONFIRMATION
+# M5 CHoCH CONFIRMATION
 # =====================================
 
 
-def analyze_m5_momentum():
+def analyze_m5_choch():
 
 
     m5 = get_candles(
@@ -455,13 +374,14 @@ def analyze_m5_momentum():
 
 
 
-    structure = detect_structure(m5)
+
+    choch = detect_choch(m5)
 
 
 
 
 
-    if structure == "BOS UP":
+    if choch == "CHoCH UP":
 
 
         return "BULLISH"
@@ -469,27 +389,11 @@ def analyze_m5_momentum():
 
 
 
-    elif structure == "BOS DOWN":
+
+    elif choch == "CHoCH DOWN":
 
 
         return "BEARISH"
-
-
-
-
-
-    elif structure == "CHoCH UP":
-
-
-        return "BULLISH REVERSAL"
-
-
-
-
-    elif structure == "CHoCH DOWN":
-
-
-        return "BEARISH REVERSAL"
 
 
 
@@ -506,13 +410,11 @@ def analyze_m5_momentum():
 
 
 # =====================================
-# M1 ENTRY MOMENTUM
-#
-# FAST CONFIRMATION
+# M1 CHoCH ENTRY
 # =====================================
 
 
-def analyze_m1_momentum():
+def analyze_m1_choch():
 
 
     m1 = get_candles(
@@ -532,13 +434,14 @@ def analyze_m1_momentum():
 
 
 
-    structure = detect_structure(m1)
+
+    choch = detect_choch(m1)
 
 
 
 
 
-    if structure == "BOS UP":
+    if choch == "CHoCH UP":
 
 
         return "BULLISH"
@@ -546,27 +449,11 @@ def analyze_m1_momentum():
 
 
 
-    elif structure == "BOS DOWN":
+
+    elif choch == "CHoCH DOWN":
 
 
         return "BEARISH"
-
-
-
-
-
-    elif structure == "CHoCH UP":
-
-
-        return "BULLISH REVERSAL"
-
-
-
-
-    elif structure == "CHoCH DOWN":
-
-
-        return "BEARISH REVERSAL"
 
 
 
@@ -577,11 +464,9 @@ def analyze_m1_momentum():
     # =====================================
 # PART 3/4
 #
-# AI CONFLUENCE ENGINE
+# PURE CHoCH CONFLUENCE ENGINE
 #
-# M15 CHoCH
-# M5 BOS
-# M1 BOS
+# M15 + M5 + M1
 # =====================================
 
 
@@ -592,23 +477,31 @@ def analyze_m1_momentum():
 
 # =====================================
 # LIQUIDITY STATUS
+#
+# CHoCH BASED
 # =====================================
 
 
-def analyze_liquidity(m15,m5,m1):
+def analyze_liquidity(
+    
+    m15,
+    m5,
+    m1
+
+):
 
 
     if (
 
-        m15=="BULLISH"
+        m15 == "BULLISH"
 
         and
 
-        m5=="BULLISH"
+        m5 == "BULLISH"
 
         and
 
-        m1=="BULLISH"
+        m1 == "BULLISH"
 
     ):
 
@@ -621,20 +514,38 @@ def analyze_liquidity(m15,m5,m1):
 
     elif (
 
-        m15=="BEARISH"
+        m15 == "BEARISH"
 
         and
 
-        m5=="BEARISH"
+        m5 == "BEARISH"
 
         and
 
-        m1=="BEARISH"
+        m1 == "BEARISH"
 
     ):
 
 
         return "ACTIVE SELL LIQUIDITY"
+
+
+
+
+
+    elif m15 == "BULLISH":
+
+
+        return "BUY SIDE WATCH"
+
+
+
+
+
+    elif m15 == "BEARISH":
+
+
+        return "SELL SIDE WATCH"
 
 
 
@@ -651,7 +562,9 @@ def analyze_liquidity(m15,m5,m1):
 
 
 # =====================================
-# FINAL AI ANALYSIS
+# AI CHoCH ANALYSIS
+#
+# FINAL DECISION
 # =====================================
 
 
@@ -660,60 +573,57 @@ def analyze_ai():
 
 
     # ==========================
-    # GET STRUCTURE
+    # GET TIMEFRAME DATA
     # ==========================
 
 
-    m15 = analyze_m15_bias()
+    m15 = analyze_m15_choch()
 
 
-    m5 = analyze_m5_momentum()
+    m5 = analyze_m5_choch()
 
 
-    m1 = analyze_m1_momentum()
-
-
+    m1 = analyze_m1_choch()
 
 
 
 
-    score = 0
 
 
     signal = "WAIT"
 
 
+    confidence = 0
+
 
 
 
 
 
     # ==========================
-    # BUY CONDITIONS
+    # BUY CONDITION
     # ==========================
 
 
     if (
 
-        m15=="BULLISH"
+        m15 == "BULLISH"
 
         and
 
-        m5=="BULLISH"
+        m5 == "BULLISH"
 
         and
 
-        m1=="BULLISH"
+        m1 == "BULLISH"
 
     ):
-
-
-        score = 100
 
 
         signal = "BUY"
 
 
+        confidence = 100
 
 
 
@@ -722,30 +632,29 @@ def analyze_ai():
 
 
     # ==========================
-    # SELL CONDITIONS
+    # SELL CONDITION
     # ==========================
 
 
     elif (
 
-        m15=="BEARISH"
+        m15 == "BEARISH"
 
         and
 
-        m5=="BEARISH"
+        m5 == "BEARISH"
 
         and
 
-        m1=="BEARISH"
+        m1 == "BEARISH"
 
     ):
 
 
-        score = 100
-
-
         signal = "SELL"
 
+
+        confidence = 100
 
 
 
@@ -754,7 +663,7 @@ def analyze_ai():
 
 
     # ==========================
-    # PARTIAL ALIGNMENT
+    # PARTIAL CONFIRMATION
     # ==========================
 
 
@@ -762,7 +671,13 @@ def analyze_ai():
 
 
 
-        if m15=="BULLISH":
+        score = 0
+
+
+
+
+
+        if m15 != "WAIT":
 
 
             score += 40
@@ -770,16 +685,8 @@ def analyze_ai():
 
 
 
-        elif m15=="BEARISH":
 
-
-            score += 40
-
-
-
-
-
-        if m5=="BULLISH":
+        if m5 != "WAIT":
 
 
             score += 30
@@ -787,7 +694,8 @@ def analyze_ai():
 
 
 
-        elif m5=="BEARISH":
+
+        if m1 != "WAIT":
 
 
             score += 30
@@ -797,18 +705,7 @@ def analyze_ai():
 
 
 
-        if m1=="BULLISH":
-
-
-            score += 30
-
-
-
-
-        elif m1=="BEARISH":
-
-
-            score += 30
+        confidence = score
 
 
 
@@ -837,32 +734,27 @@ def analyze_ai():
 
 
 
-
-    # ==========================
-    # FINAL DATA
-    # ==========================
-
-
     return {
 
 
         "signal":signal,
 
 
-        "confidence":min(score,100),
+        "confidence":confidence,
 
 
 
         "trend":m15,
 
 
-        "m15_bias":m15,
+
+        "m15_choch":m15,
 
 
-        "m5_momentum":m5,
+        "m5_choch":m5,
 
 
-        "m1_entry":m1,
+        "m1_choch":m1,
 
 
 
@@ -875,11 +767,10 @@ def analyze_ai():
     # =====================================
 # PART 4/4
 #
-# WEBSITE SIGNAL EXPORT ENGINE
+# WEBSITE JSON EXPORT ENGINE
 #
-# JSON OUTPUT
+# PURE CHoCH SIGNAL API
 # =====================================
-
 
 
 
@@ -913,8 +804,9 @@ while True:
 
 
 
+
     # ==========================
-    # REAL PRICE
+    # REAL XAUUSD PRICE
     # ==========================
 
 
@@ -938,7 +830,7 @@ while True:
 
 
     # ==========================
-    # WEBSITE JSON DATA
+    # WEBSITE DATA
     # ==========================
 
 
@@ -946,11 +838,11 @@ while True:
 
 
 
-        "symbol":symbol,
+        "symbol": symbol,
 
 
 
-        "price":round(
+        "price": round(
 
             price,
 
@@ -960,49 +852,48 @@ while True:
 
 
 
-        "signal":ai["signal"],
+        "signal": ai["signal"],
 
 
 
-        "confidence":ai["confidence"],
-
-
-
-
-
-        "trend":ai["trend"],
+        "confidence": ai["confidence"],
 
 
 
 
-        "m15_bias":ai["m15_bias"],
-
-
-
-        "m5_momentum":ai["m5_momentum"],
-
-
-
-        "m1_entry":ai["m1_entry"],
-
-
-
-
-        "liquidity":ai["liquidity"],
+        "trend": ai["trend"],
 
 
 
 
 
-        "ai_status":"ONLINE",
+        "m15_choch": ai["m15_choch"],
 
+
+
+        "m5_choch": ai["m5_choch"],
+
+
+
+        "m1_choch": ai["m1_choch"],
+
+
+
+
+
+        "liquidity": ai["liquidity"],
+
+
+
+
+        "ai_status": "ONLINE",
 
 
 
 
         "bot":
 
-        "GOLD SNIPER AI v3",
+        "GOLD SNIPER AI v4",
 
 
 
@@ -1039,7 +930,7 @@ while True:
 
         encoding="utf-8"
 
-    ) as f:
+    ) as file:
 
 
 
@@ -1047,14 +938,13 @@ while True:
 
             signal_data,
 
-            f,
+            file,
 
             ensure_ascii=False,
 
             indent=4
 
         )
-
 
 
 
@@ -1069,7 +959,7 @@ while True:
 
     print("==============================")
 
-    print("🥇 GOLD SNIPER AI v3")
+    print("🥇 GOLD SNIPER AI v4")
 
     print("==============================")
 
@@ -1105,27 +995,27 @@ while True:
 
     print(
 
-        "M15 Bias:",
+        "M15 CHoCH:",
 
-        ai["m15_bias"]
-
-    )
-
-
-    print(
-
-        "M5 Momentum:",
-
-        ai["m5_momentum"]
+        ai["m15_choch"]
 
     )
 
 
     print(
 
-        "M1 Entry:",
+        "M5 CHoCH:",
 
-        ai["m1_entry"]
+        ai["m5_choch"]
+
+    )
+
+
+    print(
+
+        "M1 CHoCH:",
+
+        ai["m1_choch"]
 
     )
 
