@@ -326,7 +326,7 @@ document.getElementById("market-bias").innerHTML =
 
 <h3 style="color:#ff4444">
 
-❌ AI CONNECTION FAILED
+❌ ОДООГООР ХОЛБОЛТ ТҮР САЛСАН БАЙНА
 
 </h3>
 
