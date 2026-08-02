@@ -13,20 +13,38 @@
 
 </head>
 
-
 <body>
+
+<!-- ========================= -->
+<!-- LANGUAGE SWITCHER -->
+<!-- ========================= -->
+
+<div class="language-switcher">
+
+<button
+    type="button"
+    data-language="mn"
+    onclick="setLanguage('mn')">
+    🇲🇳 Монгол
+</button>
+
+<button
+    type="button"
+    data-language="en"
+    onclick="setLanguage('en')">
+    🇺🇸 English
+</button>
+
+</div>
 
 
 <!-- ========================= -->
 <!-- GOLD SNIPER LIVE TICKER -->
 <!-- ========================= -->
 
-
 <div class="live-ticker">
 
-
 <marquee behavior="scroll" direction="left">
-
 
 📊 GOLD SNIPER LIVE
 
@@ -46,249 +64,211 @@
 
 🥇 XAUUSD 🟢 LIVE
 
-
 </marquee>
-
 
 </div>
 
 
-
-
+<!-- ========================= -->
+<!-- AUTH BUTTONS -->
+<!-- ========================= -->
 
 <div class="auth-buttons">
 
-
-<button 
+<button
 class="signup-btn"
-onclick="logoutUser()">
+onclick="logoutUser()"
+data-i18n="logout">
 
-LOGOUT
+ГАРАХ
 
 </button>
 
-
 </div>
-
-
-
-
-
 
 
 <div class="container">
 
 
+<!-- ========================= -->
+<!-- TITLE -->
+<!-- ========================= -->
 
-<h1>
+<h1 data-i18n="dashboard_title">
 
 🤖 MORNING STAR GOLD SNIPER ZONE
 
 </h1>
 
 
-
-<p class="subtitle">
+<p
+class="subtitle"
+data-i18n="dashboard_subtitle">
 
 Арилжааны системийн терминалын хяналтын самбар
 
 </p>
 
 
+<div
+class="status"
+data-i18n="system_active">
 
-
-
-
-
-<div class="status">
-
-🟢 SYSTEM ИДЭВХИТЭЙ
+🟢 СИСТЕМ ИДЭВХТЭЙ
 
 </div>
 
 
-
-
-
-
-
-
+<!-- ========================= -->
+<!-- USER ACCOUNT -->
+<!-- ========================= -->
 
 <div class="result">
 
+<h2 data-i18n="user_account">
 
-<h2>
-
-👤 USER ACCOUNT
+👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ
 
 </h2>
-
 
 <hr>
 
 
 <p>
 
-Email:
+<span data-i18n="email">
+И-мэйл
+</span>
 
 <br>
 
 <b id="userEmail">
-
 Loading...
-
 </b>
-
 
 <br><br>
 
 
-Status:
+<span data-i18n="status">
+Төлөв
+</span>
 
-🟢 Active
+:
 
+<span data-i18n="active">
+🟢 Идэвхтэй
+</span>
 
 </p>
 
-
 </div>
-
-
-
-
-
-
-
 
 
 <!-- ========================= -->
 <!-- XAUUSD LIVE MARKET -->
 <!-- ========================= -->
 
-
 <div class="result">
 
+<h2 data-i18n="xauusd_live_market">
 
-<h2>
-
-🥇 XAUUSD LIVE MARKET
+🥇 XAUUSD LIVE ЗАХ ЗЭЭЛ
 
 </h2>
-
 
 <hr>
 
 
-
-
 <div class="forex-grid">
-
-
 
 <div class="forex-card">
 
-
-<div class="pair">
+<div
+class="pair"
+data-i18n="gold">
 
 GOLD
 
 </div>
 
 
-
-
-<div class="price" id="gold-price">
+<div
+class="price"
+id="gold-price">
 
 Loading...
 
 </div>
 
 
-
-
-<div class="market-live" id="gold-status">
+<div
+class="market-live"
+id="gold-status">
 
 Checking...
 
 </div>
 
 
+<p
+class="update"
+data-i18n="live_gold_price">
 
-<p class="update">
-
-Live Gold Market Price
+Алтны зах зээлийн бодит үнэ
 
 </p>
 
-
+</div>
 
 </div>
 
-
-
 </div>
 
-
-
-</div>
 
 <!-- ========================= -->
-<!-- XAUUSD AI MARKET BIAS -->
+<!-- XAUUSD MARKET DIRECTION -->
 <!-- ========================= -->
-
 
 <div class="result">
 
+<h2 data-i18n="xauusd_direction">
 
-<h2>
-
-🥇 XAUUSD зах зээлийн чиглэл
+🥇 XAUUSD ЗАХ ЗЭЭЛИЙН ЧИГЛЭЛ
 
 </h2>
-
 
 <hr>
 
 
 <div id="market-bias">
 
+<span data-i18n="analysis_loading">
 
-⏳ AI шинжилгээ ачааллаж байна...
+⏳ Шинжилгээ ачааллаж байна...
 
+</span>
 
 </div>
 
-
 </div>
-
-
-
-
-
-
-
 
 
 <!-- ========================= -->
 <!-- TRADINGVIEW CHART -->
 <!-- ========================= -->
 
-
 <div class="result">
 
+<h2 data-i18n="live_chart">
 
-<h2>
-
-📈 XAUUSD LIVE CHART
+📈 XAUUSD БОДИТ ЦАГИЙН ГРАФИК
 
 </h2>
-
 
 <hr>
 
 
 <div style="height:600px;">
-
 
 <iframe
 
@@ -300,335 +280,214 @@ allowtransparency="true"
 
 scrolling="no">
 
-
 </iframe>
 
-
 </div>
 
-
 </div>
-
-
-
-
 
 <!-- ========================= -->
 <!-- DASHBOARD CARDS -->
 <!-- ========================= -->
 
-
 <div class="cards">
 
 
+<!-- FOREX -->
 
 <a href="xauusd.html" class="card">
 
-
 <div class="icon">
-
 📊
-
 </div>
 
-
-<h2>
-
+<h2 data-i18n="forex_pairs">
 FOREX ХОСЛОЛ
-
 </h2>
 
-
-<p>
-
-LIVE ЗАХ ЗЭЭЛИЙН ҮНИЙН ХӨДӨЛГӨӨН
-
+<p data-i18n="live_market_movement">
+ЗАХ ЗЭЭЛИЙН ҮНИЙН БОДИТ ХӨДӨЛГӨӨН
 </p>
-
 
 </a>
 
 
-
-
-
-
+<!-- CRYPTO -->
 
 <a href="crypto.html" class="card">
 
-
 <div class="icon">
-
 ₿
-
 </div>
 
-
-<h2>
-
-Crypto Scanner
-
+<h2 data-i18n="crypto_scanner">
+КРИПТО СКАННЕР
 </h2>
 
-
-<p>
-
-MONITOR
-
+<p data-i18n="monitor">
+ХЯНАХ
 </p>
-
 
 </a>
 
 
-
-
-
-
+<!-- TELEGRAM -->
 
 <a href="telegram.html" class="card">
 
-
 <div class="icon">
-
 📱
-
 </div>
 
-
-<h2>
-
-Telegram Signal
-
+<h2 data-i18n="telegram_signal">
+TELEGRAM ДОХИО
 </h2>
 
-
-<p>
-
-SWING & INTRADAY дохио
-
+<p data-i18n="swing_intraday">
+SWING & INTRADAY ДОХИО
 </p>
-
 
 </a>
 
 
-
-
-
-
-
+<!-- MARKET SENTIMENT -->
 
 <a href="sentiment.html" class="card">
 
-
 <div class="icon">
-
 🤖
-
 </div>
 
-
-<h2>
-
+<h2 data-i18n="market_sentiment">
 ЗАХ ЗЭЭЛИЙН ЧИГ ХАНДЛАГА
-
 </h2>
 
-
-<p>
-
-XAUUSD , Зах зээлийн хандлага, Итгэлцлийн шинжилгээ
-
+<p data-i18n="xauusd_sentiment">
+XAUUSD, Зах зээлийн хандлага, Итгэлцлийн шинжилгээ
 </p>
 
-
 </a>
+
+
+<!-- RISK CALCULATOR -->
 
 <a href="risk.html" class="card">
 
-
 <div class="icon">
-
 🧮
-
 </div>
 
-
-<h2>
-
-RISK CALCULATOR
-
+<h2 data-i18n="risk_calculator">
+ЭРСДЭЛИЙН ТООЦООЛУУР
 </h2>
 
-
-<p>
-
-Lot Size & Risk Management
-
+<p data-i18n="lot_risk">
+Lot Size & Эрсдэлийн удирдлага
 </p>
-
 
 </a>
 
 
-
-
-
-
-
+<!-- FOREX EDUCATION -->
 
 <a href="forex.html" class="card">
 
-
 <div class="icon">
-
 📚
-
 </div>
 
-
-<h2>
-
+<h2 data-i18n="forex">
 FOREX
-
 </h2>
 
-
-<p>
-
+<p data-i18n="trading_education">
 АРИЛЖААНЫ БОЛОВСРОЛ
-
 </p>
-
 
 </a>
 
 
-
-
-
+<!-- NEWS -->
 
 <a href="news.html" class="card">
 
-
 <div class="icon">
-
 📰
-
 </div>
 
-
-<h2>
-
+<h2 data-i18n="news_market">
 МЭДЭЭНИЙ ЗАХ ЗЭЭЛ
-
 </h2>
 
-
-<p>
-
-Economic News & Market Analysis
-
+<p data-i18n="economic_news">
+Эдийн засгийн мэдээ ба зах зээлийн шинжилгээ
 </p>
-
 
 </a>
 
 
-
-
-
-
+<!-- MARKET SESSIONS -->
 
 <a href="sessions.html" class="card">
 
-
 <div class="icon">
-
 🌍
-
 </div>
 
-
-<h2>
-
-MARKET SESSIONS
-
+<h2 data-i18n="market_sessions">
+ЗАХ ЗЭЭЛИЙН СЕССҮҮД
 </h2>
 
-
-<p>
-
-Global Trading Session Monitor
-
+<p data-i18n="global_sessions">
+Дэлхийн арилжааны сессийн хяналт
 </p>
-
 
 </a>
 
 
-
-
-
-
+<!-- TRADING ACADEMY -->
 
 <a href="academy.html" class="card">
 
-
 <div class="icon">
-
 🎓
-
 </div>
 
-
-<h2>
-
+<h2 data-i18n="trading_academy">
 TRADING ACADEMY
-
 </h2>
 
-
-<p>
-
-Trading Education & Strategy
-
+<p data-i18n="trading_strategy">
+Арилжааны боловсрол ба стратеги
 </p>
-
 
 </a>
 
 
-
-
-
 </div>
 
-
-
-
-
-
-
-
+<!-- ========================= -->
+<!-- SYSTEM STATUS -->
+<!-- ========================= -->
 
 <div class="result">
 
+<h2 data-i18n="system_status">
 
-<h2>
-
-🚀 Төлөв байдал
+🚀 ТӨЛӨВ БАЙДАЛ
 
 </h2>
-
 
 <hr>
 
 
 <p>
 
-MT5 Connection:
+<span data-i18n="mt5_connection">
+MT5 Холболт
+</span>
+
+:
 
 🟢 ONLINE
 
@@ -636,142 +495,124 @@ MT5 Connection:
 <br><br>
 
 
-SIGNAL ДОХИО:
+<span data-i18n="signal">
+ДОХИО
+</span>
 
-🟢 READY
+:
 
-
-<br><br>
-
-
-Market Scanner:
-
-🟢 ACTIVE
+<span data-i18n="ready">
+🟢 БЭЛЭН
+</span>
 
 
 <br><br>
 
 
-Gold Price:
+<span data-i18n="market_scanner">
+Зах зээлийн сканнер
+</span>
 
-🟢 LIVE DATA
+:
 
+<span data-i18n="active_status">
+🟢 ИДЭВХТЭЙ
+</span>
+
+
+<br><br>
+
+
+<span data-i18n="gold_price">
+Алтны үнэ
+</span>
+
+:
+
+<span data-i18n="live_data">
+🟢 БОДИТ МЭДЭЭЛЭЛ
+</span>
 
 </p>
 
-
 </div>
-
-
-
-
-
 
 
 </div>
 
 
+<!-- ========================= -->
+<!-- TELEGRAM ADMIN BUTTON -->
+<!-- ========================= -->
 
-
-
-
-
-
-
-<a 
+<a
 
 href="https://t.me/goldzonetrader9"
 
 target="_blank"
 
-class="telegram-float">
+class="telegram-float"
 
+data-i18n="contact_admin">
 
 📱 Админтай холбогдох
 
-
 </a>
 
-
-
-
-
-
-
-
+<!-- ========================= -->
+<!-- SUPABASE -->
+<!-- ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<script src="auth.js"></script>
+<!-- ========================= -->
+<!-- PROJECT JAVASCRIPT -->
+<!-- ========================= -->
 
+<script src="auth.js"></script>
 
 <script src="gold.js"></script>
 
-
 <script src="bias.js"></script>
 
+<script src="language.js"></script>
 
 
-
-
-
+<!-- ========================= -->
+<!-- AUTH CHECK -->
+<!-- ========================= -->
 
 <script>
-
 
 // ===============================
 // AUTH CHECK
 // ===============================
 
+async function checkUser() {
 
-async function checkUser(){
-
-
-
-const { data: { session } } = 
-
-await supabaseClient.auth.getSession();
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
 
 
+    if (!session) {
+
+        window.location.replace("login.html");
+
+        return;
+
+    }
 
 
-
-if(!session){
-
-
-window.location.replace("login.html");
-
-
-return;
-
+    document.getElementById("userEmail").innerHTML =
+        session.user.email;
 
 }
-
-
-
-
-
-document.getElementById("userEmail").innerHTML =
-
-session.user.email;
-
-
-
-}
-
-
-
 
 
 checkUser();
 
-
-
 </script>
-
-
-
 
 
 </body>
