@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Арилжааны Төлөвлөгөө — Checklist</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI', Arial, sans-serif; background:#0d1117; color:#e6edf3; padding:20px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  h1 { font-size:24px; text-align:center; color:#58a6ff; margin-bottom:6px; }
+  .sub { text-align:center; color:#8b949e; font-size:13px; margin-bottom:18px; }
+  .card { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:16px 18px; margin-bottom:16px; }
+  .card h2 { font-size:16px; color:#ffa657; margin-bottom:10px; border-bottom:1px solid #30363d; padding-bottom:8px; }
+  .card h2 .tag { float:right; font-size:11px; color:#8b949e; font-weight:normal; }
+  .row { display:flex; align-items:flex-start; padding:7px 0; border-bottom:1px dashed #21262d; }
+  .row:last-child { border-bottom:none; }
+  .row input[type=checkbox] { width:18px; height:18px; margin-right:10px; margin-top:1px; accent-color:#2ea043; cursor:pointer; flex-shrink:0; }
+  .row label { font-size:14px; line-height:1.45; cursor:pointer; }
+  .row label small { color:#8b949e; font-size:12px; display:block; }
+  .row input:checked + label { color:#58a6ff; }
+  .plan { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .field { background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:10px; }
+  .field .k { font-size:11px; color:#8b949e; text-transform:uppercase; letter-spacing:0.5px; }
+  .field .v { font-size:15px; font-weight:600; margin-top:4px; color:#e6edf3; }
+  .field .v.green { color:#3fb950; } .field .v.red { color:#f85149; } .field .v.blue { color:#58a6ff; }
+  .field input { width:100%; background:#0d1117; border:1px solid #30363d; border-radius:6px; color:#e6edf3; padding:6px 8px; margin-top:4px; font-size:14px; }
+  .field input:focus { outline:none; border-color:#58a6ff; }
+  .tip { background:#1f2430; border-left:4px solid #d29922; border-radius:6px; padding:10px 12px; font-size:13px; line-height:1.5; margin:8px 0; color:#e3b341; }
+  .btnrow { text-align:center; margin-top:6px; }
+  button { background:#238636; color:#fff; border:none; border-radius:8px; padding:10px 22px; font-size:14px; cursor:pointer; margin:4px; }
+  button.reset { background:#30363d; }
+  button:hover { filter:brightness(1.15); }
+  .foot { text-align:center; color:#6e7681; font-size:11px; margin-top:14px; }
+  @media print { body { background:#fff; color:#000; } .card { border-color:#ccc; background:#fff; } .field { background:#fff; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📋 Арилжааны Төлөвлөгөө — Checklist</h1>
+  <div class="sub">Орохоос ӨМНӨ бүгдийг бөглө. Entry хийсний дараа шийдвэр гаргахгүй — зөвхөн төлөвлөгөөгөө дага.</div>
+
+  <!-- ТӨЛӨВЛӨГӨӨ -->
+  <div class="card">
+    <h2>🎯 Арилжааны Төлөвлөгөө <span class="tag">Эхлээд бөглө</span></h2>
+    <div class="plan">
+      <div class="field"><div class="k">M15 чиглэл</div><input id="m15" placeholder="BUY / SELL / WAIT"></div>
+      <div class="field"><div class="k">M1 signal төрөл</div><input id="sig" placeholder="sweep+rej / retest / BOS"></div>
+      <div class="field"><div class="k">Entry</div><input id="entry" placeholder="ж: 4188.0"></div>
+      <div class="field"><div class="k">SL</div><input id="sl" placeholder="структурын доор"></div>
+      <div class="field"><div class="k">TP1</div><input id="tp1" placeholder="ж: 4200.0"></div>
+      <div class="field"><div class="k">TP2</div><input id="tp2" placeholder="ж: 4207.0"></div>
+      <div class="field"><div class="k">Эрсдэл ($)</div><input id="risk" placeholder="entry − sl"></div>
+      <div class="field"><div class="k">RR (TP1)</div><input id="rr" placeholder="1.5R-ээс дээш байх ёстой"></div>
+      <div class="field"><div class="k">Lot хэмжээ</div><input id="lot" placeholder="SL-ийн алдагдал = 1–2%"></div>
+      <div class="field"><div class="k">Хүчингүй болох нөхцөл</div><input id="inv" placeholder="ж: 4182.8 эвдвэл"></div>
+    </div>
+    <div class="tip">💡 SL хийгдвэл алдах мөнгө чинь таны хувьд "өвдөхгүй" хэмжээ байх ёстой. Өвдөж байвал lot-оо багасга.</div>
+  </div>
+
+  <!-- ОРОХЫН ӨМНӨХ ШАЛГАЛТ -->
+  <div class="card">
+    <h2>✅ Орохын ӨМНӨХ шалгалт <span class="tag">Бүгдийг чагтал</span></h2>
+    <div class="row"><input type="checkbox" id="c1"><label for="c1">M15 чиглэл тодорхой, миний entry чиглэлтэй ЗЭРЭГЦЭЖ байна<small>M15 WAIT эсвэл эсрэг чиглэл бол — ордоггүй</small></label></div>
+    <div class="row"><input type="checkbox" id="c2"><label for="c2">M1 дээр баталгаатай дохио байна<small>sweep + rejection + momentum, эсвэл төлөвлөсөн retest бүсэд байна</small></label></div>
+    <div class="row"><input type="checkbox" id="c3"><label for="c3">Entry нь одоогийн үнээс ХӨӨГӨӨГҮЙ, ухралт/retest дээр байна<small>Хөөж байвал — орхиж, дараагийн боломжийг хүлээнэ</small></label></div>
+    <div class="row"><input type="checkbox" id="c4"><label for="c4">SL нь структурын доор/дээр зөв байрлалтай<small>шуугианд хүрэхгүй, харин хүчингүй болох түвшний ард</small></label></div>
+    <div class="row"><input type="checkbox" id="c5"><label for="c5">RR ≥ 1.5 байна (TP1-ээр)<small>эрсдэлээс ашиг нь илүү</small></label></div>
+    <div class="row"><input type="checkbox" id="c6"><label for="c6">Lot-оо тооцсон: SL хийгдвэл дансны 1–2% алдана<small>хамгийн чухал дүрэм!</small></label></div>
+    <div class="row"><input type="checkbox" id="c7"><label for="c7">TP болон SL захиалгыг ХАМТ тавина<small>тэгвэл айх, шийдвэр гаргах мөч үгүй болно</small></label></div>
+  </div>
+
+  <!-- ОРСНЫ ДАРАА -->
+  <div class="card">
+    <h2>🧘 ОРСНЫ дараах дүрэм</h2>
+    <div class="row"><input type="checkbox" id="d1"><label for="d1">Орсон — төлөвлөгөөний дагуу SL/TP тавьчихсан. Одоо ЭКРАНААС ХОЛДОХ.<small>Алерт (mobile) тавиад 10–15 мин харж суухгүй</small></label></div>
+    <div class="row"><input type="checkbox" id="d2"><label for="d2">SL хүрэхгүй, структураа эвдэхгүй л байвал — АРИЛЖАА ХҮЧИНТЭЙ БАЙНА<small>4185 хатгах гэх мэт шуугиан айлгахгүй</small></label></div>
+    <div class="row"><input type="checkbox" id="d3"><label for="d3">TP1 хүрвэл хагасыг нь хааж, SL-ээ breakeven-д татаж, үлдсэнийг TP2 руу явуулна</label></div>
+    <div class="row"><input type="checkbox" id="d4"><label for="d4">Айдсаа мэдэрвэл: SL минь хаана байна? — тэнд л хамгаалалт байна. Гарах шийдвэрийг ТӨЛӨВЛӨГӨӨ л гаргана.</label></div>
+  </div>
+
+  <!-- ДАРААХ ШАЛГАЛТ -->
+  <div class="card">
+    <h2>📓 Арилжааны дараах шалгалт (журнал)</h2>
+    <div class="row"><input type="checkbox" id="p1"><label for="p1">Төлөвлөгөөгөө дагасан уу? SL/TP урьдчилан тавьсан уу?</label></div>
+    <div class="row"><input type="checkbox" id="p2"><label for="p2">Айдас/шунал гарч, дүрэм зөрчсөн үү? Хаана?</label></div>
+    <div class="row"><input type="checkbox" id="p3"><label for="p3">Юу сайн болсон / юу сайжруулах вэ? (1 өгүүлбэр бич)</label></div>
+    <div class="tip">💡 20 арилжааны дараа харвал: дүрэм зөрчсөн үедээ алдсан, дүрэм дагасан үедээ олсон нь харагдана. Энэ бол хамгийн хүчтэй хичээл.</div>
+  </div>
+
+  <div class="btnrow">
+    <button onclick="window.print()">🖨️ Хэвлэх / PDF хадгалах</button>
+    <button class="reset" onclick="resetAll()">🔄 Дахин эхлүүлэх</button>
+  </div>
+  <div class="foot">Арилжааны төлөвлөгөө — зөвхөн өөрийн хэрэглээнд. Risk 1–2%, төлөвлөгөөгөө дага, айдсаа удирд 💪</div>
+</div>
+<script>
+  function resetAll() {
+    document.querySelectorAll('input[type=text], input:not([type=checkbox])').forEach(i => i.value = '');
+    document.querySelectorAll('input[type=checkbox]').forEach(c => c.checked = false);
+  }
+</script>
+</body>
+</html>
