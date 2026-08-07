@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 SMC Аргачлал — BOS/CHoCH, Order Block, Liquidity</title>
+<style>
+  :root { --blue:#1a73e8; --green:#188038; --red:#d93025; --dark:#202124; --bg:#f8f9fa; --purple:#7b1fa2; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--dark); line-height:1.7; padding:20px; }
+  .container { max-width:900px; margin:0 auto; background:#fff; border-radius:12px; padding:30px 40px; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+  h1 { font-size:28px; color:var(--purple); border-bottom:3px solid var(--purple); padding-bottom:12px; margin-bottom:8px; }
+  .sub { color:#666; font-size:14px; margin-bottom:25px; }
+  h2 { font-size:20px; color:var(--purple); margin:28px 0 12px; padding-left:10px; border-left:4px solid var(--purple); }
+  h3 { font-size:16px; color:var(--dark); margin:14px 0 8px; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 22px; }
+  li { margin-bottom:6px; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+  th, td { border:1px solid #ddd; padding:8px 10px; text-align:left; }
+  th { background:var(--purple); color:#fff; }
+  tr:nth-child(even) { background:#f3e8fa; }
+  .tip { background:#e8f5e9; border-left:5px solid var(--green); padding:12px 16px; border-radius:6px; margin:14px 0; }
+  .warn { background:#fdecea; border-left:5px solid var(--red); padding:12px 16px; border-radius:6px; margin:14px 0; }
+  .info { background:#f3e8fa; border-left:5px solid var(--purple); padding:12px 16px; border-radius:6px; margin:14px 0; }
+  .example { background:#fef7e0; border-left:5px solid #f9ab00; padding:12px 16px; border-radius:6px; margin:14px 0; font-size:14px; }
+  code { background:#eee; padding:2px 6px; border-radius:4px; font-size:13px; }
+  .btn { display:inline-block; background:var(--purple); color:#fff; border:none; padding:12px 24px; border-radius:8px; font-size:15px; cursor:pointer; margin:10px 5px 5px 0; }
+  .btn:hover { opacity:.9; }
+  .flow { background:#202124; color:#fff; border-radius:10px; padding:16px 20px; font-size:14px; margin:14px 0; line-height:2; }
+  .flow b { color:#7dd67d; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .card { background:#f3e8fa; border-radius:8px; padding:14px; font-size:14px; }
+  .card h3 { margin-top:0; color:var(--purple); }
+  @media print { body{background:#fff;padding:0;} .container{box-shadow:none;padding:15px;} .btn{display:none;} }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎯 SMC Аргачлалын Хичээл</h1>
+  <div class="sub">Smart Money Concept — BOS/CHoCH, Order Block, Liquidity Sweep — Алт (XAUUSD) дээрх бодит жишээнүүдтэй</div>
+  <button class="btn" onclick="window.print()">🖨️ Хэвлэх / PDF хадгалах</button>
+
+  <!-- ===================== 1 ===================== -->
+  <h2>1️⃣ SMC гэж юу вэ?</h2>
+  <p><b>SMC (Smart Money Concept)</b> = "Ухаант мөнгө" (том банкууд, институцууд)-ын хөдөлгөөнийг chart-аас унших аргачлал.</p>
+  <div class="info">
+    <b>Гол санаа:</b> Том тоглогчид хямд аваад үнэтэй зарна. Тэд:
+    <ul>
+      <li>🕳️ <b>Liquidity</b> (хүмүүсийн SL) цуглуулахын тулд үнийг хатгадаг</li>
+      <li>📦 <b>Order Block</b>-д байрлалаа нуудаг</li>
+      <li>🧩 <b>BOS/CHoCH</b>-оор бүтцээ өөрчилдөг</li>
+    </ul>
+    Бид эдгээрийг илрүүлж, тэдэнтэй хамт арилжаална.
+  </div>
+
+  <!-- ===================== 2 ===================== -->
+  <h2>2️⃣ Market Structure (Бүтэц)</h2>
+  <p>Үнийн хөдөлгөөнийг <b>swing high</b> (оргил) ба <b>swing low</b> (ёроол)-оор тэмдэглэдэг:</p>
+  <table>
+    <tr><th>Тэмдэглэгээ</th><th>Утга</th><th>Чиглэл</th></tr>
+    <tr><td><b>HH</b> (Higher High)</td><td>Өндөр дээд</td><td>📈 BUY</td></tr>
+    <tr><td><b>HL</b> (Higher Low)</td><td>Өндөр нам</td><td>📈 BUY</td></tr>
+    <tr><td><b>LH</b> (Lower High)</td><td>Нам дээд</td><td>📉 SELL</td></tr>
+    <tr><td><b>LL</b> (Lower Low)</td><td>Нам нам</td><td>📉 SELL</td></tr>
+  </table>
+  <div class="example">
+    <b>Uptrend (BUY):</b> HH + HL = "дээшлээд, бага зэрэг ухраад, дахиад дээш"
+    <br><b>Downtrend (SELL):</b> LH + LL = "унаад, бага зэрэг өссөн ч, дахиад унаад"
+  </div>
+
+  <!-- ===================== 3 ===================== -->
+  <h2>3️⃣ BOS ба CHoCH (Бүтцийн эвдрэл)</h2>
+  <h3>🧱 BOS — Break of Structure (Бүтцийн тасралт)</h3>
+  <p>Трендийн <b>чиглэлд</b> бүтэц тасрах:</p>
+  <ul>
+    <li><b>BOS ▲ (Bullish):</b> Uptrend-д сүүлийн swing high-г дээш тасрах → тренд үргэлжилнэ</li>
+    <li><b>BOS ▼ (Bearish):</b> Downtrend-д сүүлийн swing low-г доош тасрах → тренд үргэлжилнэ</li>
+  </ul>
+  <h3>🔄 CHoCH — Change of Character (Чиглэлийн өөрчлөлт)</h3>
+  <p>Трендийн <b>эсрэг</b> бүтэц тасрах → чиглэл өөрчлөгдөж байна:</p>
+  <ul>
+    <li><b>CHoCH ▲ (Bullish):</b> Downtrend-д сүүлийн swing high-г дээш тасрах → SELL-ээ болих, BUY бэлдэх</li>
+    <li><b>CHoCH ▼ (Bearish):</b> Uptrend-д сүүлийн swing low-г доош тасрах → BUY-ээ болих, SELL бэлдэх</li>
+  </ul>
+  <div class="warn">
+    ⚠️ <b>Чухал:</b> BOS = тренд үргэлжлэл, CHoCH = чиглэл өөрчлөлт. Энэ хоёрыг ялгах нь SMC-ийн суурь!
+  </div>
+  <div class="example">
+    📌 <b>Бодит жишээ (2026-08-06):</b> Алт 4304 дээд үнээс унаад, 4272.7-г тасарлаа = <b>CHoCH ▼ / BOS ▼</b> → бид SELL рүү шилжсэн. Тэр уналт 4230 хүрсэн.
+  </div>
+
+  <!-- ===================== 4 ===================== -->
+  <h2>4️⃣ Liquidity (Хөрвөх чадвар / "Хатгаа")</h2>
+  <p><b>Liquidity</b> = хүмүүсийн SL, take-profit, limit захиалгууд бөөгнөрсөн газар. Том тоглогчид тэнд <b>үнийг хатгаж</b> (sweep) захиалгуудыг цуглуулдаг.</p>
+  <table>
+    <tr><th>Төрөл</th><th>Хаана</th><th>Юу болдог</th></tr>
+    <tr><td><b>EQH</b> (Equal High)</td><td>Давхар дээд цэг</td><td>Дээрх SELL SL-ууд → дээш хатгаад буцах</td></tr>
+    <tr><td><b>EQL</b> (Equal Low)</td><td>Давхар нам цэг</td><td>Доорх BUY SL-ууд → доош хатгаад буцах</td></tr>
+  </table>
+  <div class="flow">
+    💧 <b>Sweep (хатгаа) логик:</b><br>
+    &nbsp;&nbsp;1. Хүмүүс 4250-д BUY орж, SL-ээ 4247-д тавьдаг<br>
+    &nbsp;&nbsp;2. Үнэ <b>4247-г хатгаад</b> SL-уудыг цуглуулна (sweep)<br>
+    &nbsp;&nbsp;3. Дараа нь <b>буцаж дээшээ</b> явна (rejection)<br>
+    &nbsp;&nbsp;4. Хатгасны дараа үнэ буцах = <b>манай BUY signal!</b> 🎯
+  </div>
+
+  <!-- ===================== 5 ===================== -->
+  <h2>5️⃣ Order Block (OB) — Захиалгын бүс</h2>
+  <p><b>Order Block</b> = хүчтэй хөдөлгөөн эхэлсний <b>өмнөх сүүлийн эсрэг лаа</b> (институцууд тэнд орсон).</p>
+  <ul>
+    <li><b>Demand OB (Bullish):</b> Дээш хүчтэй хөдөлгөөний өмнөх улаан лаа → дэмжлэг</li>
+    <li><b>Supply OB (Bearish):</b> Доош хүчтэй хөдөлгөөний өмнөх ногоон лаа → эсэргүүцэл</li>
+  </ul>
+  <table>
+    <tr><th>Төлөв</th><th>Утга</th><th>Ашиглах эсэх</th></tr>
+    <tr><td><b>Fresh (шинэ)</b></td><td>Хүрээгүй, хүчтэй</td><td>✅ Ашиглана</td></tr>
+    <tr><td><b>Mitigated (хүрсэн)</b></td><td>Үнэ аль хэдийн OB-г хүрсэн</td><td>⚠️ Сул</td></tr>
+    <tr><td><b>Invalidated (тасарсан)</b></td><td>OB эвдэрсэн</td><td>❌ Битгий</td></tr>
+  </table>
+  <div class="tip">
+    💡 <b>OB дээр хэрхэн арилжаална:</b> Үнэ OB руу буцаж ирэхэд (retest) орно. SL = OB-ийн хязгаараас цааш, TP = дараагийн бүтэц.
+  </div>
+
+  <!-- ===================== 6 ===================== -->
+  <h2>6️⃣ FVG — Fair Value Gap (Үнийн зөрүү)</h2>
+  <p><b>FVG</b> = хүчтэй хөдөлгөөний үед үүссэн "хоосон зай" (3 лааны дунд үүсэх зөрүү). Үнэ ихэвчлэн FVG-ээ <b>бөглөж</b> буцаж ирдэг.</p>
+  <ul>
+    <li><b>Bullish FVG:</b> Дээш хөдөлгөөний үед үүссэн — бөглөхөд дэмжлэг</li>
+    <li><b>Bearish FVG:</b> Доош хөдөлгөөний үед үүссэн — бөглөхөд эсэргүүцэл</li>
+  </ul>
+  <div class="info">
+    📌 <b> zone индикаторууд</b> (NARROW_ZONE / superindicator) яг эдгээрийг автоматаар зурдаг — OB, HTF zone, FVG, BOS түвшнүүд.
+  </div>
+
+  <!-- ===================== 7 ===================== -->
+  <h2>7️⃣  Entry загвар (Sweep + Rejection + Momentum)</h2>
+  <div class="flow">
+    🎯 <b>Арилжааны дүрэм (манай аргачлал):</b><br><br>
+    <b>1. Чиглэл:</b> M15+M5 → BOS/CHoCH-оор BUY эсвэл SELL тодорхойл<br>
+    <b>2. Liquidity:</b> M1 дээр EQH/EQL хай →<br>
+    <b>3. Sweep:</b> Үнэ liquidity-г хатгана (sweep)<br>
+    <b>4. Rejection:</b> Хатгасны дараа лаа <b>буцаж хаагдана</b> (rejection close)<br>
+    <b>5. Momentum:</b> Буцах хөдөлгөөн ATR-ийн 0.4+ байна<br>
+    <b>6. Entry:</b> Retest/pullback дээр орно (хөөхгүй!)<br>
+    <b>7. SL:</b> Sweep-ийн хэт цэгээс цааш (бүтцээс)<br>
+    <b>8. TP:</b> Дараагийн structure / OB / FVG
+  </div>
+
+  <!-- ===================== 8 ===================== -->
+  <h2>8️⃣ SL / TP — Бүтцээр тодорхойлох</h2>
+  <table>
+    <tr><th></th><th>BUY</th><th>SELL</th></tr>
+    <tr><td><b>SL</b></td><td>Sweep low / OB-ийн доод хязгаараас 0.5-1.0 доош</td><td>Sweep high / OB-ийн дээд хязгаараас 0.5-1.0 дээш</td></tr>
+    <tr><td><b>TP1</b></td><td>Дараагийн swing high / resistance</td><td>Дараагийн swing low / support</td></tr>
+    <tr><td><b>TP2</b></td><td>Дараагийн OB / том бүтэц</td><td>Дараагийн OB / том бүтэц</td></tr>
+  </table>
+  <div class="warn">
+    ⚠️ <b>SL = бүтцээс!</b> Тогтсон "5 оноо" гэх мэт механик SL биш — OB/sweep-ийн хязгаараас гаргана. SL өргөн бол lot-оо багасгана (эрсдэл ижил).
+  </div>
+
+  <!-- ===================== 9 ===================== -->
+  <h2>9️⃣  3 Timeframe ажлын урсгал</h2>
+  <table>
+    <tr><th>Timeframe</th><th>Үүрэг</th><th>Юу харна</th></tr>
+    <tr><td><b>M15</b></td><td>Чиглэл</td><td>BOS/CHoCH, HTF OB, trend</td></tr>
+    <tr><td><b>M5</b></td><td>Бүс/зone</td><td>Narrow OB, ойрын supply/demand, momentum</td></tr>
+    <tr><td><b>M1</b></td><td>Entry</td><td>Sweep + rejection + momentum, CHoCH</td></tr>
+  </table>
+  <div class="example">
+    📌 <b> хийх зүйл:</b> M15 зөвшөөрвөл → M5-ийн OB-д → M1-ийн sweep+rejection дээр л орно.
+    <br>Гурвын аль нэг нь зөрчилдвөл → <b>WAIT!</b>
+  </div>
+
+  <!-- ===================== 10 ===================== -->
+  <h2>🔟 Нийтлэг алдаанууд</h2>
+  <ol>
+    <li><b>Чиглэл харалгүй орох</b> — M15 SELL байхад BUY орж байгаа (манай өчигдрийн алдаа 😅)</li>
+    <li><b>Хөөж орох</b> — sweep гарсны дараа шууд, retest хүлээхгүй байх</li>
+    <li><b>OB тасарсны дараа ч барих</b> — invalidated OB дээр арилжаална</li>
+    <li><b>SL-гүй орох</b> — алдагдлын хязгааргүй</li>
+    <li><b>TP хэт ойрхон</b> — бага ашиг авч, том хөдөлгөөнийг алгасах</li>
+    <li><b>Chop-д олон арилжаа</b> — чиглэлгүй зах зээлд хэт олон орох</li>
+    <li><b>Мэдээг шалгахгүй байх</b> — том мэдээний үед хэвийн бус хөдөлгөөн</li>
+  </ol>
+
+  <!-- ===================== 11 ===================== -->
+  <h2>🔑 SMC-ийн алтан дүрмүүд</h2>
+  <ol>
+    <li><b>Чиглэл → Бүс → Entry</b> гэсэн дарааллаар ажилла (M15 → M5 → M1)</li>
+    <li><b>Sweep + rejection баталгаагүй бол бүү ор.</b></li>
+    <li><b>Хөөж бүү ор.</b> Pullback/retest хүлээнэ.</li>
+    <li><b>SL = бүтцээс (OB/sweep),</b> тооноос биш.</li>
+    <li><b>CHoCH гарсан бол чиглэлээ соль.</b> Зөрүүд бүү бай.</li>
+    <li><b>Invalidated OB дээр бүү арилжаал.</b></li>
+    <li><b>Chop-д бүү ороорой.</b> WAIT бол зөв шийдвэр.</li>
+    <li><b>Алдсан setup-г бүү харамс.</b> Дараагийнх нь ирнэ.</li>
+  </ol>
+
+  <div class="info" style="margin-top:20px">
+    🎓 <b>Санаж авах хамгийн чухал:</b> SMC бол "том тоглогчдын сэтгэл зүйг" унших урлаг. Хатгаа (sweep) = махчин амьтны занга, OB = тэдний нуугдмал байрлал, BOS/CHoCH = тэдний шийдвэр. Бид тэдэнтэй хамт ажиллана, эсрэг биш!
+  </div>
+
+  <button class="btn" onclick="window.print()">🖨️ Хэвлэх / PDF хадгалах</button>
+  <div style="text-align:center;color:#999;font-size:12px;margin-top:20px">Боловсролын материал · 2026</div>
+</div>
+</body>
+</html>
