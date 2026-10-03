@@ -7,7 +7,7 @@ const translations = {
 
     mn: {
         logout: "ГАРАХ",
-        dashboard_title: "🤖 GOLD SNIPER ZONE",
+        dashboard_title: "🤖 STRYX ZONE GOLD SNIPER",
         dashboard_subtitle: "Арилжааны системийн терминалын хяналтын самбар",
         system_active: "🟢 СИСТЕМ ИДЭВХТЭЙ",
 
