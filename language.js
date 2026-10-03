@@ -8,7 +8,7 @@ const translations = {
     mn: {
         logout: "ГАРАХ",
         dashboard_title: "🤖 STRYX ZONE GOLD SNIPER",
-        dashboard_subtitle: "Арилжааны системийн терминалын хяналтын самбар",
+        dashboard_subtitle: "Smart Market Structure",
         system_active: "🟢 СИСТЕМ ИДЭВХТЭЙ",
 
         user_account: "👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ",
