@@ -68,7 +68,7 @@ const translations = {
 
     en: {
         logout: "LOGOUT",
-        dashboard_title: "🤖 GOLD SNIPER ZONE",
+        dashboard_title: "🤖 STRYX ZONE SNIPER ZONE",
         dashboard_subtitle: "Trading System Terminal Dashboard",
         system_active: "🟢 SYSTEM ACTIVE",
 
