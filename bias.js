@@ -15,9 +15,10 @@ async function loadMarketBias() {
     if (data.signal === "BUY") color = "#00ff99";
     if (data.signal === "SELL") color = "#ff4444";
 
-    let strength = "🔴 Сул";
-    if (data.confidence >= 80) strength = "🟢 Хүчтэй";
-    else if (data.confidence >= 50) strength = "🟡 Дунд";
+    let strength = "⏳ Дохио байхгүй (WAIT)";
+    if (data.signal === "BUY" || data.signal === "SELL") {
+      strength = "🟢 Хүчтэй";
+    }
 
     document.getElementById("market-bias").innerHTML = `
       <h3 style="color:${color};font-size:30px">${data.signal}</h3>
