@@ -113,9 +113,9 @@ def analyze_liquidity(h4, h1, m15, m5):
     elif all(t == "BEARISH" for t in tfs):
         return "ACTIVE SELL LIQUIDITY"
     elif h4 == "BULLISH":
-        return "BUY SIDE WATCH"
+        return "BUY BIAS (хүлээж байна)"
     elif h4 == "BEARISH":
-        return "SELL SIDE WATCH"
+        return "SELL BIAS (хүлээж байна)"
     return "WAIT"
 
 
