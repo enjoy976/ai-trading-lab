@@ -1,6 +1,6 @@
 # =====================================
 # GOLD SNIPER AI v4 (FIXED)
-# M15 BIAS / M5 CONFIRMATION / M1 ENTRY
+# H4 BIAS / H1 / M15 / M5 ENTRY
 # =====================================
 
 import MetaTrader5 as mt5
@@ -86,70 +86,75 @@ def structure(df, n=SWING_N):
     return trend
 
 
-def analyze_m15_choch():
+def analyze_h4():
+    return structure(get_candles(mt5.TIMEFRAME_H4, 300))
+
+
+def analyze_h1():
+    return structure(get_candles(mt5.TIMEFRAME_H1, 300))
+
+
+def analyze_m15():
     return structure(get_candles(mt5.TIMEFRAME_M15, 300))
 
 
-def analyze_m5_choch():
+def analyze_m5():
     return structure(get_candles(mt5.TIMEFRAME_M5, 300))
-
-
-def analyze_m1_choch():
-    return structure(get_candles(mt5.TIMEFRAME_M1, 300))
 
 
 # =====================================
 # LIQUIDITY STATUS
 # =====================================
 
-def analyze_liquidity(m15, m5, m1):
-    if m15 == "BULLISH" and m5 == "BULLISH" and m1 == "BULLISH":
+def analyze_liquidity(h4, h1, m15, m5):
+    tfs = [h4, h1, m15, m5]
+    if all(t == "BULLISH" for t in tfs):
         return "ACTIVE BUY LIQUIDITY"
-    elif m15 == "BEARISH" and m5 == "BEARISH" and m1 == "BEARISH":
+    elif all(t == "BEARISH" for t in tfs):
         return "ACTIVE SELL LIQUIDITY"
-    elif m15 == "BULLISH":
+    elif h4 == "BULLISH":
         return "BUY SIDE WATCH"
-    elif m15 == "BEARISH":
+    elif h4 == "BEARISH":
         return "SELL SIDE WATCH"
     return "WAIT"
 
 
 # =====================================
 # AI ANALYSIS
+# H4 40 + H1 30 + M15 20 + M5 10
+# Зөвхөн H4-тэй ижил чиглэлтэй TF оноо авна
 # =====================================
 
 def analyze_ai():
-    m15 = analyze_m15_choch()
-    m5 = analyze_m5_choch()
-    m1 = analyze_m1_choch()
+    h4 = analyze_h4()
+    h1 = analyze_h1()
+    m15 = analyze_m15()
+    m5 = analyze_m5()
 
     signal = "WAIT"
+    confidence = 0
 
-    if m15 == "BULLISH" and m5 == "BULLISH" and m1 == "BULLISH":
-        signal = "BUY"
-        confidence = 100
-    elif m15 == "BEARISH" and m5 == "BEARISH" and m1 == "BEARISH":
-        signal = "SELL"
-        confidence = 100
-    else:
-        confidence = 0
-        if m15 != "WAIT":
-            confidence += 40
-            if m5 == m15:
-                confidence += 30
-            if m1 == m15:
-                confidence += 30
+    if h4 != "WAIT":
+        confidence = 40
+        if h1 == h4:
+            confidence += 30
+        if m15 == h4:
+            confidence += 20
+        if m5 == h4:
+            confidence += 10
 
-    liquidity = analyze_liquidity(m15, m5, m1)
+    if confidence == 100:
+        signal = "BUY" if h4 == "BULLISH" else "SELL"
 
     return {
         "signal": signal,
         "confidence": confidence,
-        "trend": m15,
+        "trend": h4,
+        "h4_choch": h4,
+        "h1_choch": h1,
         "m15_choch": m15,
         "m5_choch": m5,
-        "m1_choch": m1,
-        "liquidity": liquidity,
+        "liquidity": analyze_liquidity(h4, h1, m15, m5),
     }
 
 
@@ -207,9 +212,10 @@ while True:
         "signal": ai["signal"],
         "confidence": ai["confidence"],
         "trend": ai["trend"],
+        "h4_choch": ai["h4_choch"],
+        "h1_choch": ai["h1_choch"],
         "m15_choch": ai["m15_choch"],
         "m5_choch": ai["m5_choch"],
-        "m1_choch": ai["m1_choch"],
         "liquidity": ai["liquidity"],
         "ai_status": "ONLINE",
         "bot": "GOLD SNIPER AI v4",
@@ -227,9 +233,10 @@ while True:
     print("Signal:", ai["signal"])
     print("Price:", price)
     print("Confidence:", ai["confidence"], "%")
+    print("H4:", ai["h4_choch"])
+    print("H1:", ai["h1_choch"])
     print("M15:", ai["m15_choch"])
     print("M5:", ai["m5_choch"])
-    print("M1:", ai["m1_choch"])
     print("Liquidity:", ai["liquidity"])
     print("==============================")
 
