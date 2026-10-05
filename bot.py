@@ -135,10 +135,10 @@ def analyze_ai():
         confidence = 0
         if m15 != "WAIT":
             confidence += 40
-        if m5 != "WAIT":
-            confidence += 30
-        if m1 != "WAIT":
-            confidence += 30
+            if m5 == m15:
+                confidence += 30
+            if m1 == m15:
+                confidence += 30
 
     liquidity = analyze_liquidity(m15, m5, m1)
 
