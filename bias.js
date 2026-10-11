@@ -38,7 +38,7 @@ async function loadMarketBias() {
   } catch (error) {
     console.log("AI ERROR:", error);
     document.getElementById("market-bias").innerHTML = `
-      <h3 style="color:#ff4444">❌ AI CONNECTION FAILED</h3>
+      <h3 style="color:#ff4444">❌ ОДООГООР ХОЛБОЛТ ТҮР САЛСАН БАЙНА</h3>
       <p>${error.message}</p>
     `;
   }
