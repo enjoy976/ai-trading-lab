@@ -7,85 +7,101 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gold Sniper AI Signup</title>
+<title>STRYX ZONE GOLD SNIPER — Signup</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 
-<body>
+<body class="auth-page">
+
+
+<div class="auth-language-bar">
+
+  <div class="language-switcher">
+
+    <button data-language="mn" class="active">MN</button>
+
+    <button data-language="en">EN</button>
+
+  </div>
+
+</div>
+
+
+<div class="auth-glow-orb"></div>
 
 
 <div class="login-box">
 
 
-<h1>
-🤖 STRYX ZONE
-</h1>
+  <div class="auth-brand">
+
+    <div class="auth-brand__icon"></div>
+
+    <h1>STRYX ZONE</h1>
+
+    <div class="auth-brand__sub">GOLD SNIPER</div>
+
+  </div>
 
 
-<h2>
-🧬 БҮРТГҮҮЛЭХ
-</h2>
+  <div class="auth-divider"></div>
 
 
-<hr>
+  <h2 data-i18n="auth_signup_title">🧬 БҮРТГҮҮЛЭХ</h2>
 
 
-<p>Email</p>
-
-<input 
-id="signupEmail"
-type="email"
-placeholder="Enter email хаягаа оруулна уу">
+  <form class="auth-form" onsubmit="event.preventDefault(); signupUser();">
 
 
-<br><br>
+    <label class="auth-field">
+
+      <span data-i18n="auth_email_label">Email</span>
+
+      <input
+      id="signupEmail"
+      type="email"
+      placeholder="Enter email хаягаа оруулна уу">
+
+    </label>
 
 
-<p>Нууц үг</p>
+    <label class="auth-field">
 
-<input 
-id="signupPassword"
-type="password"
-placeholder="Шинэ нууц үгээ оруулна уу">
+      <span data-i18n="auth_password_label">Нууц үг</span>
 
+      <input
+      id="signupPassword"
+      type="password"
+      placeholder="Шинэ нууц үгээ оруулна уу">
 
-<br><br>
-
-
-<button 
-class="access-btn"
-onclick="signupUser()">
-
-ШИНЭ ХАЯГ ҮҮСГЭХ 
-
-</button>
+    </label>
 
 
-<p id="signupResult"></p>
+    <button
+    class="access-btn"
+    type="submit">
+
+      <span data-i18n="auth_signup_button">ШИНЭ ХАЯГ ҮҮСГЭХ</span>
+
+    </button>
 
 
-
-<br>
-
-
-<a href="login.html">
-
-Аль хэдийн бүртгэлтэй юу?
-
-</a>
+  </form>
 
 
-<br><br>
+  <p id="signupResult" class="auth-result"></p>
 
 
-<a href="index.html">
+  <div class="auth-links">
 
-← Нүүр хуудас руу буцах
+    <a href="login.html" data-i18n="auth_have_account">Аль хэдийн бүртгэлтэй юу?</a>
 
-</a>
+    <a href="index.html" data-i18n="auth_back_home_mn">← Нүүр хуудас руу буцах</a>
+
+  </div>
 
 
 </div>
@@ -93,10 +109,11 @@ onclick="signupUser()">
 
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="auth.js"></script>
+
+<script src="language.js"></script>
 
 
 </body>
