@@ -1006,33 +1006,36 @@ updateKillzone();
 setInterval(updateKillzone, 1000);
 
 // ===============================
-// BULLISH (НОГООН) / BEARISH (УЛААН) ӨНГӨ БУДАГЧ
+// BULLISH (НОГООН) / BEARISH (УЛААН) ӨНГӨ БУДАГЧ (Сайжруулсан)
 // ===============================
 function colorizeMarketBias() {
   const biasBox = document.getElementById("market-bias");
   if (!biasBox) return;
 
-  let html = biasBox.innerHTML;
-  if (html.includes("bias-colored")) return;
-
-  if (html.includes("BEARISH") || html.includes("BULLISH") || html.includes("BUY") || html.includes("SELL")) {
-    html = html
-      .replace(/\b(BEARISH|SELL BIAS|SELL)\b/g, '<span class="bias-colored" style="color:#EF4444; font-weight:700; text-shadow:0 0 8px rgba(239,68,68,0.35);">$1</span>')
-      .replace(/\b(BULLISH|BUY BIAS|BUY)\b/g, '<span class="bias-colored" style="color:#22C55E; font-weight:700; text-shadow:0 0 8px rgba(34,197,94,0.35);">$1</span>')
-      .replace(/\b(WAIT)\b/g, '<span class="bias-colored" style="color:#F0CE6E; font-weight:700;">$1</span>');
-
-    biasBox.innerHTML = html;
+  const walker = document.createTreeWalker(biasBox, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while ((node = walker.nextNode())) {
+    if (node.parentElement && node.parentElement.classList.contains("bias-colored")) continue;
+    if (/(BEARISH|BULLISH|SELL|BUY|WAIT)/i.test(node.nodeValue)) {
+      textNodes.push(node);
+    }
   }
+
+  textNodes.forEach(textNode => {
+    const span = document.createElement("span");
+    span.innerHTML = textNode.nodeValue
+      .replace(/\b(BEARISH|SELL BIAS|SELL)\b/gi, '<span class="bias-colored" style="color:#EF4444 !important; font-weight:700; text-shadow:0 0 8px rgba(239,68,68,0.4);">$1</span>')
+      .replace(/\b(BULLISH|BUY BIAS|BUY)\b/gi, '<span class="bias-colored" style="color:#22C55E !important; font-weight:700; text-shadow:0 0 8px rgba(34,197,94,0.4);">$1</span>')
+      .replace(/\b(WAIT)\b/gi, '<span class="bias-colored" style="color:#F0CE6E !important; font-weight:700;">$1</span>');
+    textNode.parentNode.replaceChild(span, textNode);
+  });
 }
 
-const biasEl = document.getElementById("market-bias");
-if (biasEl) {
-  const observer = new MutationObserver(colorizeMarketBias);
-  observer.observe(biasEl, { childList: true, subtree: true, characterData: true });
-  setInterval(colorizeMarketBias, 1000);
-}
+setInterval(colorizeMarketBias, 500);
 
 </script>
+
 
 
 
