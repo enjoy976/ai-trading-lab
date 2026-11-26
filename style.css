@@ -1025,6 +1025,484 @@ input:focus {
 }
 
 /* ================================================================
+   KILLZONE COUNTDOWN
+   ================================================================ */
+.killzone-section {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.killzone-section:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 0 40px var(--gold-glow);
+}
+
+.killzone-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.6;
+}
+
+.killzone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.killzone-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.killzone-header h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+  margin-left: 8px;
+}
+
+.killzone-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  background: var(--green-glow);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.killzone-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.killzone-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.killzone-card {
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 22px 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.killzone-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.killzone-card--active {
+  border-color: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.12);
+}
+
+.killzone-card--active::before {
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity: 1;
+}
+
+.killzone-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.killzone-card__name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.killzone-card__time {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--gold-glow);
+  border: 1px solid var(--border-strong);
+}
+
+.killzone-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.killzone-timer__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 64px;
+}
+
+.killzone-timer__value {
+  font-family: var(--mono);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 16px var(--gold-glow);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.killzone-timer__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.killzone-timer__sep {
+  font-family: var(--mono);
+  font-size: 32px;
+  color: var(--gold-dim);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.killzone-card__status {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(92, 100, 120, 0.1);
+  border: 1px solid rgba(92, 100, 120, 0.2);
+  display: inline-block;
+  width: 100%;
+}
+
+.killzone-card__status--active {
+  color: var(--green);
+  background: var(--green-glow);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* ================================================================
+   VIP SIGNAL & VERIFIED TP HISTORY
+   ================================================================ */
+.vip-section {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vip-section:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 0 40px var(--gold-glow);
+}
+
+.vip-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.6;
+}
+
+.vip-header {
+  margin-bottom: 24px;
+}
+
+.vip-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vip-header h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+.vip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* --- Left: Locked signal --- */
+.vip-signal-card {
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.vip-signal-card__label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.vip-signal-preview {
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.vip-signal-preview__content {
+  position: relative;
+  padding: 24px 20px;
+  background: linear-gradient(135deg, rgba(11,14,20,0.6), rgba(22,27,39,0.4));
+}
+
+.vip-signal-blur {
+  filter: blur(5px);
+  user-select: none;
+  pointer-events: none;
+}
+
+.vip-signal-line {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.vip-signal-line b {
+  color: var(--gold-bright);
+}
+
+.vip-signal-lock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--gold-bright);
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px var(--gold-glow);
+  z-index: 2;
+}
+
+.vip-signal-lock__icon {
+  font-size: 32px;
+}
+
+.vip-join-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--obsidian);
+  border: none;
+  padding: 13px 28px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+  width: 100%;
+  text-align: center;
+}
+
+.vip-join-btn:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 28px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+/* --- Right: History table --- */
+.vip-history-card {
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px 20px;
+}
+
+.vip-history-card__label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.vip-history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.vip-history-table thead th {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.vip-history-table tbody td {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.vip-history-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.vip-history-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.vip-history-table tbody tr:hover {
+  background: var(--gold-glow);
+}
+
+.vip-pips {
+  color: var(--green) !important;
+  font-weight: 600;
+}
+
+.vip-tp {
+  color: var(--green) !important;
+  font-weight: 600;
+  font-size: 12px !important;
+}
+
+.vip-history-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* --- Killzone + VIP responsive --- */
+@media (max-width: 768px) {
+  .killzone-grid,
+  .vip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .killzone-timer__value {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .killzone-section,
+  .vip-section {
+    padding: 20px 16px;
+  }
+
+  .killzone-timer__value {
+    font-size: 26px;
+  }
+
+  .killzone-timer__unit {
+    min-width: 52px;
+  }
+
+  .vip-history-table thead th,
+  .vip-history-table tbody td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+}
+
+/* ================================================================
    FOREX GRID (xauusd.html / standalone pages)
    ================================================================ */
 .forex-grid {
