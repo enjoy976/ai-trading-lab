@@ -7,85 +7,101 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>STRYX ZONE GOLD SNIPER</title>
+<title>STRYX ZONE GOLD SNIPER — Login</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 
-<body>
+<body class="auth-page">
+
+
+<div class="auth-language-bar">
+
+  <div class="language-switcher">
+
+    <button data-language="mn" class="active">MN</button>
+
+    <button data-language="en">EN</button>
+
+  </div>
+
+</div>
+
+
+<div class="auth-glow-orb"></div>
 
 
 <div class="login-box">
 
 
-<h1>
-🤖 STRYX ZONE GOLD SNIPER
-</h1>
+  <div class="auth-brand">
+
+    <div class="auth-brand__icon"></div>
+
+    <h1>STRYX ZONE</h1>
+
+    <div class="auth-brand__sub">GOLD SNIPER</div>
+
+  </div>
 
 
-<h2>
-🔐 SYSTEM LOGIN
-</h2>
+  <div class="auth-divider"></div>
 
 
-<hr>
+  <h2 data-i18n="auth_login_title">🔐 SYSTEM LOGIN</h2>
 
 
-<p>Email</p>
-
-<input 
-id="loginEmail"
-type="email"
-placeholder="Enter email хаягаа оруулна уу">
+  <form class="auth-form" onsubmit="event.preventDefault(); loginUser();">
 
 
-<br><br>
+    <label class="auth-field">
+
+      <span data-i18n="auth_email_label">Email</span>
+
+      <input
+      id="loginEmail"
+      type="email"
+      placeholder="Enter email хаягаа оруулна уу">
+
+    </label>
 
 
-<p>Нууц үг</p>
+    <label class="auth-field">
 
-<input 
-id="loginPassword"
-type="password"
-placeholder="Нууц үгээ оруулна уу">
+      <span data-i18n="auth_password_label">Нууц үг</span>
 
+      <input
+      id="loginPassword"
+      type="password"
+      placeholder="Нууц үгээ оруулна уу">
 
-<br><br>
-
-
-<button 
-class="access-btn"
-onclick="loginUser()">
-
-НЭВТРЭХ
-
-</button>
+    </label>
 
 
-<p id="loginResult"></p>
+    <button
+    class="access-btn"
+    type="submit">
+
+      <span data-i18n="auth_login_button">НЭВТРЭХ</span>
+
+    </button>
 
 
-
-<br>
-
-
-<a href="signup.html">
-
-Шинээр бүртгэл үүсгэх
-
-</a>
+  </form>
 
 
-<br><br>
+  <p id="loginResult" class="auth-result"></p>
 
 
-<a href="index.html">
+  <div class="auth-links">
 
-← Back Home
+    <a href="signup.html" data-i18n="auth_signup_link">Шинээр бүртгэл үүсгэх</a>
 
-</a>
+    <a href="index.html" data-i18n="auth_back_home">← Back Home</a>
+
+  </div>
 
 
 </div>
@@ -93,10 +109,11 @@ onclick="loginUser()">
 
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="auth.js"></script>
+
+<script src="language.js"></script>
 
 
 </body>
