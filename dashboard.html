@@ -335,7 +335,82 @@ MT5 Холболт
 
 </div>
 
+<!-- ============================================================ -->
+<!-- GLOBAL MARKET SESSIONS CLOCK (ДЭЛХИЙН ЗАХ ЗЭЭЛИЙН АМЬД ЦАГ) -->
+<!-- ============================================================ -->
+<div class="market-card" style="margin-bottom: 24px;">
+  <div class="market-card__label" style="margin-bottom: 14px;">
+    🌍 GLOBAL MARKET SESSIONS (ДЭЛХИЙН БИРЖҮҮДИЙН АМЬД ЦАГ)
+  </div>
 
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; font-family: var(--mono);">
+    <!-- SYDNEY -->
+    <div id="sess-syd" style="padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">🇦🇺 SYDNEY</div>
+      <div id="time-syd" style="font-size: 20px; font-weight: 700; color: var(--text); margin: 6px 0;">00:00:00</div>
+      <div id="stat-syd" style="font-size: 11px; font-weight: 700;">⚪ CLOSED</div>
+    </div>
+
+    <!-- TOKYO -->
+    <div id="sess-tyo" style="padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">🇯🇵 TOKYO</div>
+      <div id="time-tyo" style="font-size: 20px; font-weight: 700; color: var(--text); margin: 6px 0;">00:00:00</div>
+      <div id="stat-tyo" style="font-size: 11px; font-weight: 700;">⚪ CLOSED</div>
+    </div>
+
+    <!-- LONDON -->
+    <div id="sess-ldn" style="padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">🇬🇧 LONDON</div>
+      <div id="time-ldn" style="font-size: 20px; font-weight: 700; color: var(--text); margin: 6px 0;">00:00:00</div>
+      <div id="stat-ldn" style="font-size: 11px; font-weight: 700;">⚪ CLOSED</div>
+    </div>
+
+    <!-- NEW YORK -->
+    <div id="sess-nyc" style="padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); text-align: center;">
+      <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">🇺🇸 NEW YORK</div>
+      <div id="time-nyc" style="font-size: 20px; font-weight: 700; color: var(--text); margin: 6px 0;">00:00:00</div>
+      <div id="stat-nyc" style="font-size: 11px; font-weight: 700;">⚪ CLOSED</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateGlobalClocks() {
+    const now = new Date();
+    const utcH = now.getUTCHours();
+
+    const cities = [
+      { id: "syd", tz: "Australia/Sydney", open: utcH >= 22 || utcH < 7 },
+      { id: "tyo", tz: "Asia/Tokyo",       open: utcH >= 0 && utcH < 9 },
+      { id: "ldn", tz: "Europe/London",    open: utcH >= 8 && utcH < 17 },
+      { id: "nyc", tz: "America/New_York", open: utcH >= 13 && utcH < 22 }
+    ];
+
+    cities.forEach(c => {
+      const timeStr = now.toLocaleTimeString("en-GB", { timeZone: c.tz, hour12: false });
+      const timeEl = document.getElementById("time-" + c.id);
+      const statEl = document.getElementById("stat-" + c.id);
+      const boxEl  = document.getElementById("sess-" + c.id);
+
+      if (timeEl) timeEl.textContent = timeStr;
+      if (statEl && boxEl) {
+        if (c.open) {
+          statEl.innerHTML = '<span style="color:#22C55E;">🟢 OPEN</span>';
+          boxEl.style.borderColor = "rgba(34,197,94,0.45)";
+          boxEl.style.background = "rgba(34,197,94,0.06)";
+        } else {
+          statEl.innerHTML = '<span style="color:#8A93A6;">⚪ CLOSED</span>';
+          boxEl.style.borderColor = "var(--border)";
+          boxEl.style.background = "rgba(255,255,255,0.03)";
+        }
+      }
+    });
+  }
+  setInterval(updateGlobalClocks, 1000);
+  updateGlobalClocks();
+</script>
+
+  
 <!-- ========================= -->
 <!-- GOLD KILLZONE COUNTDOWN -->
 <!-- ========================= -->
