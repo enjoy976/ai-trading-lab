@@ -1083,6 +1083,51 @@ function colorizeMarketBias() {
 
 setInterval(colorizeMarketBias, 500);
 
+// ===============================
+// AI ХЭМЖҮҮРИЙН ЗҮҮГ АВТОМАТААР ХӨДӨЛГӨХ
+// ===============================
+function syncGaugeWithBiasBox() {
+  const biasBox = document.getElementById("market-bias");
+  const needle = document.getElementById("ai-gauge-needle");
+  const scoreEl = document.getElementById("ai-gauge-score");
+  const labelEl = document.getElementById("ai-gauge-label");
+  if (!biasBox || !needle || !scoreEl || !labelEl) return;
+
+  const text = biasBox.innerText || "";
+  if (!text.includes("AI CONFIDENCE")) return;
+
+  // Дээд хайрцагнаас AI CONFIDENCE хувийг уншина (жишээ нь 100%)
+  const confMatch = text.match(/AI CONFIDENCE:\s*(\d+)%/i);
+  const conf = confMatch ? parseInt(confMatch[1], 10) : 50;
+
+  let angle = 0;
+  let labelText = `⏳ NEUTRAL (${conf}%)`;
+  let labelColor = "#F0CE6E";
+
+  if (text.includes("SELL") || text.includes("BEARISH")) {
+    angle = -Math.min(85, Math.max(25, (conf / 100) * 85));
+    labelText = text.includes("SELL") && !text.includes("Дохио байхгүй")
+      ? `🔴 STRONG SELL (${conf}% AI CONFIDENCE)`
+      : `🔻 BEARISH BIAS (${conf}%)`;
+    labelColor = "#EF4444";
+  } else if (text.includes("BUY") || text.includes("BULLISH")) {
+    angle = Math.min(85, Math.max(25, (conf / 100) * 85));
+    labelText = text.includes("BUY") && !text.includes("Дохио байхгүй")
+      ? `🟢 STRONG BUY (${conf}% AI CONFIDENCE)`
+      : `🔺 BULLISH BIAS (${conf}%)`;
+    labelColor = "#22C55E";
+  }
+
+  needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+  scoreEl.textContent = `${conf}%`;
+  scoreEl.style.color = labelColor;
+  labelEl.textContent = labelText;
+  labelEl.style.color = labelColor;
+}
+
+setInterval(syncGaugeWithBiasBox, 800);
+
+  
 </script>
 
 
