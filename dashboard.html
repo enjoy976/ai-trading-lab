@@ -1001,71 +1001,39 @@ function isKillzoneActive(targetHour) {
 
 }
 
-function updateKillzone() {
-
-  var zones = [
-
-    { hour: 8,  prefix: 'ldn', el: 'killzone-london' },
-
-    { hour: 13, prefix: 'ny',  el: 'killzone-ny' }
-
-  ];
-
-  zones.forEach(function(z) {
-
-    var target = getNextKillzone(z.hour);
-
-    var now = new Date();
-
-    var diff = target.getTime() - now.getTime();
-
-    var hours = Math.floor(diff / 3600000);
-
-    var mins  = Math.floor((diff % 3600000) / 60000);
-
-    var secs  = Math.floor((diff % 60000) / 1000);
-
-    var hEl = document.getElementById(z.prefix + '-hours');
-
-    var mEl = document.getElementById(z.prefix + '-mins');
-
-    var sEl = document.getElementById(z.prefix + '-secs');
-
-    var stEl = document.getElementById(z.prefix + '-status');
-
-    var card = document.getElementById(z.el);
-
-    if (hEl) hEl.textContent = String(hours).padStart(2, '0');
-
-    if (mEl) mEl.textContent = String(mins).padStart(2, '0');
-
-    if (sEl) sEl.textContent = String(secs).padStart(2, '0');
-
-    var active = isKillzoneActive(z.hour);
-
-    if (stEl) {
-
-      stEl.textContent = active ? '🟢 ACTIVE' : 'ХААГДСАН';
-
-      stEl.className = 'killzone-card__status' + (active ? ' killzone-card__status--active' : '');
-
-    }
-
-    if (card) {
-
-      card.classList.toggle('killzone-card--active', active);
-
-    }
-
-  });
-
-}
-
 updateKillzone();
 
 setInterval(updateKillzone, 1000);
 
+// ===============================
+// BULLISH (НОГООН) / BEARISH (УЛААН) ӨНГӨ БУДАГЧ
+// ===============================
+function colorizeMarketBias() {
+  const biasBox = document.getElementById("market-bias");
+  if (!biasBox) return;
+
+  let html = biasBox.innerHTML;
+  if (html.includes("bias-colored")) return;
+
+  if (html.includes("BEARISH") || html.includes("BULLISH") || html.includes("BUY") || html.includes("SELL")) {
+    html = html
+      .replace(/\b(BEARISH|SELL BIAS|SELL)\b/g, '<span class="bias-colored" style="color:#EF4444; font-weight:700; text-shadow:0 0 8px rgba(239,68,68,0.35);">$1</span>')
+      .replace(/\b(BULLISH|BUY BIAS|BUY)\b/g, '<span class="bias-colored" style="color:#22C55E; font-weight:700; text-shadow:0 0 8px rgba(34,197,94,0.35);">$1</span>')
+      .replace(/\b(WAIT)\b/g, '<span class="bias-colored" style="color:#F0CE6E; font-weight:700;">$1</span>');
+
+    biasBox.innerHTML = html;
+  }
+}
+
+const biasEl = document.getElementById("market-bias");
+if (biasEl) {
+  const observer = new MutationObserver(colorizeMarketBias);
+  observer.observe(biasEl, { childList: true, subtree: true, characterData: true });
+  setInterval(colorizeMarketBias, 1000);
+}
+
 </script>
+
 
 
 </body>
