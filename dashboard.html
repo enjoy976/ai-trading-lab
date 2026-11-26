@@ -310,6 +310,55 @@ MT5 Холболт
 
 </div>
 
+<!-- ============================================================ -->
+<!-- AI CONFIDENCE & MARKET SENTIMENT GAUGE (ХӨДӨЛГӨӨНТ ХЭМЖҮҮР) -->
+<!-- ============================================================ -->
+<div class="market-card" style="margin-bottom: 24px; text-align: center; padding: 28px 20px;">
+  <div class="market-card__label" style="justify-content: center; margin-bottom: 16px;">
+    🌡️ AI CONFIDENCE &amp; MARKET SENTIMENT GAUGE
+  </div>
+
+  <div style="position: relative; width: 260px; height: 140px; margin: 0 auto; overflow: hidden;">
+    <svg viewBox="0 0 260 140" style="width: 100%; height: 100%;">
+      <defs>
+        <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#EF4444" />
+          <stop offset="50%" stop-color="#F0CE6E" />
+          <stop offset="100%" stop-color="#22C55E" />
+        </linearGradient>
+      </defs>
+      <path d="M 20 130 A 110 110 0 0 1 240 130" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="18" stroke-linecap="round" />
+      <path d="M 20 130 A 110 110 0 0 1 240 130" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" />
+    </svg>
+
+    <div id="ai-gauge-needle" style="position: absolute; bottom: 10px; left: 50%; width: 4px; height: 95px; background: linear-gradient(to top, #D4AF37, #FFFFFF); border-radius: 4px; transform-origin: bottom center; transform: translateX(-50%) rotate(0deg); transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);"></div>
+
+    <div style="position: absolute; bottom: 2px; left: 50%; width: 18px; height: 18px; background: #D4AF37; border: 3px solid #0B0E14; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(212, 175, 55, 0.9);"></div>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <div id="ai-gauge-score" style="font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--gold-bright);">
+      50%
+    </div>
+    <div id="ai-gauge-label" style="font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px;">
+      ⏳ NEUTRAL / ХҮЛЭЭЖ БАЙНА
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; max-width: 260px; margin: 12px auto 0; font-family: var(--mono); font-size: 11px;">
+    <span style="color: #EF4444; font-weight: 600;">STRONG SELL</span>
+    <span style="color: #F0CE6E;">WAIT</span>
+    <span style="color: #22C55E; font-weight: 600;">STRONG BUY</span>
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- GOLD KILLZONE COUNTDOWN -->
+<!-- ========================= -->
+
+<div class="killzone-section">
+
+
 
 <!-- ========================= -->
 <!-- GOLD KILLZONE COUNTDOWN -->
