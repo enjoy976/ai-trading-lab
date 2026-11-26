@@ -921,13 +921,28 @@ data-i18n="contact_admin">
 async function checkUser() {
   const { data: { session } } = await supabaseClient.auth.getSession();
   const emailEl = document.getElementById("userEmail");
+  const statusEl = document.querySelector('[data-i18n="active"]');
   const authBtn = document.querySelector(".signup-btn");
 
   if (session) {
     if (emailEl) emailEl.innerHTML = session.user.email;
+    if (statusEl) {
+      statusEl.removeAttribute("data-i18n");
+      statusEl.innerHTML = "🟢 Идэвхтэй";
+    }
+    if (authBtn) {
+      authBtn.removeAttribute("data-i18n");
+      authBtn.textContent = "ГАРАХ";
+      authBtn.onclick = logoutUser;
+    }
   } else {
     if (emailEl) emailEl.innerHTML = "Зочин (Нэвтрээгүй)";
+    if (statusEl) {
+      statusEl.removeAttribute("data-i18n");
+      statusEl.innerHTML = "⚪ Нэвтрээгүй";
+    }
     if (authBtn) {
+      authBtn.removeAttribute("data-i18n");
       authBtn.textContent = "НЭВТРЭХ";
       authBtn.onclick = function() { window.location.href = "login.html"; };
     }
@@ -941,7 +956,8 @@ async function checkUser() {
   }
 }
 
-checkUser();
+setTimeout(checkUser, 200);
+
 
 
 
