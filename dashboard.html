@@ -228,27 +228,29 @@ data-i18n="live_gold_price">
 
 </div>
 
-<!-- MARKET DIRECTION -->
-
+<!-- MARKET VOLUME & TECHNICAL GAUGE (24/7 LIVE) -->
 <div class="market-card">
-
-<div class="market-card__label" data-i18n="xauusd_direction">
-
-🥇 XAUUSD ЗАХ ЗЭЭЛИЙН ЧИГЛЭЛ
-
+  <div class="market-card__label">
+    📊 XAUUSD VOLUME &amp; ХҮЧНИЙ ХЭМЖҮҮР
+  </div>
+  <div class="tradingview-widget-container" style="margin-top: 8px;">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://tradingview.com" async>
+    {
+      "interval": "15m",
+      "width": "100%",
+      "isTransparent": true,
+      "height": 280,
+      "symbol": "OANDA:XAUUSD",
+      "showIntervalTabs": true,
+      "displayMode": "single",
+      "locale": "en",
+      "colorTheme": "dark"
+    }
+    </script>
+  </div>
 </div>
 
-<div id="market-bias">
-
-<span data-i18n="analysis_loading">
-
-⏳ Шинжилгээ ачааллаж байна...
-
-</span>
-
-</div>
-
-</div>
 
 <!-- SYSTEM STATUS -->
 
