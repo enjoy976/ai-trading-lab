@@ -1,4 +1,4 @@
-// GOLD SNIPER AI v4 - H4 / H1 / M15 / M5 DASHBOARD + SENTIMENT GAUGE
+// GOLD SNIPER AI v4 - H4 / H1 / M15 / M5 DASHBOARD
 
 function formatBiasBadge(text) {
   if (!text) return '<b style="color:#F0CE6E;">WAIT</b>';
@@ -12,50 +12,21 @@ function formatBiasBadge(text) {
   return `<b style="color:#F0CE6E;">${text}</b>`;
 }
 
-function updateGaugeMeter(signal, confidence, trend) {
-  const needle = document.getElementById("ai-gauge-needle");
-  const scoreEl = document.getElementById("ai-gauge-score");
-  const labelEl = document.getElementById("ai-gauge-label");
-  if (!needle || !scoreEl || !labelEl) return;
-
-  const conf = Number(confidence) || 50;
-  let angle = 0; // -90 (Strong Sell) to +90 (Strong Buy)
-  let labelText = "⏳ NEUTRAL / ХҮЛЭЭЖ БАЙНА";
-  let labelColor = "#F0CE6E";
-
-  const sig = String(signal || "").toUpperCase();
-  const trd = String(trend || "").toUpperCase();
-
-  if (sig === "SELL" || (sig === "WAIT" && trd.includes("BEARISH"))) {
-    angle = -Math.min(85, Math.max(25, (conf / 100) * 85));
-    labelText = sig === "SELL" ? `🔴 STRONG SELL (${conf}% AI CONFIDENCE)` : `🔻 BEARISH BIAS (${conf}%)`;
-    labelColor = "#EF4444";
-  } else if (sig === "BUY" || (sig === "WAIT" && trd.includes("BULLISH"))) {
-    angle = Math.min(85, Math.max(25, (conf / 100) * 85));
-    labelText = sig === "BUY" ? `🟢 STRONG BUY (${conf}% AI CONFIDENCE)` : `🔺 BULLISH BIAS (${conf}%)`;
-    labelColor = "#22C55E";
-  }
-
-  needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
-  scoreEl.textContent = `${conf}%`;
-  scoreEl.style.color = labelColor;
-  labelEl.textContent = labelText;
-  labelEl.style.color = labelColor;
-}
-
 async function loadMarketBias() {
   try {
     const response = await fetch(
       "https://ngrok-free.dev",
-      { method: "GET", headers: { "ngrok-skip-browser-warning": "true" } }
+      {
+        method: "GET",
+        headers: {
+          "ngrok-skip-browser-warning": "true"
+        }
+      }
     );
 
     if (!response.ok) throw new Error("API STATUS: " + response.status);
 
     const data = await response.json();
-
-    // Хэмжүүрийн зүүг хөдөлгөнө
-    updateGaugeMeter(data.signal, data.confidence, data.trend);
 
     let color = "#F0CE6E";
     if (data.signal === "BUY") color = "#22C55E";
