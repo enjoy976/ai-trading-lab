@@ -1124,10 +1124,11 @@ setInterval(colorizeMarketBias, 500);
 setInterval(() => {
   const el = document.getElementById("userEmail");
   if (el && el.textContent.includes("@")) {
-    sessionStorage.setItem("stryx_active_user", el.textContent.trim().toLowerCase());
+    localStorage.setItem("stryx_verified_email", el.textContent.trim().toLowerCase());
   }
 }, 500);
 </script>
+
   
   
 </body>
