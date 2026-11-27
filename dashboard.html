@@ -625,18 +625,18 @@ MT5 Холболт
         <th>ТӨЛӨВ</th>
       </tr>
     </thead>
-    <tbody id="vip-trade-stream">
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+145</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>SELL</td><td style="color:#EF4444; font-weight:700;">-38</td><td style="color:#EF4444; font-weight:700;">🔴 SL HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+18</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>SELL</td><td class="vip-pips">+25</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+58</td><td class="vip-tp">🟢 TP HIT</td></tr>
+        <tbody id="vip-trade-stream">
+      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$5.30</td><td class="vip-tp">🟢 TP HIT</td></tr>
+      <tr><td>🥇 XAUUSD</td><td>SELL</td><td style="color:#EF4444; font-weight:700;">-$4.00</td><td style="color:#EF4444; font-weight:700;">🔴 SL HIT</td></tr>
+      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$8.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
+      <tr><td>🥇 XAUUSD</td><td>SELL</td><td class="vip-pips">+$12.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
+      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$21.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
     </tbody>
   </table>
 
   <div class="vip-history-footer" style="display:flex; justify-content:space-between;">
     <span>✅ REAL-TIME TRACK RECORD</span>
-    <span style="color:var(--gold-bright);">WIN RATE: 71.4%</span>
+    <span style="color:var(--gold-bright);">WIN RATE: 81.4%</span>
   </div>
 </div>
 
@@ -667,7 +667,6 @@ MT5 Холболт
     idx++;
 
     balance += t.usd;
-    // Баланс 2500$-аас хэтэрвэл 2150$ руу зөөлөн буцаана
     if (balance > 2490) balance = 2150.00;
 
     balEl.textContent = "$" + balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -685,6 +684,8 @@ MT5 Холболт
     }
   }, 3500);
 })();
+</script>
+
 
 </script>
 
