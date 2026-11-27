@@ -1,12 +1,12 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    const r = await fetch(
+    const response = await fetch(
       "https://coingecko.com"
     );
-    const data = await r.json();
-    return res.status(200).json(data);
-  } catch (e) {
-    return res.status(500).json({ error: "Fetch failed" });
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: "API error" });
   }
-}
+};
