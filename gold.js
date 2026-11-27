@@ -8,9 +8,7 @@ async function loadGoldPrice() {
     const response = await fetch(p1 + p2 + p3);
     const data = await response.json();
     const price = Number(data.price);
-
     if (!price || isNaN(price)) return;
-
     const priceEl = document.getElementById("gold-price");
     const statusEl = document.getElementById("gold-status");
 
