@@ -292,6 +292,64 @@ window.location.href="dashboard.html";
 
 async function logoutUser(){
 
+// ===============================
+// FORGOT & RESET PASSWORD
+// ===============================
+async function forgotPassword() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const resBox = document.getElementById("loginResult");
+
+  if (!email) {
+    resBox.innerHTML = "⚠️ Эхлээд дээрх нүдэнд бүртгэлтэй <b>Email</b> хаягаа бичнэ үү.";
+    return;
+  }
+
+  resBox.innerHTML = "⏳ Нууц үг сэргээх линк илгээж байна...";
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + "/login.html"
+  });
+
+  if (error) {
+    resBox.innerHTML = "❌ АЛДАА: " + error.message;
+    return;
+  }
+
+  resBox.innerHTML = `
+    🟢 <b>СЭРГЭЭХ ЛИНК ИЛГЭЭГДЛЭЭ!</b><br><br>
+    📩 <b>${email}</b> хаягаа шалгаад ирсэн линк дээр дарж шинэ нууц үгээ оруулна уу.
+  `;
+}
+
+// Хэрэглэгч и-мэйл дээрх сэргээх линкээр буцаж орж ирэх үед шинэ нууц үг солих цонх гаргана
+supabaseClient.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY") {
+    const resetBox = document.getElementById("resetPasswordBox");
+    if (resetBox) resetBox.style.display = "block";
+  }
+});
+
+async function updateNewPassword() {
+  const newPassword = document.getElementById("newPasswordInput").value;
+  const resBox = document.getElementById("loginResult");
+
+  if (!newPassword || newPassword.length < 6) {
+    resBox.innerHTML = "⚠️ Шинэ нууц үг дор хаяж 6 тэмдэгттэй байх ёстой.";
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    resBox.innerHTML = "❌ АЛДАА: " + error.message;
+    return;
+  }
+
+  resBox.innerHTML = "🟢 <b>НУУЦ ҮГ АМЖИЛТТАЙ СОЛИГДЛОО!</b> Dashboard руу шилжиж байна...";
+  setTimeout(() => {
+    window.location.href = "dashboard.html";
+  }, 1500);
+}
 
 
 await supabaseClient.auth.signOut();
