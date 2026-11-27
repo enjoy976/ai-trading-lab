@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .fx-wrap { max-width: 1100px; margin: 90px auto 50px; padding: 0 18px; }
-    .fx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 24px 0; }
-    .fx-card { background: rgba(16, 20, 29, 0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: all 0.25s ease; }
+    .fx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin: 24px 0; }
+    .fx-card { background: rgba(16, 20, 29, 0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 20px; transition: all 0.25s ease; }
     .fx-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.18); border-color: var(--gold); }
     .fx-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .fx-name { font-weight: 700; font-size: 16px; color: var(--gold-bright); }
+    .fx-name { font-weight: 700; font-size: 15px; color: var(--gold-bright); }
     .fx-tag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(212,175,55,0.12); color: var(--gold); }
-    .fx-val { font-family: var(--mono); font-size: 25px; font-weight: 700; color: #FFFFFF; line-height: 1.4; }
+    .fx-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: #FFFFFF; line-height: 1.4; }
     .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.85); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
     .strength-box { background: rgba(16,20,29,0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; }
     .str-row { margin-bottom: 14px; font-family: var(--mono); font-size: 12px; }
@@ -30,93 +30,59 @@
 <div class="fx-wrap">
   <div class="terminal-title" style="margin-bottom: 10px;">
     <h1>📊 STRYX FOREX &amp; METALS</h1>
-    <p class="subtitle">XAUUSD • XAGUSD • EURUSD • GBPUSD • USDJPY Real-Time Feed</p>
+    <p class="subtitle">XAUUSD • XAGUSD • EURUSD • GBPUSD • USDJPY • GBPJPY • AUDUSD • USDCAD</p>
   </div>
 
-  <!-- LIVE METALS & FOREX CARDS -->
+  <!-- 8 ТЭГШХЭН ДӨРВӨЛЖИН ХАЙРЦАГ (4 x 2) -->
   <div class="fx-grid">
-    <!-- XAUUSD -->
     <div class="fx-card" style="border-color: rgba(212,175,55,0.6);">
-      <div class="fx-head">
-        <span class="fx-name">🥇 GOLD SPOT</span>
-        <span class="fx-tag">XAU / USD</span>
-      </div>
-      <div class="fx-val" id="fx-xau">Loading...</div>
-      <div id="stat-xau" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">Checking...</div>
+      <div class="fx-head"><span class="fx-name">🥇 GOLD SPOT</span><span class="fx-tag">XAU / USD</span></div>
+      <div class="fx-val" id="fx-xau">$3,645.30</div>
+      <div id="stat-xau" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE METAL DATA</div>
     </div>
 
-    <!-- XAGUSD -->
     <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">🥈 SILVER SPOT</span>
-        <span class="fx-tag">XAG / USD</span>
-      </div>
-      <div class="fx-val" id="fx-xag">Loading...</div>
-      <div id="stat-xag" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">Checking...</div>
+      <div class="fx-head"><span class="fx-name">🥈 SILVER SPOT</span><span class="fx-tag">XAG / USD</span></div>
+      <div class="fx-val" id="fx-xag">$39.850</div>
+      <div id="stat-xag" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE METAL DATA</div>
     </div>
 
-    <!-- EURUSD -->
     <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">💶 EURO / DOLLAR</span>
-        <span class="fx-tag">EUR / USD</span>
-      </div>
-      <div class="fx-val" id="fx-eur">Loading...</div>
-      <div id="stat-eur" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
-    </div>
-
-    <!-- GBPUSD -->
-    <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">💷 POUND / DOLLAR</span>
-        <span class="fx-tag">GBP / USD</span>
-      </div>
-      <div class="fx-val" id="fx-gbp">Loading...</div>
-      <div id="stat-gbp" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
-    </div>
-
-        <!-- USDCAD -->
-    <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">🇨🇦 DOLLAR / LOONIE</span>
-        <span class="fx-tag">USD / CAD</span>
-      </div>
-      <div class="fx-val" id="fx-cad">1.39850</div>
+      <div class="fx-head"><span class="fx-name">💶 EURO / DOLLAR</span><span class="fx-tag">EUR / USD</span></div>
+      <div class="fx-val" id="fx-eur">1.08420</div>
       <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
     </div>
-  </div>
 
-      <!-- GBPJPY (THE DRAGON) -->
     <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">🐉 POUND / YEN</span>
-        <span class="fx-tag">GBP / JPY</span>
-      </div>
+      <div class="fx-head"><span class="fx-name">💷 POUND / DOLLAR</span><span class="fx-tag">GBP / USD</span></div>
+      <div class="fx-val" id="fx-gbp">1.26850</div>
+      <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
+    </div>
+
+    <div class="fx-card">
+      <div class="fx-head"><span class="fx-name">💴 DOLLAR / YEN</span><span class="fx-tag">USD / JPY</span></div>
+      <div class="fx-val" id="fx-jpy">154.320</div>
+      <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
+    </div>
+
+    <div class="fx-card">
+      <div class="fx-head"><span class="fx-name">🐉 POUND / YEN</span><span class="fx-tag">GBP / JPY</span></div>
       <div class="fx-val" id="fx-gbpjpy">195.750</div>
       <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 HIGH VOLATILITY</div>
     </div>
 
-    <!-- AUDUSD (GOLD CORRELATED) -->
     <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">🇦🇺 AUSSIE / DOLLAR</span>
-        <span class="fx-tag">AUD / USD</span>
-      </div>
+      <div class="fx-head"><span class="fx-name">🇦🇺 AUSSIE / DOLLAR</span><span class="fx-tag">AUD / USD</span></div>
       <div class="fx-val" id="fx-aud">0.65420</div>
       <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 GOLD CORRELATED</div>
     </div>
 
-    <!-- USDCAD -->
     <div class="fx-card">
-      <div class="fx-head">
-        <span class="fx-name">🇨🇦 DOLLAR / LOONIE</span>
-        <span class="fx-tag">USD / CAD</span>
-      </div>
+      <div class="fx-head"><span class="fx-name">🇨🇦 DOLLAR / LOONIE</span><span class="fx-tag">USD / CAD</span></div>
       <div class="fx-val" id="fx-cad">1.39850</div>
       <div style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
     </div>
-
-
+  </div>
   <!-- STATUS STRIP -->
   <div class="status-strip">
     <div>📊 Data Feed: <b style="color:#22C55E;">🟢 INSTITUTIONAL FEED</b></div>
@@ -129,18 +95,18 @@
     <div style="font-family:var(--mono); font-size:13px; color:var(--gold-bright); margin-bottom:16px; font-weight:700;">🔥 CURRENCY &amp; GOLD STRENGTH METER (ХҮЧНИЙ ХЭМЖҮҮР)</div>
 
     <div class="str-row">
-      <div style="display:flex; justify-content:space-between;"><span style="color:#F0CE6E; font-weight:700;">🥇 XAU (GOLD)</span><span id="str-xau-txt" style="color:#22C55E; font-weight:700;">82% STRONG</span></div>
-      <div class="str-bar-bg"><div id="str-xau-bar" style="width:82%; height:100%; background:linear-gradient(90deg, #D4AF37, #22C55E); transition:width 1s;"></div></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#F0CE6E; font-weight:700;">🥇 XAU (GOLD)</span><span style="color:#22C55E; font-weight:700;">82% STRONG</span></div>
+      <div class="str-bar-bg"><div style="width:82%; height:100%; background:linear-gradient(90deg, #D4AF37, #22C55E);"></div></div>
     </div>
 
     <div class="str-row">
-      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇺🇸 USD (DOLLAR)</span><span id="str-usd-txt" style="color:#F0CE6E; font-weight:700;">54% NEUTRAL</span></div>
-      <div class="str-bar-bg"><div id="str-usd-bar" style="width:54%; height:100%; background:#F0CE6E; transition:width 1s;"></div></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇺🇸 USD (DOLLAR)</span><span style="color:#F0CE6E; font-weight:700;">54% NEUTRAL</span></div>
+      <div class="str-bar-bg"><div style="width:54%; height:100%; background:#F0CE6E;"></div></div>
     </div>
 
     <div class="str-row" style="margin-bottom:0;">
-      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇪🇺 EUR (EURO)</span><span id="str-eur-txt" style="color:#38BDF8; font-weight:700;">61% BULLISH</span></div>
-      <div class="str-bar-bg"><div id="str-eur-bar" style="width:61%; height:100%; background:#38BDF8; transition:width 1s;"></div></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇪🇺 EUR (EURO)</span><span style="color:#38BDF8; font-weight:700;">61% BULLISH</span></div>
+      <div class="str-bar-bg"><div style="width:61%; height:100%; background:#38BDF8;"></div></div>
     </div>
   </div>
 </div>
@@ -148,18 +114,10 @@
 <script>
 const prevFx = { XAU: 3645.30, XAG: 39.85 };
 
-// Эхлээд 5 хослолыг тавууланг нь шууд харуулна (Loading... гарахгүй)
-document.getElementById("fx-xau").textContent = "$3,645.30";
-document.getElementById("stat-xau").textContent = "🟢 LIVE METAL DATA";
-document.getElementById("fx-xag").textContent = "$39.850";
-document.getElementById("stat-xag").textContent = "🟢 LIVE METAL DATA";
-document.getElementById("fx-eur").textContent = "1.08420";
-document.getElementById("fx-gbp").textContent = "1.26850";
-document.getElementById("fx-jpy").textContent = "154.320";
-
 async function loadMetal(sym, valId, statId, decimals) {
   try {
-    const res = await fetch("https://gold-api.com" + sym);
+    const apiBase = "https://gold-api.com";
+    const res = await fetch(apiBase + sym);
     const data = await res.json();
     const price = Number(data.price);
     if (!price || isNaN(price)) return;
@@ -193,12 +151,20 @@ async function loadMetal(sym, valId, statId, decimals) {
 
 async function loadCurrencies() {
   try {
-    const res = await fetch("https://frankfurter.app");
+    const fxUrl = "https://frankfurter.app";
+    const res = await fetch(fxUrl);
     const data = await res.json();
     const r = data.rates;
+    const gbpusd = 1 / r.GBP;
+    const usdjpy = Number(r.JPY);
+
     document.getElementById("fx-eur").textContent = (1 / r.EUR).toFixed(5);
-    document.getElementById("fx-gbp").textContent = (1 / r.GBP).toFixed(5);
-    document.getElementById("fx-jpy").textContent = Number(r.JPY).toFixed(3);
+    document.getElementById("fx-gbp").textContent = gbpusd.toFixed(5);
+    document.getElementById("fx-jpy").textContent = usdjpy.toFixed(3);
+    document.getElementById("fx-gbpjpy").textContent = (gbpusd * usdjpy).toFixed(3);
+    document.getElementById("fx-aud").textContent = (1 / r.AUD).toFixed(5);
+    document.getElementById("fx-cad").textContent = Number(r.CAD).toFixed(5);
+    document.getElementById("fx-upd").textContent = new Date().toLocaleTimeString("en-GB");
   } catch (e) {}
 }
 
@@ -214,6 +180,3 @@ setInterval(updateForexTerminal, 8000);
 
 </body>
 </html>
-
-
-
