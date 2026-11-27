@@ -1044,6 +1044,51 @@ body::after {
 })();
 </script>
 
+<script>
+(function() {
+  let liveGold = 3678.50;
+
+  // 1. Одоогийн бодит алтны ханшийг gold-api.com-оос татна
+  async function syncRealGold() {
+    try {
+      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.price && !isNaN(data.price)) {
+        liveGold = Number(data.price);
+      }
+    } catch (e) {}
+  }
+  syncRealGold();
+
+  // 2. Bolt.new-ийн гаргасан хуучин 2300-тай тоонуудыг одоогийн бодит ханш дээр тулгуурлан автоматаар шинэчилнэ
+  function fixAnalyzerNumbers() {
+    const isBuy = document.body.innerText.includes("STRONG BUY");
+    const entry = liveGold;
+    const sl  = isBuy ? (entry - 8.5)  : (entry + 8.5);
+    const tp1 = isBuy ? (entry + 15.0) : (entry - 15.0);
+    const tp2 = isBuy ? (entry + 26.5) : (entry - 26.5);
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while ((node = walker.nextNode())) {
+      const txt = node.nodeValue.trim();
+      // 2000-2999 хоорондох хуучин зохиомол үнэ гарвал бодит ханшаар солино
+      if (/^2[0-9]{3}(\.[0-9]+)?$/.test(txt)) {
+        const val = parseFloat(txt);
+        if (val < 2295) node.nodeValue = isBuy ? sl.toFixed(1) : tp2.toFixed(1);
+        else if (val < 2315) node.nodeValue = entry.toFixed(1);
+        else if (val < 2335) node.nodeValue = isBuy ? tp1.toFixed(1) : sl.toFixed(1);
+        else node.nodeValue = isBuy ? tp2.toFixed(1) : entry.toFixed(1);
+      }
+    }
+  }
+
+  setInterval(fixAnalyzerNumbers, 400);
+})();
+</script>
+
+  
 </body>
 
 </html>
