@@ -2,128 +2,173 @@
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
-<title>Order Block Хичээл</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Block Хичээл — STRYX ZONE</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; background: #f5f6fa; color: #222; }
-  h1 { color: #1a4d8f; text-align: center; }
-  h2 { color: #c0392b; border-bottom: 2px solid #eee; padding-bottom: 5px; }
-  .box { background: #fff; border-radius: 10px; padding: 18px; margin: 15px 0; box-shadow: 0 2px 6px rgba(0,0,0,.1); }
-  .warn { background: #fff8e1; border-left: 5px solid #f39c12; padding: 12px; border-radius: 5px; }
-  .ok { background: #e8f8f0; border-left: 5px solid #27ae60; padding: 12px; border-radius: 5px; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-  th { background: #1a4d8f; color: #fff; }
-  .red { color: #c0392b; font-weight: bold; }
-  .green { color: #27ae60; font-weight: bold; }
-  button { background: #1a4d8f; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
-  svg { display: block; margin: 10px auto; }
+  .ob-wrap { max-width: 960px; margin: 90px auto 60px; padding: 0 18px; }
+  .ob-sec { background: rgba(16, 20, 29, 0.92); border: 1px solid var(--border-strong); border-radius: 18px; padding: 26px; margin-bottom: 24px; }
+  .ob-sec h2 { color: var(--gold-bright); font-size: 20px; border-left: 4px solid var(--gold); padding-left: 12px; margin-bottom: 14px; }
+  .ob-sec p, .ob-sec li { color: #D8DEE9; font-size: 14.5px; line-height: 1.75; }
+  .ob-sec ul, .ob-sec ol { margin: 8px 0 14px 22px; }
+  .ob-sec li { margin-bottom: 6px; }
+  .ob-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+  .ob-table th { background: rgba(212,175,55,0.2); color: var(--gold-bright); padding: 10px; text-align: left; border: 1px solid var(--border-strong); }
+  .ob-table td { padding: 10px; border: 1px solid var(--border); color: #E5E9F0; }
+  .chart-demo { background: #070A0F; border: 1px solid var(--border-strong); border-radius: 14px; padding: 16px; margin: 16px 0; }
+  .chart-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; font-family: var(--mono); font-size: 12px; color: var(--gold); }
+  .play-btn { background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .tab-btn { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border-strong); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .tab-btn.active { background: var(--gold); color: #0B0E14; border-color: var(--gold); }
+  .box-ok { background: rgba(34,197,94,0.12); border-left: 4px solid #22C55E; padding: 12px 16px; border-radius: 8px; margin: 14px 0; font-size: 14px; color: #E8ECF2; }
+  .box-warn { background: rgba(239,68,68,0.12); border-left: 4px solid #EF4444; padding: 12px 16px; border-radius: 8px; margin: 14px 0; font-size: 14px; color: #E8ECF2; }
 </style>
 </head>
 <body>
-<h1>📚 Order Block — Хэрхэн Таних Вэ</h1>
-<p style="text-align:center;color:#777">Хичээл 3 · SMC Аргачлал · Зурагтай заавар</p>
 
-<div class="box">
-<h2>🧠 Order Block гэж юу вэ?</h2>
-<p><b>Order Block (OB)</b> = <b>хүчтэй хөдөлгөөний өмнөх сүүлийн эсрэг лаа</b>. Энэ нь "том тоглогчид" (smart money) захиалгаа үлдээсэн газар юм.</p>
-<p>Том тоглогчид нэг талдаа их хэмжээний захиалга тавьж, үнийг чиглүүлдэг — тэдний орсон лаа нь буцах үед дэмжлэг/эсэргүүцэл болдог.</p>
+<div class="header-bar" style="top: 0;">
+  <a href="dashboard.html" style="text-decoration:none; color:var(--gold-bright); font-family:var(--mono); font-weight:700; font-size:13px;">← DASHBOARD</a>
+  <div style="font-family:var(--mono); color:var(--gold); font-size:12px; font-weight:700;">📖 ORDER BLOCK ACADEMY</div>
 </div>
 
-<div class="box">
-<h2>🔍 Алхам 1: Хүчтэй импульс хай (Displacement)</h2>
-<p>Эхлээд <b>хэдэн том лаа нэг чиглэлд</b> хурдан хөдөлснийг ол — энэ бол "displacement" (том хөдөлгөөн). Жишээ нь: 5-10 минутад +10 оноо.</p>
-<svg width="400" height="180">
-  <rect x="20" y="20" width="360" height="140" fill="#fafafa" stroke="#ccc"/>
-  <text x="30" y="40" fill="#999" font-size="11">ХҮЧТЭЙ ИМПУЛЬС (том ногоон лаанууд)</text>
-  <rect x="50" y="90" width="18" height="40" fill="#27ae60"/>
-  <rect x="80" y="80" width="18" height="50" fill="#27ae60"/>
-  <rect x="110" y="60" width="18" height="60" fill="#27ae60"/>
-  <rect x="140" y="45" width="18" height="75" fill="#27ae60"/>
-  <rect x="170" y="30" width="18" height="90" fill="#27ae60"/>
-  <text x="200" y="50" fill="#c0392b" font-size="13" font-weight="bold">→ дээш хүчтэй хөдөлгөөн!</text>
-</svg>
+<div class="ob-wrap">
+  <div class="terminal-title" style="margin-bottom: 24px;">
+    <h1>📖 ORDER BLOCK — ХЭРХЭН ТАНИХ ВЭ</h1>
+    <p class="subtitle">Хичээл 3 · SMC Аргачлал · Интерактив чарт заавар</p>
+  </div>
+
+  <!-- 1. ORDER BLOCK ГЭЖ ЮУ ВЭ -->
+  <div class="ob-sec">
+    <h2>🧠 Order Block гэж юу вэ?</h2>
+    <p><b>Order Block (OB)</b> = <b style="color:#F0CE6E;">хүчтэй хөдөлгөөний өмнөх сүүлийн эсрэг лаа</b>. Энэ нь "том тоглогчид" (Smart Money) захиалгаа үлдээсэн газар юм.</p>
+    <p>Том банкууд нэг талдаа их хэмжээний захиалга тавьж үнийг чиглүүлдэг тул тэдний орсон тэр лааны бүс рүү ханш буцаж ирэхэд хүчтэй дэмжлэг эсвэл эсэргүүцэл болдог.</p>
+  </div>
+
+  <!-- 2. АЛХАМ 1 & 2: BULLISH VS BEARISH OB -->
+  <div class="ob-sec">
+    <h2>🔍 Алхам 1 &amp; 2: Импульс ба Эсрэг Лааг Олох</h2>
+    <p>Эхлээд нэг чиглэлд хэдэн том лаа хурдан хөдөлсөн <b>Displacement (хүчтэй импульс)</b>-ийг олоод, яг түүний өмнөх сүүлийн эсрэг лааг тэмдэглэнэ:</p>
+
+    <table class="ob-table">
+      <tr><th>Импульс</th><th>Өмнөх сүүлийн эсрэг лаа</th><th>Order Block төрөл</th></tr>
+      <tr><td>📈 Дээш (том ногоон лаанууд)</td><td>Сүүлийн УЛААН лаа</td><td style="color:#22C55E; font-weight:700;">BULLISH OB (Demand)</td></tr>
+      <tr><td>📉 Доош (том улаан лаанууд)</td><td>Сүүлийн НОГООН лаа</td><td style="color:#EF4444; font-weight:700;">BEARISH OB (Supply)</td></tr>
+    </table>
+
+    <!-- ИНТЕРАКТИВ BULLISH / BEARISH OB ЧАРТ -->
+    <div class="chart-demo">
+      <div class="chart-bar">
+        <div>
+          <button id="btn-bull" class="tab-btn active" onclick="showOB('bull')">🟢 Bullish OB (BUY)</button>
+          <button id="btn-bear" class="tab-btn" onclick="showOB('bear')">🔴 Bearish OB (SELL)</button>
+        </div>
+        <button class="play-btn" onclick="replayOB()">▶️ Лаа хөдөлгөх</button>
+      </div>
+      <div id="ob-svg-box"></div>
+    </div>
+  </div>
+  <!-- 3. АЛХАМ 3 & OB-ИЙН 3 ТӨЛӨВ -->
+  <div class="ob-sec">
+    <h2>🔍 Алхам 3: OB-ийн Бүс ба 3 Төлөв</h2>
+    <p><b>Order Block</b> = тэр эсрэг лааны бие (эсвэл сүүдэртэй бүтэн бүс). Үнэ тэр бүс рүү буцаж ирэхийг (Retest) хүлээж байгаад орно.</p>
+    <div class="box-ok">
+      <b>✅ Entry дүрэм:</b> ХӨӨХГҮЙ! OB дээр үнэ буцаж ирээд урт сүүдэр (Rejection) эсвэл буцаж хаагдах лаа гарвал орно.
+    </div>
+
+    <table class="ob-table">
+      <tr><th>Төлөв</th><th>Тайлбар</th><th>Арилжааны шийдвэр</th></tr>
+      <tr><td style="color:#22C55E; font-weight:700;">✅ Fresh (Шинэ)</td><td>Үнэ OB-д хараахан эргэж хүрээгүй</td><td style="color:#22C55E;">ХАМГИЙН САЙН — Retest дээр орно</td></tr>
+      <tr><td style="color:#F59E0B; font-weight:700;">⚠️ Mitigated (Хүрсэн)</td><td>Үнэ аль хэдийн OB-д буцаж хүрсэн</td><td>Сул — зөвхөн нэмэлт баталгаатай үед</td></tr>
+      <tr><td style="color:#EF4444; font-weight:700;">❌ Invalidated (Эвдэрсэн)</td><td>OB-ийн хязгаар лааны биеэр сэтэрсэн</td><td style="color:#EF4444;">БҮҮ ОР — хүчингүй болсон</td></tr>
+    </table>
+  </div>
+
+  <!-- 4. ӨДӨР ТУТМЫН XAUUSD ЖИШЭЭ БА 3 ДҮРЭМ -->
+  <div class="ob-sec">
+    <h2>🎯 Өдөр тутмын хэрэглээ (XAUUSD жишээ)</h2>
+    <ul>
+      <li>Үнэ <b>4249.6 → 4259.2</b> хүртэл хүчтэй дээш гарсан (Displacement импульс).</li>
+      <li>Түүний өмнөх сүүлийн улаан лаа = <b style="color:#F0CE6E;">4254 – 4256</b> бүс (Bullish OB / Demand).</li>
+      <li>Үнэ буцаж <b>4254</b> дээр ирээд Rejection өгөхөд → <b style="color:#22C55E;">SNIPER BUY ENTRY!</b></li>
+    </ul>
+
+    <div class="box-warn" style="margin-top:18px;">
+      <h3 style="color:#F0CE6E; margin-bottom:8px;">📌 Санаж байх 3 Алтан Дүрэм:</h3>
+      <ol style="margin-bottom:0;">
+        <li><b>OB = хүчтэй хөдөлгөөний эхлэлийн лаа</b> — үргэлж хүчтэй импульсээс эхэлж хай!</li>
+        <li><b>Зөвхөн Fresh OB арилжаал</b> — эвдэрсэн (Invalidated) OB дээр бүү ор.</li>
+        <li><b>Retest хүлээ</b> — ханшийг хөөхгүй, OB дээр буцаж ирэхэд нь баталгаагаар ор.</li>
+      </ol>
+    </div>
+  </div>
 </div>
 
-<div class="box">
-<h2>🔍 Алхам 2: Импульсийн ӨМНӨХ сүүлийн ЭСРЭГ лааг ол</h2>
-<table>
-<tr><th>Импульс</th><th>Өмнөх сүүлийн эсрэг лаа</th><th>Order Block</th></tr>
-<tr><td>📈 Дээш (том ногоон)</td><td>Сүүлийн УЛААН лаа</td><td class="green">BULLISH OB (Demand)</td></tr>
-<tr><td>📉 Доош (том улаан)</td><td>Сүүлийн НОГООН лаа</td><td class="red">BEARISH OB (Supply)</td></tr>
-</table>
+<script>
+const bullSVG = `
+  <svg viewBox="0 0 600 190" width="100%" height="190">
+    <rect x="65" y="125" width="480" height="38" fill="rgba(34,197,94,0.14)" stroke="#22C55E" stroke-dasharray="4,4"/>
+    <text x="385" y="148" fill="#22C55E" font-size="11" font-family="monospace">BULLISH ORDER BLOCK (DEMAND)</text>
+    <g id="ob-anim-group">
+      <line x1="84" y1="115" x2="84" y2="170" stroke="#EF4444" stroke-width="2"/>
+      <rect x="75" y="125" width="18" height="38" fill="#EF4444"/>
+      <text x="62" y="182" fill="#EF4444" font-size="11" font-family="monospace">OB Лаа</text>
+      <rect x="130" y="55" width="20" height="75" fill="#22C55E"/>
+      <rect x="185" y="25" width="20" height="40" fill="#22C55E"/>
+      <text x="130" y="18" fill="#22C55E" font-size="11" font-family="monospace">Хүчтэй импульс ↑</text>
+      <rect x="240" y="45" width="18" height="45" fill="#EF4444"/>
+      <rect x="295" y="85" width="18" height="45" fill="#EF4444"/>
+      <circle cx="304" cy="130" r="7" fill="#F0CE6E" stroke="#EF4444" stroke-width="2"/>
+      <text x="255" y="176" fill="#F0CE6E" font-size="12" font-weight="bold" font-family="monospace">🎯 RETEST BUY ENTRY!</text>
+      <rect x="355" y="70" width="18" height="55" fill="#22C55E"/>
+      <rect x="415" y="25" width="20" height="50" fill="#22C55E"/>
+    </g>
+  </svg>
+`;
 
-<p><b>Bullish OB (Demand) жишээ:</b></p>
-<svg width="400" height="200">
-  <rect x="20" y="20" width="360" height="160" fill="#fafafa" stroke="#ccc"/>
-  <text x="30" y="40" fill="#999" font-size="11">Улаан лаа → дараа нь дээш импульс</text>
-  <!-- red candle (OB) -->
-  <rect x="60" y="100" width="20" height="40" fill="#c0392b"/>
-  <line x1="70" y1="90" x2="70" y2="150" stroke="#c0392b" stroke-width="2"/>
-  <!-- green impulse candles -->
-  <rect x="110" y="85" width="18" height="45" fill="#27ae60"/>
-  <rect x="140" y="70" width="18" height="60" fill="#27ae60"/>
-  <rect x="170" y="55" width="18" height="75" fill="#27ae60"/>
-  <rect x="200" y="40" width="18" height="90" fill="#27ae60"/>
-  <!-- OB zone highlight -->
-  <rect x="52" y="95" width="36" height="50" fill="none" stroke="#27ae60" stroke-width="2" stroke-dasharray="4,3"/>
-  <text x="100" y="185" fill="#27ae60" font-size="12" font-weight="bold">← ОБ ЭНД (ягаан дээр: улаан лааны бие)</text>
-</svg>
-</div>
+const bearSVG = `
+  <svg viewBox="0 0 600 190" width="100%" height="190">
+    <rect x="65" y="22" width="480" height="38" fill="rgba(239,68,68,0.14)" stroke="#EF4444" stroke-dasharray="4,4"/>
+    <text x="385" y="45" fill="#EF4444" font-size="11" font-family="monospace">BEARISH ORDER BLOCK (SUPPLY)</text>
+    <g id="ob-anim-group">
+      <line x1="84" y1="15" x2="84" y2="68" stroke="#22C55E" stroke-width="2"/>
+      <rect x="75" y="22" width="18" height="38" fill="#22C55E"/>
+      <text x="62" y="14" fill="#22C55E" font-size="11" font-family="monospace">OB Лаа</text>
+      <rect x="130" y="55" width="20" height="75" fill="#EF4444"/>
+      <rect x="185" y="120" width="20" height="40" fill="#EF4444"/>
+      <text x="130" y="176" fill="#EF4444" font-size="11" font-family="monospace">Хүчтэй импульс ↓</text>
+      <rect x="240" y="95" width="18" height="45" fill="#22C55E"/>
+      <rect x="295" y="55" width="18" height="45" fill="#22C55E"/>
+      <circle cx="304" cy="55" r="7" fill="#F0CE6E" stroke="#EF4444" stroke-width="2"/>
+      <text x="255" y="18" fill="#F0CE6E" font-size="12" font-weight="bold" font-family="monospace">🎯 RETEST SELL ENTRY!</text>
+      <rect x="355" y="65" width="18" height="55" fill="#EF4444"/>
+      <rect x="415" y="115" width="20" height="50" fill="#EF4444"/>
+    </g>
+  </svg>
+`;
 
-<div class="box">
-<h2>🔍 Алхам 3: OB-ийн бүсийг тэмдэглэ</h2>
-<p>OB = <b>тэр эсрэг лааны бие</b> (зарим хувилбарт high-low хооронд). Үнэ тэр бүс рүү буцахыг хүлээ — тэнд entry!</p>
-<div class="ok"><b>Entry дүрэм:</b> ХӨӨХГҮЙ! OB-д үнэ буцаж ирэхийг хүлээнэ. OB дээр rejection (урт wick / буцаж хаалт) гарвал орно.</div>
-</div>
+let currentMode = "bull";
 
-<div class="box">
-<h2>⚠️ OB-ийн 3 ТӨЛӨВ</h2>
-<table>
-<tr><th>Төлөв</th><th>Тайлбар</th><th>Арилжаа</th></tr>
-<tr><td class="green">✅ Fresh (шинэ)</td><td>Үнэ OB-д хараахан эргэж хүрээгүй</td><td>ХАМГИЙН САЙН — retest-д орно</td></tr>
-<tr><td style="color:#e67e22">⚠️ Mitigated (хүрсэн)</td><td>Үнэ аль хэдийн OB-д буцаж ирсэн</td><td>Сул — болгоомжтой</td></tr>
-<tr><td class="red">❌ Invalidated (эвдэрсэн)</td><td>OB-ийн хязгаар тасарсан</td><td>БҮҮ ОР — хүчингүй</td></tr>
-</table>
-<svg width="400" height="140">
-  <rect x="20" y="20" width="360" height="100" fill="#fafafa" stroke="#ccc"/>
-  <text x="30" y="45" fill="#27ae60" font-size="12">Fresh: үнэ OB-д хүрээгүй</text>
-  <rect x="40" y="70" width="70" height="30" fill="#27ae60" opacity=".5"/>
-  <line x1="140" y1="60" x2="340" y2="55" stroke="#888" stroke-width="2" stroke-dasharray="4,3"/>
-  <text x="140" y="85" fill="#27ae60" font-size="12">→ үнэ дээр, OB-д хүрээгүй</text>
-  <text x="30" y="112" fill="#c0392b" font-size="12">Invalidated: OB тасарсан → хүчингүй</text>
-  <rect x="40" y="92" width="70" height="20" fill="#c0392b" opacity=".4"/>
-</svg>
-</div>
+function showOB(mode) {
+  currentMode = mode;
+  document.getElementById("btn-bull").classList.toggle("active", mode === "bull");
+  document.getElementById("btn-bear").classList.toggle("active", mode === "bear");
+  document.getElementById("ob-svg-box").innerHTML = mode === "bull" ? bullSVG : bearSVG;
+  replayOB();
+}
 
-<div class="box">
-<h2>🎯 Өдөр тутмын хэрэглээ (XAUUSD жишээ)</h2>
-<ul>
-<li>Үнэ 4249.6 → 4259.2 хүртэл хүчтэй дээш гарсан (импульс)</li>
-<li>Түүний өмнөх сүүлийн улаан лаа = 4254-4256 бүс</li>
-<li>Тэр бүс = Bullish OB (Demand)</li>
-<li>Үнэ буцаж 4254-д ирэхэд → BUY entry боломж!</li>
-</ul>
-</div>
+function replayOB() {
+  const g = document.getElementById("ob-anim-group");
+  if (!g) return;
+  g.style.opacity = "0.1";
+  g.style.transition = "none";
+  setTimeout(() => {
+    g.style.transition = "opacity 1.1s ease";
+    g.style.opacity = "1";
+  }, 60);
+}
 
-<div class="box">
+showOB("bull");
+</script>
 
-<table>
-
-
-
-
-</table>
-</div>
-
-<div class="warn">
-<h3>📌 Санаж байх 3 дүрэм:</h3>
-<ol>
-<li><b>OB = хүчтэй хөдөлгөөний эхлэлийн лаа</b> — үргэлж импульсээс эхэл!</li>
-<li><b>Fresh OB л арилжаал</b> — invalidated OB-д бүү ор</li>
-<li><b>Retest хүлээ</b> — хөөхгүй, OB-д буцаж ирэхэд rejection баталгаагаар ор</li>
-</ol>
-</div>
-
-<p style="color:#999;font-size:12px;margin-top:10px">Боловсролын материал · SMC Хичээл 3</p>
 </body>
 </html>
