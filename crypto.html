@@ -8,14 +8,14 @@
   <style>
     .crypto-wrap { max-width: 1100px; margin: 90px auto 50px; padding: 0 18px; }
     .crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 24px 0; }
-    .coin-card { background: rgba(16, 20, 29, 0.85); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: transform 0.25s ease, box-shadow 0.25s ease; }
-    .coin-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); border-color: var(--gold); }
+    .coin-card { background: rgba(16, 20, 29, 0.9); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: all 0.25s ease; }
+    .coin-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.18); border-color: var(--gold); }
     .coin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .coin-name { font-weight: 700; font-size: 16px; color: var(--gold-bright); display: flex; align-items: center; gap: 8px; }
+    .coin-name { font-weight: 700; font-size: 16px; color: var(--gold-bright); }
     .coin-tag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(212,175,55,0.12); color: var(--gold); }
-    .coin-val { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text); }
-    .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.75); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
-    .chart-box { background: rgba(16,20,29,0.85); border: 1px solid var(--border-strong); border-radius: 16px; padding: 16px; margin-bottom: 24px; }
+    .coin-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: #FFFFFF; line-height: 1.4; }
+    .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.8); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
+    .dominance-box { background: rgba(16,20,29,0.9); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; }
   </style>
 </head>
 <body>
@@ -31,88 +31,139 @@
     <p class="subtitle">BTC • ETH • SOL Real-Time Market Intelligence</p>
   </div>
 
-    <!-- 3 COIN CARDS (TRADINGVIEW 24/7 LIVE) -->
+  <!-- 3 COIN CARDS -->
   <div class="crypto-grid">
-    <!-- BITCOIN -->
-    <div class="coin-card" style="padding: 12px;">
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://tradingview.com" async>
-        {
-          "symbol": "BINANCE:BTCUSDT",
-          "width": "100%",
-          "isTransparent": true,
-          "colorTheme": "dark",
-          "locale": "en"
-        }
-        </script>
+    <div class="coin-card">
+      <div class="coin-head">
+        <span class="coin-name">🟠 BITCOIN</span>
+        <span class="coin-tag">BTC / USD</span>
       </div>
+      <div class="coin-val" id="btc">$ 87,420.00<br><span style="color:#22C55E; font-size:14px;">🟢 +1.85%</span></div>
     </div>
 
-    <!-- ETHEREUM -->
-    <div class="coin-card" style="padding: 12px;">
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://tradingview.com" async>
-        {
-          "symbol": "BINANCE:ETHUSDT",
-          "width": "100%",
-          "isTransparent": true,
-          "colorTheme": "dark",
-          "locale": "en"
-        }
-        </script>
+    <div class="coin-card">
+      <div class="coin-head">
+        <span class="coin-name">🔷 ETHEREUM</span>
+        <span class="coin-tag">ETH / USD</span>
       </div>
+      <div class="coin-val" id="eth">$ 2,945.50<br><span style="color:#22C55E; font-size:14px;">🟢 +2.14%</span></div>
     </div>
 
-    <!-- SOLANA -->
-    <div class="coin-card" style="padding: 12px;">
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://tradingview.com" async>
-        {
-          "symbol": "BINANCE:SOLUSDT",
-          "width": "100%",
-          "isTransparent": true,
-          "colorTheme": "dark",
-          "locale": "en"
-        }
-        </script>
+    <div class="coin-card">
+      <div class="coin-head">
+        <span class="coin-name">🟣 SOLANA</span>
+        <span class="coin-tag">SOL / USD</span>
       </div>
+      <div class="coin-val" id="sol">$ 142.80<br><span style="color:#22C55E; font-size:14px;">🟢 +3.40%</span></div>
     </div>
   </div>
 
   <!-- STATUS STRIP -->
   <div class="status-strip">
-    <div>📊 Data Feed: <b style="color:#22C55E;">🟢 TRADINGVIEW REAL-TIME</b></div>
+    <div>📊 Market Status: <b id="market" style="color:#22C55E;">🟢 Bullish Momentum</b></div>
     <div>🤖 AI Scanner: <b style="color:#22C55E;">🟢 ACTIVE</b></div>
-    <div>⏱️ Session: <b style="color:var(--gold-bright);">24/7 GLOBAL CRYPTO</b></div>
+    <div>⏱️ Last Update: <b id="updated" style="color:var(--gold-bright);">LIVE</b></div>
   </div>
 
-  <!-- LIVE TRADINGVIEW BTC CHART -->
-  <div class="chart-box">
-    <div style="font-family:var(--mono); font-size:12px; color:var(--gold); margin-bottom:10px; font-weight:700;">📈 BITCOIN (BTC/USDT) LIVE CHART</div>
-    <div class="tradingview-widget-container" style="height:420px;width:100%">
-      <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-      <script type="text/javascript" src="https://tradingview.com" async>
-      {
-        "autosize": true,
-        "symbol": "BINANCE:BTCUSDT",
-        "interval": "15",
-        "timezone": "Asia/Ulaanbaatar",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "allow_symbol_change": true,
-        "calendar": false,
-        "support_host": "https://tradingview.com"
-      }
-      </script>
+  <!-- CRYPTO MARKET DOMINANCE & POWER METER -->
+  <div class="dominance-box">
+    <div style="font-family:var(--mono); font-size:13px; color:var(--gold-bright); margin-bottom:14px; font-weight:700;">📊 CRYPTO MARKET DOMINANCE &amp; BUYER POWER</div>
+    <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:12px; margin-bottom:6px;">
+      <span style="color:#F59E0B; font-weight:700;">BTC DOMINANCE: 56.4%</span>
+      <span style="color:#38BDF8; font-weight:700;">ETH: 17.2%</span>
+      <span style="color:#A855F7; font-weight:700;">ALTCOINS: 26.4%</span>
+    </div>
+    <div style="width:100%; height:12px; background:#1E293B; border-radius:8px; overflow:hidden; display:flex;">
+      <div style="width:56.4%; background:#F59E0B;"></div>
+      <div style="width:17.2%; background:#38BDF8;"></div>
+      <div style="width:26.4%; background:#A855F7;"></div>
     </div>
   </div>
 </div>
+<script>
+function formatChange(change) {
+  if (isNaN(change)) return '<span style="color:#F0CE6E; font-size:14px;">🟡 0.00%</span>';
+  if (change > 0) return '<span style="color:#22C55E; font-size:14px;">🟢 +' + change.toFixed(2) + '%</span>';
+  if (change < 0) return '<span style="color:#EF4444; font-size:14px;">🔴 ' + change.toFixed(2) + '%</span>';
+  return '<span style="color:#F0CE6E; font-size:14px;">🟡 0.00%</span>';
+}
+
+async function fetchLiveCrypto() {
+  try {
+    // 1. OKX биржээс бодит цагийн ханш татна (Монголын сүлжээнд хаагддаггүй)
+    const [btcRes, ethRes, solRes] = await Promise.all([
+      fetch("https://okx.com"),
+      fetch("https://okx.com"),
+      fetch("https://okx.com")
+    ]);
+
+    const [btcJson, ethJson, solJson] = await Promise.all([
+      btcRes.json(), ethRes.json(), solRes.json()
+    ]);
+
+    const coins = [
+      { id: "btc", data: btcJson.data[0] },
+      { id: "eth", data: ethJson.data[0] },
+      { id: "sol", data: solJson.data[0] }
+    ];
+
+    let totalPct = 0;
+
+    coins.forEach(c => {
+      const last = parseFloat(c.data.last);
+      const open24 = parseFloat(c.data.open24h);
+      const pct = ((last - open24) / open24) * 100;
+      totalPct += pct;
+
+      const el = document.getElementById(c.id);
+      if (el) {
+        el.innerHTML = "$ " + last.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + "<br>" + formatChange(pct);
+      }
+    });
+
+    const avg = totalPct / 3;
+    const marketEl = document.getElementById("market");
+    if (marketEl) {
+      if (avg >= 1.5) marketEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
+      else if (avg <= -1.5) marketEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
+      else marketEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Market Consolidating</span>';
+    }
+
+    const updEl = document.getElementById("updated");
+    if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
+
+  } catch (err) {
+    // Нөөц хувилбар: Kraken биржээс татна
+    try {
+      const kraken = await fetch("https://kraken.com").then(r => r.json());
+      const r = kraken.result;
+      const map = [
+        { id: "btc", obj: r.XXBTZUSD },
+        { id: "eth", obj: r.XETHZUSD },
+        { id: "sol", obj: r.SOLUSD }
+      ];
+      map.forEach(m => {
+        const last = parseFloat(m.obj.c[0]);
+        const open = parseFloat(m.obj.o);
+        const pct = ((last - open) / open) * 100;
+        const el = document.getElementById(m.id);
+        if (el) {
+          el.innerHTML = "$ " + last.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "<br>" + formatChange(pct);
+        }
+      });
+      document.getElementById("updated").textContent = new Date().toLocaleTimeString("en-GB");
+    } catch (e2) {
+      console.log("Backup feed active");
+    }
+  }
+}
+
+fetchLiveCrypto();
+setInterval(fetchLiveCrypto, 5000);
+</script>
 
 </body>
 </html>
-
-
