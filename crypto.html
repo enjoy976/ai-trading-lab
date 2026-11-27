@@ -81,7 +81,7 @@
 <script>
 const prevPrices = { btc: 0, eth: 0, sol: 0 };
 
-function renderCoin(key, elId, price) {
+function renderCoin(key, elId, price, pct) {
   const el = document.getElementById(elId);
   if (!el || !price || isNaN(price)) return;
 
@@ -89,38 +89,45 @@ function renderCoin(key, elId, price) {
   prevPrices[key] = price;
 
   let color = "#FFFFFF";
-  let arrow = "🟢 LIVE";
-  if (old > 0 && price > old) { color = "#22C55E"; arrow = "🟢 ▲ +$" + (price - old).toFixed(2); }
-  else if (old > 0 && price < old) { color = "#EF4444"; arrow = "🔴 ▼ -$" + (old - price).toFixed(2); }
+  if (old > 0 && price > old) color = "#22C55E";
+  else if (old > 0 && price < old) color = "#EF4444";
+
+  const badge = pct >= 0
+    ? '<span style="color:#22C55E; font-size:14px;">🟢 +' + Number(pct).toFixed(2) + '%</span>'
+    : '<span style="color:#EF4444; font-size:14px;">🔴 ' + Number(pct).toFixed(2) + '%</span>';
 
   el.innerHTML = '<span style="color:' + color + '; transition:color 0.3s;">$ ' +
     Number(price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
-    '</span><br><span style="color:' + (color === "#EF4444" ? "#EF4444" : "#22C55E") + '; font-size:14px;">' + arrow + '</span>';
-
-  document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
-  document.getElementById("mkt-status").innerHTML = '<span style="color:#22C55E;">🟢 COINBASE LIVE FEED</span>';
+    '</span><br>' + badge;
 }
 
-async function loadCoinbaseLive() {
+async function loadFromVercelAPI() {
   try {
-    const [b, e, s] = await Promise.all([
-      fetch("https://coinbase.com").then(r => r.json()),
-      fetch("https://coinbase.com").then(r => r.json()),
-      fetch("https://coinbase.com").then(r => r.json())
-    ]);
+    const res = await fetch("/api/crypto?t=" + Date.now());
+    const data = await res.json();
 
-    renderCoin("btc", "btc-box", parseFloat(b.data.amount));
-    renderCoin("eth", "eth-box", parseFloat(e.data.amount));
-    renderCoin("sol", "sol-box", parseFloat(s.data.amount));
+    renderCoin("btc", "btc-box", data.bitcoin.usd, data.bitcoin.usd_24h_change);
+    renderCoin("eth", "eth-box", data.ethereum.usd, data.ethereum.usd_24h_change);
+    renderCoin("sol", "sol-box", data.solana.usd, data.solana.usd_24h_change);
+
+    const avg = (data.bitcoin.usd_24h_change + data.ethereum.usd_24h_change + data.solana.usd_24h_change) / 3;
+    const mEl = document.getElementById("mkt-status");
+    if (mEl) {
+      if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
+      else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
+      else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
+    }
+    document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
   } catch (err) {
-    document.getElementById("mkt-status").innerHTML = '<span style="color:#EF4444;">⚠️ Сүлжээ шалгана уу</span>';
+    document.getElementById("mkt-status").innerHTML = '<span style="color:#EF4444;">⏳ Vercel шинэчлэгдэж байна...</span>';
   }
 }
 
-loadCoinbaseLive();
-setInterval(loadCoinbaseLive, 2000);
+loadFromVercelAPI();
+setInterval(loadFromVercelAPI, 5000);
 </script>
 
 </body>
 </html>
+
 
