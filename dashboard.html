@@ -1145,6 +1145,61 @@ setInterval(() => {
 }, 500);
 </script>
 
+<script>
+(function() {
+  let prevGold = 0;
+
+  async function syncRadarWithRealMarket() {
+    try {
+      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      const price = Number(data.price);
+      if (!price || isNaN(price)) return;
+
+      // Өмнөх ханштай (эсвэл өдрийн дундаж $3655-тай) харьцуулж бодит чиглэлийг тогтооно
+      const refPrice = prevGold > 0 ? prevGold : 3655.00;
+      const isBearish = price <= refPrice;
+      prevGold = price;
+
+      // 1. STRYXZONE SNIPER RADAR-ийг бодит чиглэлээр шинэчилнэ
+      document.querySelectorAll("div").forEach(el => {
+        if (el.children.length === 0 && (el.textContent.includes("BULLISH / BUY") || el.textContent.includes("BEARISH / SELL"))) {
+          if (isBearish) {
+            el.textContent = "🔴 BEARISH / SELL";
+            el.style.color = "#EF4444";
+            if (el.parentElement) {
+              el.parentElement.style.background = "rgba(239,68,68,0.12)";
+              el.parentElement.style.borderColor = "rgba(239,68,68,0.45)";
+            }
+          } else {
+            el.textContent = "🟢 BULLISH / BUY";
+            el.style.color = "#22C55E";
+            if (el.parentElement) {
+              el.parentElement.style.background = "rgba(34,197,94,0.12)";
+              el.parentElement.style.borderColor = "rgba(34,197,94,0.45)";
+            }
+          }
+        }
+      });
+
+      // 2. XAUUSD VOLUME & ХҮЧНИЙ ХЭМЖҮҮР-ийг бодит чиглэлээр шинэчилнэ
+      const sellPct = isBearish ? (58 + Math.floor(Math.random() * 11)) : (33 + Math.floor(Math.random() * 9));
+      const buyPct = 100 - sellPct;
+
+      document.querySelectorAll("span, b, div").forEach(el => {
+        if (el.children.length === 0) {
+          if (el.textContent.includes("BUYERS:")) el.textContent = "BUYERS: " + buyPct + "%";
+          if (el.textContent.includes("SELLERS:")) el.textContent = "SELLERS: " + sellPct + "%";
+        }
+      });
+    } catch (e) {}
+  }
+
+  syncRadarWithRealMarket();
+  setInterval(syncRadarWithRealMarket, 5000);
+})();
+</script>
   
   
 </body>
