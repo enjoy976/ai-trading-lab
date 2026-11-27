@@ -674,10 +674,11 @@ MT5 Холболт
       ? `<td>🥇 XAUUSD</td><td>${t.type}</td><td class="vip-pips">${t.pips}</td><td class="vip-tp">🟢 TP HIT</td>`
       : `<td>🥇 XAUUSD</td><td>${t.type}</td><td style="color:#EF4444; font-weight:700;">${t.pips}</td><td style="color:#EF4444; font-weight:700;">🔴 SL HIT</td>`;
 
-    tbody.insertBefore(tr, tbody.firstChild);
-    if (tbody.children.length > 5) {
+        tbody.insertBefore(tr, tbody.firstChild);
+    while (tbody.children.length > 8) {
       tbody.removeChild(tbody.lastChild);
     }
+
   }, 3500);
 })();
 </script>
