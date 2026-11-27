@@ -2,7 +2,7 @@ let prevGoldPrice = 0;
 
 async function loadGoldPrice() {
   try {
-    const response = await fetch("https://gold-api.com" + Date.now());
+    const response = await fetch("https://gold-api.com");
     const data = await response.json();
     const price = Number(data.price);
     if (!price || isNaN(price)) return;
@@ -37,9 +37,9 @@ async function loadGoldPrice() {
       statusEl.textContent = trendBadge;
     }
   } catch (error) {
-    console.log("Reconnecting gold feed...");
+    console.log(error);
   }
 }
 
 loadGoldPrice();
-setInterval(loadGoldPrice, 2000);
+setInterval(loadGoldPrice, 4000);
