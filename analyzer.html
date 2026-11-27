@@ -728,14 +728,14 @@ body::after {
 
 <body>
 
-<script src="vip-users.js"></script>
 <div id="vip-lock-screen" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(11,14,20,0.97); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:20px; text-align:center;">
   <div style="max-width:440px; background:#11151F; border:1px solid #D4AF37; border-radius:20px; padding:32px 24px; box-shadow:0 0 40px rgba(212,175,55,0.25);">
     <div style="font-size:48px; margin-bottom:12px;">🔒</div>
     <h2 style="color:#F0CE6E; font-size:20px; margin-bottom:10px;">ЗӨВХӨН VIP ГИШҮҮДЭД НЭЭЛТТЭЙ</h2>
-    <p style="color:#8A93A6; font-size:14px; line-height:1.6; margin-bottom:20px;">
+    <p style="color:#8A93A6; font-size:14px; line-height:1.6; margin-bottom:8px;">
       <b>STRYX AI CHART &amp; SMC SCANNER</b> нь зөвхөн төлбөрөө төлж эрхээ идэвхжүүлсэн VIP гишүүдэд ажиллана.
     </p>
+    <p id="detected-email-info" style="color:#F0CE6E; font-family:monospace; font-size:12px; margin-bottom:18px;"></p>
     <a id="vip-tg-btn" href="#" target="_blank" style="display:block; background:linear-gradient(135deg,#F0CE6E,#D4AF37); color:#0B0E14; font-weight:800; text-decoration:none; padding:13px 20px; border-radius:10px; margin-bottom:12px;">
       💬 TELEGRAM-ААР ЭРХ ИДЭВХЖҮҮЛЭХ
     </a>
@@ -745,22 +745,41 @@ body::after {
 
 <script>
 (function() {
+  // ========================================================
+  // ЭНД ЗӨВШӨӨРӨГДСӨН VIP ХЭРЭГЛЭГЧДИЙН И-МЭЙЛИЙГ БИЧНЭ ҮҮ
+  // ========================================================
+  const APPROVED_VIP_EMAILS = [
+    "mansmus2@gmail.com",
+    "shinehun@gmail.com"
+  ];
+
   const tgUser = "Stryx_golzonetrader";
   const tgBtn = document.getElementById("vip-tg-btn");
   if (tgBtn) tgBtn.href = ["https:", "", "t.me", tgUser].join("/");
 
-  const activeEmail = (localStorage.getItem("stryx_verified_email") || "").toLowerCase().trim();
+  // 1. Эхлээд localStorage-аас шалгана
+  let activeEmail = (localStorage.getItem("stryx_verified_email") || "").toLowerCase().trim();
 
-  const allowed = (typeof APPROVED_VIP_EMAILS !== "undefined")
-    ? APPROVED_VIP_EMAILS.map(e => e.toLowerCase().trim())
-    : [];
+  // 2. Хэрэв тэнд байхгүй бол бусад хадгалагдсан бүх санах ойгоос хайна
+  if (!activeEmail) {
+    for (let i = 0; i < localStorage.length; i++) {
+      const val = localStorage.getItem(localStorage.key(i)) || "";
+      const match = val.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+      if (match) { activeEmail = match.toLowerCase(); break; }
+    }
+  }
+
+  const allowed = APPROVED_VIP_EMAILS.map(e => e.toLowerCase().trim());
 
   if (!activeEmail || !allowed.includes(activeEmail)) {
+    const info = document.getElementById("detected-email-info");
+    if (info) info.textContent = "Таны и-мэйл: " + (activeEmail || "Нэвтрээгүй байна");
     const lock = document.getElementById("vip-lock-screen");
     if (lock) lock.style.display = "flex";
   }
 })();
 </script>
+
 
 
 
