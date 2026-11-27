@@ -905,27 +905,31 @@ body::after {
   dropzone.addEventListener("click", () => fileInput.click());
   dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
   dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
-  dropzone.addEventListener("drop", (e) => {
+    dropzone.addEventListener("drop", (e) => {
     e.preventDefault();
     dropzone.classList.remove("dragover");
-    if (e.dataTransfer.files && e.dataTransfer.files) handleImageFile(e.dataTransfer.files);
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) handleImageFile(files[0]);
   });
   fileInput.addEventListener("change", () => {
-    if (fileInput.files && fileInput.files) handleImageFile(fileInput.files);
+    const files = fileInput.files;
+    if (files && files.length > 0) handleImageFile(files[0]);
   });
 
   function handleImageFile(file) {
     currentMediaType = file.type || "image/png";
     const reader = new FileReader();
     reader.onload = (e) => {
-      previewImg.src = e.target.result;
-      currentBase64 = e.target.result.split(",");
+      const fullDataUrl = e.target.result;
+      previewImg.src = fullDataUrl;
+      currentBase64 = fullDataUrl.split(",")[1];
       dropContent.style.display = "none";
       previewWrap.style.display = "block";
       scanBtn.disabled = false;
     };
     reader.readAsDataURL(file);
   }
+
 
   document.querySelectorAll("#timeframeGroup .pill").forEach(btn => {
     btn.addEventListener("click", () => {
