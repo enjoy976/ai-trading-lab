@@ -1032,47 +1032,54 @@ setTimeout(checkUser, 200);
 
 
 // ===============================
-// KILLZONE COUNTDOWN TIMER
+// KILLZONE COUNTDOWN TIMER (УБ ЦАГААР)
 // ===============================
+function updateKillzone() {
+  const now = new Date();
+  const utcH = now.getUTCHours();
 
-function getNextKillzone(targetHour) {
+  const sessions = [
+    { prefix: "ldn", startH: 8,  endH: 10, openTxt: "🟢 ИДЭВХТЭЙ (16:00–18:00 УБ)" },
+    { prefix: "ny",  startH: 13, endH: 15, openTxt: "🟢 ИДЭВХТЭЙ (21:00–23:00 УБ)" }
+  ];
 
-  var now = new Date();
+  sessions.forEach(s => {
+    const isOpen = utcH >= s.startH && utcH < s.endH;
+    const target = new Date(Date.UTC(
+      now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+      isOpen ? s.endH : s.startH, 0, 0
+    ));
 
-  var target = new Date(Date.UTC(
+    if (!isOpen && target.getTime() <= now.getTime()) {
+      target.setUTCDate(target.getUTCDate() + 1);
+    }
 
-    now.getUTCFullYear(),
+    const diff = Math.max(0, target.getTime() - now.getTime());
+    const hrs  = String(Math.floor(diff / 3600000)).padStart(2, "0");
+    const mins = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+    const secs = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
 
-    now.getUTCMonth(),
+    const hEl = document.getElementById(s.prefix + "-hours");
+    const mEl = document.getElementById(s.prefix + "-mins");
+    const sEl = document.getElementById(s.prefix + "-secs");
+    const stEl = document.getElementById(s.prefix + "-status");
 
-    now.getUTCDate(),
-
-    targetHour, 0, 0
-
-  ));
-
-  if (target.getTime() <= now.getTime()) {
-
-    target.setUTCDate(target.getUTCDate() + 1);
-
-  }
-
-  return target;
-
-}
-
-function isKillzoneActive(targetHour) {
-
-  var now = new Date();
-
-  var utcHour = now.getUTCHours();
-
-  return utcHour >= targetHour && utcHour < targetHour + 2;
-
+    if (hEl) hEl.textContent = hrs;
+    if (mEl) mEl.textContent = mins;
+    if (sEl) sEl.textContent = secs;
+    if (stEl) {
+      if (isOpen) {
+        stEl.style.color = "#22C55E";
+        stEl.textContent = s.openTxt;
+      } else {
+        stEl.style.color = "#8A93A6";
+        stEl.textContent = "⏳ ХҮЛЭЭЖ БАЙНА";
+      }
+    }
+  });
 }
 
 updateKillzone();
-
 setInterval(updateKillzone, 1000);
 
 // ===============================
