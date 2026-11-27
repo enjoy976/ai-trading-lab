@@ -820,231 +820,48 @@ body::after {
 
 <script>
 (function() {
+  let liveGold = 3678.10;
 
-  // ===== ELEMENTS =====
-  var dropzone       = document.getElementById('dropzone');
-  var dropzoneContent= document.getElementById('dropzoneContent');
-  var dropzonePreview= document.getElementById('dropzonePreview');
-  var previewImg     = document.getElementById('previewImg');
-  var fileInput      = document.getElementById('fileInput');
-  var scanBtn        = document.getElementById('scanBtn');
-  var scanOverlay    = document.getElementById('scanOverlay');
-  var scanLaser      = document.getElementById('scanLaser');
-  var scanPercent    = document.getElementById('scanPercent');
-  var resultCard     = document.getElementById('resultCard');
-  var tfGroup        = document.getElementById('timeframeGroup');
-  var sessionGroup   = document.getElementById('sessionGroup');
+  async function syncRealGold() {
+    try {
+      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.price && !isNaN(data.price)) {
+        liveGold = Number(data.price);
+      }
+    } catch (e) {}
+  }
+  syncRealGold();
+  setInterval(syncRealGold, 5000);
 
-  var selectedTF = 'M15';
-  var selectedSession = 'london';
-  var hasImage = false;
+  function fixTradeBoxes() {
+    const isBuy = document.body.innerText.includes("STRONG BUY");
+    const isSell = document.body.innerText.includes("STRONG SELL");
+    if (!isBuy && !isSell) return;
 
-  // ===== DROPZONE EVENTS =====
-  dropzone.addEventListener('click', function() {
-    if (!hasImage) fileInput.click();
-  });
+    const entry = liveGold;
+    const sl  = isBuy ? (entry - 8.0)  : (entry + 8.0);
+    const tp1 = isBuy ? (entry + 16.0) : (entry - 16.0);
+    const tp2 = isBuy ? (entry + 28.0) : (entry - 28.0);
 
-  dropzone.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    dropzone.classList.add('dragover');
-  });
-
-  dropzone.addEventListener('dragleave', function(e) {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-  });
-
-  dropzone.addEventListener('drop', function(e) {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-    var file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      handleFile(file);
-    }
-  });
-
-  fileInput.addEventListener('change', function() {
-    var file = fileInput.files[0];
-    if (file && file.type.startsWith('image/')) {
-      handleFile(file);
-    }
-  });
-
-  function handleFile(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      previewImg.src = e.target.result;
-      dropzoneContent.style.display = 'none';
-      dropzonePreview.style.display = 'block';
-      hasImage = true;
-      scanBtn.disabled = false;
-    };
-    reader.readAsDataURL(file);
+    // Хайрцаг бүрийн гарчгаар нь олоод яг доторх утгыг нь солино
+    document.querySelectorAll("div").forEach(box => {
+      if (box.children.length === 2) {
+        const label = box.children[0].innerText || "";
+        const valEl = box.children[1];
+        if (label.includes("Entry Zone")) valEl.textContent = entry.toFixed(2);
+        else if (label.includes("Stop Loss")) valEl.textContent = sl.toFixed(2);
+        else if (label.includes("Take Profit 1")) valEl.textContent = tp1.toFixed(2);
+        else if (label.includes("Take Profit 2")) valEl.textContent = tp2.toFixed(2);
+      }
+    });
   }
 
-  // ===== PILL SELECTORS =====
-  tfGroup.addEventListener('click', function(e) {
-    var btn = e.target.closest('.pill');
-    if (!btn) return;
-    tfGroup.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
-    btn.classList.add('active');
-    selectedTF = btn.getAttribute('data-tf');
-  });
-
-  sessionGroup.addEventListener('click', function(e) {
-    var btn = e.target.closest('.pill');
-    if (!btn) return;
-    sessionGroup.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
-    btn.classList.add('active');
-    selectedSession = btn.getAttribute('data-session');
-  });
-
-  // ===== SCAN =====
-  scanBtn.addEventListener('click', function() {
-    if (!hasImage) return;
-    scanBtn.disabled = true;
-    scanOverlay.classList.add('active');
-
-    // Reset laser animation
-    scanLaser.style.animation = 'none';
-    void scanLaser.offsetHeight;
-    scanLaser.style.animation = 'scan-sweep 2s ease-in-out';
-
-    // Animate percentage
-    var pct = 0;
-    var pctInterval = setInterval(function() {
-      pct += Math.random() * 12;
-      if (pct >= 100) pct = 100;
-      scanPercent.textContent = Math.floor(pct) + '%';
-      if (pct >= 100) clearInterval(pctInterval);
-    }, 150);
-
-    setTimeout(function() {
-      scanOverlay.classList.remove('active');
-      scanBtn.disabled = false;
-      generateResult();
-    }, 2000);
-  });
-
-  // ===== ANALYSIS GENERATION =====
-  function generateResult() {
-
-    var isBuy = Math.random() > 0.4;
-    var confidence = (85 + Math.random() * 12).toFixed(1);
-    var basePrice = 2300 + Math.random() * 80;
-    var entry = basePrice.toFixed(1);
-    var sl, tp1, tp2;
-
-    if (isBuy) {
-      sl = (basePrice - 8 - Math.random() * 6).toFixed(1);
-      tp1 = (basePrice + 16 + Math.random() * 10).toFixed(1);
-      tp2 = (basePrice + 32 + Math.random() * 16).toFixed(1);
-    } else {
-      sl = (basePrice + 8 + Math.random() * 6).toFixed(1);
-      tp1 = (basePrice - 16 - Math.random() * 10).toFixed(1);
-      tp2 = (basePrice - 32 - Math.random() * 16).toFixed(1);
-    }
-
-    var risk = Math.abs(basePrice - parseFloat(sl));
-    var reward = Math.abs(parseFloat(tp2) - basePrice);
-    var rr = (reward / risk).toFixed(1);
-
-    // Market Structure
-    var structureHTML = '';
-    if (isBuy) {
-      structureHTML =
-        '<span class="structure-tag bullish">📈 Bullish BOS</span>' +
-        '<span class="structure-tag bullish">💧 Liquidity Sweep</span>' +
-        '<span class="structure-tag bullish">🟦 Bullish Order Block</span>' +
-        '<span class="structure-tag">⚡ ' + selectedTF + ' Structure</span>';
-    } else {
-      structureHTML =
-        '<span class="structure-tag bearish">📉 Bearish BOS</span>' +
-        '<span class="structure-tag bearish">💧 Liquidity Sweep</span>' +
-        '<span class="structure-tag bearish">🟥 Bearish Order Block</span>' +
-        '<span class="structure-tag">⚡ ' + selectedTF + ' Structure</span>';
-    }
-    document.getElementById('marketStructure').innerHTML = structureHTML;
-
-    // Signal Badge
-    var signalClass = isBuy ? 'buy' : 'sell';
-    var signalText  = isBuy ? '🟢 STRONG BUY SETUP' : '🔴 STRONG SELL SETUP';
-    document.getElementById('signalBadgeWrap').innerHTML =
-      '<div class="signal-badge ' + signalClass + '">' +
-        '<span>' + signalText + '</span>' +
-        '<span class="signal-badge__confidence">Confidence: ' + confidence + '%</span>' +
-      '</div>';
-
-    // Trade Plan
-    var tpBuyClass = isBuy ? 'tp-buy' : 'tp-sell';
-    document.getElementById('tradePlanGrid').innerHTML =
-      '<div class="tp-box ' + tpBuyClass + '">' +
-        '<div class="tp-box__label">🎯 Entry Zone</div>' +
-        '<div class="tp-box__value">' + entry + '</div>' +
-      '</div>' +
-      '<div class="tp-box tp-sell">' +
-        '<div class="tp-box__label">🛑 Stop Loss (SL)</div>' +
-        '<div class="tp-box__value">' + sl + '</div>' +
-      '</div>' +
-      '<div class="tp-box tp-buy">' +
-        '<div class="tp-box__label">✅ Take Profit 1 (TP1)</div>' +
-        '<div class="tp-box__value">' + tp1 + '</div>' +
-      '</div>' +
-      '<div class="tp-box tp-buy">' +
-        '<div class="tp-box__label">✅ Take Profit 2 (TP2)</div>' +
-        '<div class="tp-box__value">' + tp2 + '</div>' +
-      '</div>' +
-      '<div class="tp-box tp-rr" style="grid-column:1/-1;">' +
-        '<div class="tp-box__label">⚖️ RISK : REWARD RATIO</div>' +
-        '<div class="tp-box__value">1 : ' + rr + '</div>' +
-      '</div>';
-
-    // SMC Checklist
-    var sessionLabel = selectedSession === 'london' ? 'London Killzone' :
-                       selectedSession === 'ny' ? 'New York Killzone' : 'Asian Session';
-
-    document.getElementById('smcChecklist').innerHTML =
-      '<div class="smc-check-item">' +
-        '<span class="smc-check-item__icon">💧</span>' +
-        '<div class="smc-check-item__body">' +
-          '<div class="smc-check-item__title">Liquidity Sweep — Батлагдсан</div>' +
-          '<div class="smc-check-item__desc">Хууран мэхэлэлт амжилттай болсон. Өмнөх liquidity-г sweep хийсэн.</div>' +
-        '</div>' +
-        '<span class="smc-check-item__tag">CONFIRMED</span>' +
-      '</div>' +
-      '<div class="smc-check-item">' +
-        '<span class="smc-check-item__icon">🟦</span>' +
-        '<div class="smc-check-item__body">' +
-          '<div class="smc-check-item__title">Fresh Order Block Retest</div>' +
-          '<div class="smc-check-item__desc">Шинэ order block- дахин тестлээ. Үнэ OB дотор буцаж орсон.</div>' +
-        '</div>' +
-        '<span class="smc-check-item__tag">CONFIRMED</span>' +
-      '</div>' +
-      '<div class="smc-check-item">' +
-        '<span class="smc-check-item__icon">⚡</span>' +
-        '<div class="smc-check-item__body">' +
-          '<div class="smc-check-item__title">FVG Imbalance — Fair Value Gap</div>' +
-          '<div class="smc-check-item__desc">Тэнцвэргүй бүс (imbalance) илэрсэн. Үнэ хурдан дүүргэх магадлалтай.</div>' +
-        '</div>' +
-        '<span class="smc-check-item__tag">CONFIRMED</span>' +
-      '</div>' +
-      '<div class="smc-check-item">' +
-        '<span class="smc-check-item__icon">🕐</span>' +
-        '<div class="smc-check-item__body">' +
-          '<div class="smc-check-item__title">Session Timing — ' + sessionLabel + '</div>' +
-          '<div class="smc-check-item__desc">' + selectedTF + ' timeframe, ' + sessionLabel + ' цагт хийгдсэн шинжилгээ.</div>' +
-        '</div>' +
-        '<span class="smc-check-item__tag">ACTIVE</span>' +
-      '</div>';
-
-    resultCard.classList.add('show');
-    resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
+  setInterval(fixTradeBoxes, 300);
 })();
 </script>
 
-<script>
 (function() {
   let liveGold = 3678.50;
 
