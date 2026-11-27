@@ -145,45 +145,47 @@ data-i18n="system_active">
 
 
 <!-- ========================= -->
-<!-- USER ACCOUNT & SNIPER PROFILE -->
+<!-- USER ACCOUNT & SNIPER PROFILE (CLEAN INTEGRATED) -->
 <!-- ========================= -->
-<div class="result" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
+<div class="result" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; align-items: center; padding: 24px 28px;">
 
   <!-- ЗҮҮН ТАЛ: ХЭРЭГЛЭГЧИЙН МЭДЭЭЛЭЛ -->
   <div>
-    <h2 data-i18n="user_account" style="margin-bottom: 10px;">👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ</h2>
-    <hr style="margin-bottom: 14px;">
-    <p style="line-height: 1.8;">
-      <span data-i18n="email" style="color: var(--text-muted); font-size: 12px;">И-мэйл хаяг:</span><br>
-      <b id="userEmail" style="font-size: 16px; color: #FFFFFF;">Loading...</b><br><br>
-      <span data-i18n="status" style="color: var(--text-muted); font-size: 12px;">Төлөв:</span>
+    <div style="font-family: var(--mono); font-size: 12px; color: var(--gold); letter-spacing: 1px; margin-bottom: 8px; font-weight: 700;">
+      👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ
+    </div>
+    <div id="userEmail" style="font-size: 17px; font-weight: 700; color: #FFFFFF; margin-bottom: 12px;">
+      Loading...
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px;">
+      <span style="color: var(--text-muted);">Төлөв:</span>
       <span data-i18n="active" style="font-weight: 700; color: #22C55E;">🟢 Идэвхтэй</span>
-      &nbsp;|&nbsp;
-      <span style="font-family: var(--mono); font-size: 12px; color: var(--gold-bright); background: rgba(212,175,55,0.14); padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4);">🏆 SNIPER MEMBER</span>
-    </p>
+      <span style="color: var(--border-strong);">|</span>
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--gold-bright); background: rgba(212,175,55,0.1); padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.3);">🏆 SNIPER MEMBER</span>
+    </div>
   </div>
 
-  <!-- БАРУУН ТАЛ: ӨНӨӨДРИЙН ТЕРМИНАЛ СТАТИСТИК БА ШУУРХАЙ ТОВЧ -->
-  <div style="background: rgba(7, 10, 15, 0.75); border: 1px solid var(--border-strong); border-radius: 14px; padding: 18px; font-family: var(--mono);">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
-      <span style="font-size: 12px; color: var(--gold-bright); font-weight: 700;">🇲🇳 УЛААНБААТАР ЦАГ</span>
-      <b id="ub-live-clock" style="font-size: 16px; color: #FFFFFF;">00:00:00</b>
+  <!-- БАРУУН ТАЛ: АРЫН ДЭВСГЭРТЭЙ УУССАН ЦЭВЭРХЭН САМБАР -->
+  <div style="border-left: 1px solid rgba(212,175,55,0.22); padding-left: 26px; font-family: var(--mono);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px;">🇲🇳 УЛААНБААТАР ЦАГ</span>
+      <b id="ub-live-clock" style="font-size: 15px; color: var(--gold-bright);">00:00:00</b>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; font-size: 12px;">
-      <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px;">
-        <div style="color: var(--text-muted); font-size: 10px;">ӨНӨӨДРИЙН ЗОРИЛТ</div>
-        <div style="color: #22C55E; font-weight: 700; margin-top: 2px;">+1.5% / +3.0%</div>
+    <div style="display: flex; justify-content: space-between; gap: 16px; margin-bottom: 14px; font-size: 12px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <div>
+        <span style="color: var(--text-muted); font-size: 10px; display: block;">ӨНӨӨДРИЙН ЗОРИЛТ</span>
+        <b style="color: #22C55E;">+1.5% / +3.0%</b>
       </div>
-      <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px;">
-        <div style="color: var(--text-muted); font-size: 10px;">MAX ЭРСДЭЛ</div>
-        <div style="color: #EF4444; font-weight: 700; margin-top: 2px;">1.0% PER TRADE</div>
+      <div style="text-align: right;">
+        <span style="color: var(--text-muted); font-size: 10px; display: block;">MAX ЭРСДЭЛ</span>
+        <b style="color: #EF4444;">1.0% / TRADE</b>
       </div>
     </div>
 
     <div style="display: flex; gap: 10px;">
-      <a href="risk.html" style="flex: 1; text-align: center; text-decoration: none; background: rgba(212,175,55,0.16); border: 1px solid var(--gold); color: var(--gold-bright); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">🧮 ЭРСДЭЛ ТООЦОХ</a>
-      <a href="checklist.html" style="flex: 1; text-align: center; text-decoration: none; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">📋 CHECKLIST</a>
+      <a href="risk.html" style="flex: 1; text-align: center; text-decoration: none; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.4); color: var(--gold-bright); padding: 8px 10px; border-radius: 8px; font-size: 11px; font-weight: 700;">🧮 ЭРСДЭЛ ТООЦОХ</a>
+      <a href="checklist.html" style="flex: 1; text-align: center; text-decoration: none; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; padding: 8px 10px; border-radius: 8px; font-size: 11px; font-weight: 700;">📋 CHECKLIST</a>
     </div>
   </div>
 
@@ -197,6 +199,7 @@ data-i18n="system_active">
     }
   }, 1000);
 </script>
+
 
 
 
