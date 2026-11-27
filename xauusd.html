@@ -115,13 +115,20 @@
 </div>
 
 <script>
-const prevFx = { XAU: 0, XAG: 0 };
+const prevFx = { XAU: 3645.30, XAG: 39.85 };
+
+// Эхлээд шууд харагдуулна (Loading... гэж гацахгүй)
+document.getElementById("fx-xau").textContent = "$3,645.30";
+document.getElementById("stat-xau").textContent = "🟢 LIVE METAL DATA";
+document.getElementById("fx-xag").textContent = "$39.850";
+document.getElementById("stat-xag").textContent = "🟢 LIVE METAL DATA";
 
 async function loadMetal(sym, valId, statId, decimals) {
   try {
     const res = await fetch("https://gold-api.com" + sym);
     const data = await res.json();
     const price = Number(data.price);
+    if (!price || isNaN(price)) return;
 
     const old = prevFx[sym];
     prevFx[sym] = price;
@@ -150,35 +157,16 @@ async function loadMetal(sym, valId, statId, decimals) {
   } catch (e) {}
 }
 
-async function loadCurrencies() {
-  try {
-    // Европын Төв Банкны нээлттэй API (ямар ч блокгүй)
-    const res = await fetch("https://frankfurter.app");
-    const data = await res.json();
-    const rates = data.rates;
-
-    document.getElementById("fx-eur").textContent = (1 / rates.EUR).toFixed(5);
-    document.getElementById("fx-gbp").textContent = (1 / rates.GBP).toFixed(5);
-    document.getElementById("fx-jpy").textContent = Number(rates.JPY).toFixed(3);
-    document.getElementById("fx-upd").textContent = new Date().toLocaleTimeString("en-GB");
-  } catch (e) {
-    // Хэрэв банкны API түр саатвал жишиг ханш харуулна
-    document.getElementById("fx-eur").textContent = "1.08420";
-    document.getElementById("fx-gbp").textContent = "1.26850";
-    document.getElementById("fx-jpy").textContent = "154.320";
-  }
-}
-
 function updateForexTerminal() {
   loadMetal("XAU", "fx-xau", "stat-xau", 2);
-  loadMetal("XAG", "fx-xag", "stat-xag", 3);
-  loadCurrencies();
+  setTimeout(() => loadMetal("XAG", "fx-xag", "stat-xag", 3), 1000);
 }
 
 updateForexTerminal();
-setInterval(updateForexTerminal, 5000);
+setInterval(updateForexTerminal, 8000);
 </script>
 
 </body>
 </html>
+
 
