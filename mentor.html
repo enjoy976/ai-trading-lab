@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🧠 STRYX AI MENTOR &amp; SMC COACH</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --obsidian:       #0B0E14;
+  --obsidian-2:     #11151F;
+  --obsidian-3:     #161B27;
+  --surface:        rgba(22, 27, 39, 0.72);
+  --surface-2:      rgba(17, 21, 31, 0.85);
+  --border:         rgba(212, 175, 55, 0.14);
+  --border-strong:  rgba(212, 175, 55, 0.30);
+  --gold:           #D4AF37;
+  --gold-bright:    #F0CE6E;
+  --gold-dim:       #8E7423;
+  --gold-glow:      rgba(212, 175, 55, 0.18);
+  --text:           #E8ECF2;
+  --text-muted:     #8A93A6;
+  --text-dim:       #5C6478;
+  --green:          #22C55E;
+  --green-glow:     rgba(34, 197, 94, 0.15);
+  --red:            #EF4444;
+  --red-glow:       rgba(239, 68, 68, 0.15);
+  --radius:         16px;
+  --radius-sm:      10px;
+  --mono:           'JetBrains Mono', 'Courier New', monospace;
+  --sans:           'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--obsidian);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(212,175,55,0.04), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+}
+
+/* ===== HEADER ===== */
+.mentor-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 24px;
+  background: rgba(11, 14, 20, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--gold-glow);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.back-link:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateX(-3px);
+}
+
+.mentor-header__title {
+  font-size: 17px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 30px;
+  background: var(--obsidian-2);
+  border: 1px solid var(--border-strong);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.price-badge__icon {
+  font-size: 14px;
+}
+
+.price-badge__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.price-badge__value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px var(--gold-glow);
+  letter-spacing: 0.5px;
+}
+
+.price-badge.loading .price-badge__value {
+  color: var(--text-dim);
+  text-shadow: none;
+}
+
+/* ===== CHAT LAYOUT ===== */
+.chat-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 62px);
+  padding: 0 16px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== MESSAGE BUBBLES ===== */
+.msg {
+  max-width: 82%;
+  padding: 16px 20px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  animation: msg-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+}
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msg--bot {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.msg--bot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  border-radius: 18px 0 0 18px;
+}
+
+.msg--user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.05));
+  border: 1px solid var(--border-strong);
+  border-bottom-right-radius: 4px;
+  color: var(--text);
+}
+
+.msg__author {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.msg--bot .msg__author { color: var(--gold); }
+.msg--user .msg__author { color: var(--text-muted); text-align: right; }
+
+.msg__body {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.msg__body b {
+  color: var(--gold-bright);
+}
+
+.msg__body .highlight {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.msg__body .warn {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ===== TYPING INDICATOR ===== */
+.typing {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: none;
+  position: relative;
+}
+
+.typing.show { display: flex; gap: 5px; }
+
+.typing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  border-radius: 18px 0 0 18px;
+}
+
+.typing__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.4;
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+
+.typing__dot:nth-child(2) { animation-delay: 0.15s; }
+.typing__dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ===== SUGGESTION CHIPS ===== */
+.suggestion-chips {
+  display: flex;
+  gap: 8px;
+  padding: 10px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-shrink: 0;
+}
+
+.suggestion-chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex-shrink: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-family: var(--sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.chip:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: var(--gold-glow);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* ===== INPUT BAR ===== */
+.input-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0 20px;
+  flex-shrink: 0;
+}
+
+.input-bar__field {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 14px 22px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--sans);
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.input-bar__field::placeholder {
+  color: var(--text-dim);
+}
+
+.input-bar__field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+
+.input-bar__send {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--obsidian);
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.input-bar__send:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: scale(1.05);
+}
+
+.input-bar__send:active {
+  transform: scale(0.95);
+}
+
+/* ===== SCROLLBAR ===== */
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+.chat-messages::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::selection { background: var(--gold-glow); color: var(--gold-bright); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .mentor-header {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .back-link {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .mentor-header__title {
+    font-size: 14px;
+  }
+
+  .price-badge {
+    padding: 6px 12px;
+  }
+
+  .price-badge__value {
+    font-size: 13px;
+  }
+
+  .chat-wrapper {
+    padding: 0 10px;
+    height: calc(100vh - 56px);
+  }
+
+  .msg {
+    max-width: 92%;
+    font-size: 13px;
+    padding: 14px 16px;
+  }
+
+  .chip {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  .input-bar__field {
+    font-size: 13px;
+    padding: 12px 18px;
+  }
+
+  .input-bar__send {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="mentor-header">
+  <a href="dashboard.html" class="back-link">← DASHBOARD</a>
+  <div class="mentor-header__title">🧠 STRYX AI MENTOR &amp; SMC COACH</div>
+  <div class="price-badge loading" id="priceBadge">
+    <span class="price-badge__icon">🥇</span>
+    <div>
+      <div class="price-badge__label">XAUUSD</div>
+      <div class="price-badge__value" id="xauPrice">...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAT ===== -->
+<div class="chat-wrapper">
+
+  <div class="chat-messages" id="chatMessages">
+    <!-- Messages injected by JS -->
+  </div>
+
+  <div class="typing" id="typingIndicator">
+    <div class="typing__dot"></div>
+    <div class="typing__dot"></div>
+    <div class="typing__dot"></div>
+  </div>
+
+  <div class="suggestion-chips" id="suggestionChips">
+    <button class="chip" data-q="🥇 Одоо XAUUSD дээр юу анхаарах вэ?">🥇 Одоо XAUUSD дээр юу анхаарах вэ?</button>
+    <button class="chip" data-q="😰 2 дараалан SL цохиуллаа, яах вэ?">😰 2 дараалан SL цохиуллаа, яах вэ?</button>
+    <button class="chip" data-q="📦 Valid Order Block яаж таних вэ?">📦 Valid Order Block яаж таних вэ?</button>
+    <button class="chip" data-q="⏰ Killzone цаг хэдээс эхлэх вэ?">⏰ Killzone цаг хэдээс эхлэх вэ?</button>
+    <button class="chip" data-q="💰 $500 дансанд хэдэн Lot орох вэ?">💰 $500 дансанд хэдэн Lot орох вэ?</button>
+  </div>
+
+  <div class="input-bar">
+    <input
+      type="text"
+      class="input-bar__field"
+      id="chatInput"
+      placeholder="STRYX AI Mentor-т асуултаа бичнэ үү..."
+      autocomplete="off">
+    <button class="input-bar__send" id="sendBtn">➤</button>
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  // ===== ELEMENTS =====
+  var chatMessages    = document.getElementById('chatMessages');
+  var typingIndicator = document.getElementById('typingIndicator');
+  var chatInput       = document.getElementById('chatInput');
+  var sendBtn         = document.getElementById('sendBtn');
+  var chipsContainer  = document.getElementById('suggestionChips');
+  var priceBadge      = document.getElementById('priceBadge');
+  var xauPriceEl      = document.getElementById('xauPrice');
+
+  var xauPrice = '';
+  var isTyping = false;
+
+  // ===== FETCH XAUUSD PRICE =====
+  function fetchPrice() {
+    fetch('https://api.gold-api.com/price/XAU')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && data.price) {
+          xauPrice = '$' + Number(data.price).toFixed(2);
+          xauPriceEl.textContent = xauPrice;
+          priceBadge.classList.remove('loading');
+        }
+      })
+      .catch(function() {
+        xauPriceEl.textContent = 'LIVE';
+        priceBadge.classList.remove('loading');
+      });
+  }
+
+  fetchPrice();
+  setInterval(fetchPrice, 30000);
+
+  // ===== SCROLL =====
+  function scrollToBottom() {
+    requestAnimationFrame(function() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  }
+
+  // ===== ADD MESSAGE =====
+  function addMessage(author, body, isBot) {
+    var div = document.createElement('div');
+    div.className = 'msg ' + (isBot ? 'msg--bot' : 'msg--user');
+    div.innerHTML =
+      '<div class="msg__author">' + author + '</div>' +
+      '<div class="msg__body">' + body + '</div>';
+    chatMessages.appendChild(div);
+    scrollToBottom();
+  }
+
+  // ===== TYPING THEN REPLY =====
+  function showTypingThenReply(text) {
+    if (isTyping) return;
+    isTyping = true;
+    typingIndicator.classList.add('show');
+    scrollToBottom();
+
+    setTimeout(function() {
+      typingIndicator.classList.remove('show');
+      isTyping = false;
+      addMessage('STRYX AI MENTOR', text, true);
+    }, 1100 + Math.random() * 700);
+  }
+
+  // ===== AI BRAIN =====
+  function getReply(input) {
+    var q = input.toLowerCase();
+
+    // Gold / XAU
+    if (/(gold|xau|xauusd|алт|золото|одоо|анхаар)/i.test(q)) {
+      var priceLine = xauPrice
+        ? 'Одоогийн XAUUSD үнэ: <b>' + xauPrice + '</b>\n\n'
+        : '';
+      return priceLine +
+        '🥇 XAUUSD шинжилгээ:\n\n' +
+        '1. <b>Market Structure:</b> H1 дээр өндрөөр шинэ Higher High үүсгэсэн эсэхийг шалга.\n' +
+        '2. <b>Liquidity:</b> Өмнөх өдрийн Asian range-н liquidity-г sweep хийсэн эсэхийг хар.\n' +
+        '3. <b>Order Block:</b> M15 дээр шинэ OB-г test хийж байгаа эсэхийг хянана.\n' +
+        '4. <b>FVG:</b> Imbalance бүс дотор entry авах боломжтой юу гэж шалга.\n\n' +
+        '<span class="highlight">✅ Хэрвээ бүх нөхцөл нийцвэл — Killzone-н дотор entry ав.</span>';
+    }
+
+    // SL / Loss / Fear / Tilt
+    if (/(sl|алдагдал|айдас|цохиул|tilt|страха|daraalan|2 дараа| serial|loss|эмоц|уур)/i.test(q)) {
+      return '😰 Хоёр дараалан SL цохиулсан байна. Энэ маш чухал мөч:\n\n' +
+        '1. <b>Зогсоох:</b> Даруй арилжаагаа зогсоо. Өнөөдөр дахин орохгүй.\n' +
+        '2. <b>Шалтгаан:</b> Entry чинь SMC规则-нд нийцсэн байсан уу? Гэхдээ structure дотор орох ёстой.\n' +
+        '3. <b>Эмоц:</b> Айдас болон уур хөдөлгөөнд орохгүй. "Нэг алдагдал — нэг арилжаа" гэж бод.\n' +
+        '4. <b>Журнал:</b> Алдагдлын шалтгааныг бич. Паттерн олдоно.\n' +
+        '5. <b>Хэмжээ:</b> Дараагийн өдөр lot-оо хагасал. Сэтгэл амар сууж шинэ setup хар.\n\n' +
+        '<span class="warn">⚠️ Тогтвортой бай. Тогтвортой трейдер бол өгөөжтэй.</span>';
+    }
+
+    // Order Block
+    if (/(order block|ob|ордер блок|ордер|об|valid ob|таних)/i.test(q)) {
+      return '📦 Valid Order Block таних дүрмүүд:\n\n' +
+        '1. <b>Гэрэлтэй хөдөлгөөн:</b> OB-н дотор байгаа свчинь нь хүчтэй (strong impulse) байх ёстой.\n' +
+        '2. <b>Шинэ OB:</b> Хамгийн сүүлд үүссэн OB-г ав. Хуучин OB-ууд үлдэгдэл болсон байна.\n' +
+        '3. <b>Imbalance/FVG:</b> OB-н дотор FVG (Fair Value Gap) байвал илүү баталгаатай.\n' +
+        '4. <b>Liquidity Sweep:</b> OB-н дээр liquidity цугларсан байх ёстой.\n' +
+        '5. <b>Retest:</b> Үнэ OB-г дахин тестлэх ёстой. Breakdown-р орох гэж байгаал гэхдээ шууд биш.\n\n' +
+        '<span class="highlight">✅ Valid OB = Strong move + FVG + Liquidity + Fresh retest</span>';
+    }
+
+    // FVG / Imbalance
+    if (/(fvg|imbalance|fair value|тэнцвэргүй| imbalance)/i.test(q)) {
+      return '⚡ FVG (Fair Value Gap) — Imbalance:\n\n' +
+        'FVG бол гурван свчний дундах gap буюу хоосон орон зай юм.\n\n' +
+        '<b>Хэрхэн таних:</b>\n' +
+        '• 1-р свчн нь эхлэл\n' +
+        '• 2-р свчн нь том (gap үүсгэсэн)\n' +
+        '• 3-р свчн нь 1-р свчн-н дээд тал-с дээгүүр харагдана\n\n' +
+        '<b>Ашиглах:</b>\n' +
+        '• FVG-г OB-н дотор хайна — илүү хүчтэй setup\n' +
+        '• Үнэ FVG-г дүүргэх (fill) магадлалтай — тэр дотор entry авах боломжтой\n' +
+        '• Гэхдээ FVG ганцаараа нэг причина болохгүй. Structure + OB-тэй хослуул.\n\n' +
+        '<span class="highlight">✅ FVG = Үнэ хурдан дүүргэх магадлалтай хоосон бүс</span>';
+    }
+
+    // Liquidity
+    if (/(liquidity|ликвид|долд|хөв/шингэн|liq|sweep)/i.test(q)) {
+      return '💧 Liquidity — Институциональ хөдөлгөөн:\n\n' +
+        'Liquidity гэдэг нь stop loss-ууд цугларсан бүс юм. Институуд эдгээр бүс-р үнэ хөдөлгөж liquidity-г авдаг.\n\n' +
+        '<b>Төрлүүд:</b>\n' +
+        '• <b>BSL (Buy-side Liquidity):</b> Өндөр (equal highs) дээр\n' +
+        '• <b>SSL (Sell-side Liquidity):</b> Доод (equal lows) дор\n' +
+        '• <b>Asian Range Liquidity:</b> Asian session-н өндөр/доод\n' +
+        '• <b>Previous Day High/Low:</b> Өмнөх өдрийн шинэ өндөр/доод\n\n' +
+        '<b>Хэрхэн ашиглах:</b>\n' +
+        'Liquidity sweep хийгдсэний дараа үнэ буцааж structure-г бутааж (BOS) гарна. Энэ дотор entry авна.\n\n' +
+        '<span class="highlight">✅ Liquidity Sweep = Stop hunt хийгдсэн → буцааж structure break → entry</span>';
+    }
+
+    // Lot / Risk / Position sizing
+    if (/(lot|эрсдэл|risk|position|данс|500|account|хэмжээ|size)/i.test(q)) {
+      return '💰 $500 дансанд Lot тооцоолол:\n\n' +
+        '<b>Алтлын дүрэм:</b> Нэг арилжаан-с 1-2% л риск авна. $500-с 1% = $5.\n\n' +
+        '<b>Тооцоолол:</b>\n' +
+        '• XAUUSD 1 lot = 100 унц = 1 пункт = $1\n' +
+        '• Хэрвээ SL = 50 пункт → $5 / 50 = 0.01 lot (micro lot)\n' +
+        '• Хэрвээ SL = 20 пункт → $5 / 20 = 0.05 lot\n' +
+        '• Хэрвээ SL = 100 пункт → $5 / 100 = 0.005 lot\n\n' +
+        '<b>Формула:</b>\n' +
+        'Lot = Риск ($5) ÷ (SL пункт × $1/пункт)\n\n' +
+        '<span class="warn">⚠️ Хэзээ ч 2%-с илүү эрсдэл бүү ав. Тогтвортой байх нь хамгийн чухал.</span>\n\n' +
+        '<span class="highlight">✅ $500 данс → 1% = $5 эрсдэл → 0.01–0.05 lot</span>';
+    }
+
+    // Killzone / Session / Time
+    if (/(killzone|цаг|session|сесси|хэдээс|London|New York|Asian|的时间)/i.test(q)) {
+      return '⏰ Gold Killzone цагууд (UTC):\n\n' +
+        '🇬🇧 <b>London Killzone:</b> 08:00 — 11:00 UTC\n' +
+        '  → Хамгийн идэвхтэй. Liquidity sweep + BOS ихэвчлэн энд үүснэ.\n\n' +
+        '🇺🇸 <b>New York Killzone:</b> 13:00 — 16:00 UTC\n' +
+        '  → Хамгийн их volume. Өндөр probability setup.\n\n' +
+        '🇯🇵 <b>Asian Session:</b> 00:00 — 06:00 UTC\n' +
+        '  → Нам volume. Range үүсгэх магадлалтай. Энд range-н liquidity-г London/NY цуглуулна.\n\n' +
+        '<b>Зөвлөгөө:</b>\n' +
+        '• Зөвхөн Killzone-н дотор entry ав\n' +
+        '• Asian range-н high/low-г тэмдэглэж ав — тэдгээр нь liquidity targets\n' +
+        '• Killzone-н гадуур орохгүй. Хүлээж сурах нь чадвар юм.\n\n' +
+        '<span class="highlight">✅ Зөв цаг + Зөв setup = Өндөр probability арилжаа</span>';
+    }
+
+    // Psychology / Greed / Discipline
+    if (/(psychology|шунал|дисциплин|сэтгэл|эмоц|тийш|гэдэг|тогтвор|huselt|хүсэл|гэнэтийн)/i.test(q)) {
+      return '🧠 Trading Psychology — Сэтгэл зүй:\n\n' +
+        '<b>Тогтворжсон трейдерийн 5 дүрэм:</b>\n\n' +
+        '1. <b>Шуналаа хяна:</b> TP2 хүрэхийг хүлээж байгаад бүү хэтэд. TP1-с partial close хий.\n' +
+        '2. <b>Айдас-г ял:</b> SL цохиулна гэж айхаасаа өмнө entry-гээ нарийвчлан шалга.\n' +
+        '3. <b>Тогтворитой процесс:</b> Өдөр бүр ижил дүрмээр арилжаа хий. Setup-аа өөрчилөхгүй.\n' +
+        '4. <b>Журнал бичих:</b> Бүх арилжаагаа бич. Win/loss, setup, эмоц бүхэл нь.\n' +
+        '5. <b>Амрах:</b> 2 дараалан loss = өдрөө зогсоо. Маргааш нь шинэ өдөр.\n\n' +
+        '<span class="highlight">✅ Тогтворжсон трейдер = Урт хугацаанд амжилттай трейдер</span>\n\n' +
+        '"Рынок-г биш, өөрийгөө хяна. Хяналт = ашиг."';
+    }
+
+    // BOS / Market Structure / CHoCH
+    if (/(bos|choch|structure|бүтэц|чиглэл|бам|break|structure break|market structure)/i.test(q)) {
+      return '📊 Market Structure — BOS / CHoCH:\n\n' +
+        '<b>BOS (Break of Structure):</b>\n' +
+        'Үнэ өмнөх Higher High (эсвэл Lower Low)-г бутааж гарвал BOS. Энэ нь trend-г баталгаажуулна.\n\n' +
+        '<b>CHoCH (Change of Character):</b>\n' +
+        Trend-н чиглэл солигдохыг харуулна. Өмнө Higher High үүсгэж байсан бол одоо Lower Low үүсгэвэл CHoCH.\n\n' +
+        '<b>Хэрхэн ашиглах:</b>\n' +
+        '• BOS-н дараа OB-г хайна → retest → entry\n' +
+        '• CHoCH = чиглэл солигдсон гэсэн үг → шинэ trend-нд бэлд\n' +
+        '• Зөвхөн Killzone-н дотор BOS/CHoCH хүчингээтэй\n\n' +
+        '<span class="highlight">✅ BOS = Trend баталгаажсан → OB retest → entry</span>';
+    }
+
+    // R:R / Risk Reward
+    if (/(rr|r:r|risk reward|эрсдэл харьцаа|харьцаа|1:|2:|3:)/i.test(q)) {
+      return '⚖️ Risk : Reward Ratio:\n\n' +
+        '<b>Алтлын харьцаа:</b> Минимум 1:2, тохиромжтой 1:3 эсвэл илүү.\n\n' +
+        '<b>Тооцоолол:</b>\n' +
+        '• Entry: 2,350.0\n' +
+        '• SL: 2,340.0 (10 пункт эрсдэл)\n' +
+        '• TP1: 2,370.0 (20 пункт → 1:2)\n' +
+        '• TP2: 2,380.0 (30 пункт → 1:3)\n\n' +
+        '<b>Чухал:</b>\n' +
+        '• R:R муу байвал entry бүү ав. Setup сайн байсан ч R:R муу бол орохгүй.\n' +
+        '• TP1-с 50% close хий. Үлдсэнийг BE (breakeven) рүү stop-оо шилжүүл.\n' +
+        '• Win rate 40% байсан ч 1:3 R:R-тэй бол ашигтай.\n\n' +
+        '<span class="highlight">✅ 1:3 R:R + 40% win rate = Profitable system</span>';
+    }
+
+    // Hello / Hi / Greeting
+    if (/(сайн|hello|hi|сайн уу|байна|help|тусламж|юу хийж|what can|боломж)/i.test(q)) {
+      return 'Сайн байна уу! 👋 Би STRYX AI MENTOR.\n\n' +
+        'Танд дараах сэдвүүдээр туслаж чадна:\n\n' +
+        '🥇 <b>Gold (XAUUSD) bias</b> — одоогийн чиглэл, юу анхаарах\n' +
+        '📦 <b>SMC rules</b> — Order Block, FVG, Liquidity, BOS\n' +
+        '💰 <b>Risk Management</b> — Lot тооцоолол, R:R\n' +
+        '🧠 <b>Trading Psychology</b> — тогтвор, эмоц хянах\n' +
+        '⏰ <b>Killzone</b> — зөв цаг, session-нүүд\n\n' +
+        'Дээрх санал болгож буй товчнуудаас сонгох эсвэл асуултаа бичнэ үү!';
+    }
+
+    // Default
+    return 'Таны асуултыг ойлгосон. 🤔\n\n' +
+      'Би дараах сэдвүүдээр илүү сайн туслаж чадна:\n\n' +
+      '🥇 Gold / XAUUSD bias\n' +
+      '📦 Order Block, FVG, Liquidity\n' +
+      '💰 Lot тооцоолол, Risk Management\n' +
+      '🧠 Trading Psychology, тогтвор\n' +
+      '⏰ Killzone цаг, Session\n' +
+      '📊 BOS / Market Structure\n' +
+      '⚖️ Risk:Reward Ratio\n\n' +
+      'Дээрх товчнуудаас сонгох эсвэл түлхүүр үгээ ашиглан асуугаа!';
+  }
+
+  // ===== SEND MESSAGE =====
+  function sendMessage(text) {
+    if (!text || !text.trim()) return;
+
+    addMessage('ТА', text.trim(), false);
+    chatInput.value = '';
+
+    var reply = getReply(text.trim());
+    showTypingThenReply(reply);
+  }
+
+  // ===== EVENT HANDLERS =====
+  sendBtn.addEventListener('click', function() {
+    sendMessage(chatInput.value);
+  });
+
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage(chatInput.value);
+    }
+  });
+
+  chipsContainer.addEventListener('click', function(e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    var q = chip.getAttribute('data-q');
+    sendMessage(q);
+  });
+
+  // ===== WELCOME MESSAGE =====
+  setTimeout(function() {
+    addMessage(
+      'STRYX AI MENTOR',
+      'Сайн байна уу! 👋 Би <b>STRYX AI MENTOR & SMC COACH</b>.\n\n' +
+      'Танд дараах сэдвүүдээр туслаж чадна:\n\n' +
+      '🥇 <b>Gold (XAUUSD) bias</b> — одоогийн чиглэл, юу анхаарах\n' +
+      '📦 <b>SMC rules</b> — Order Block, FVG, Liquidity, BOS\n' +
+      '💰 <b>Risk Management</b> — Lot тооцоолол, R:R\n' +
+      '🧠 <b>Trading Psychology</b> — тогтвор, эмоц хянах\n\n' +
+      'Доорх санал болгож буй товчнуудаас сонгох эсвэл асуултаа бичнэ үү!',
+      true
+    );
+  }, 400);
+
+})();
+</script>
+
+</body>
+
+</html>
