@@ -81,89 +81,90 @@
   </div>
 </div>
 <script>
-function formatChange(change) {
-  if (isNaN(change)) return '<span style="color:#F0CE6E; font-size:14px;">🟡 0.00%</span>';
-  if (change > 0) return '<span style="color:#22C55E; font-size:14px;">🟢 +' + change.toFixed(2) + '%</span>';
-  if (change < 0) return '<span style="color:#EF4444; font-size:14px;">🔴 ' + change.toFixed(2) + '%</span>';
-  return '<span style="color:#F0CE6E; font-size:14px;">🟡 0.00%</span>';
+const prices = { btc: 0, eth: 0, sol: 0 };
+
+function updateCoinUI(id, newPrice, pct) {
+  const el = document.getElementById(id);
+  if (!el || isNaN(newPrice)) return;
+
+  const oldPrice = prices[id];
+  prices[id] = newPrice;
+
+  // Үнэ өсвөл ногоон, унавал улаанаар гялалзана
+  let flashColor = "#FFFFFF";
+  if (oldPrice > 0 && newPrice > oldPrice) flashColor = "#22C55E";
+  else if (oldPrice > 0 && newPrice < oldPrice) flashColor = "#EF4444";
+
+  const pctHtml = pct >= 0
+    ? `<span style="color:#22C55E; font-size:14px;">🟢 +${pct.toFixed(2)}%</span>`
+    : `<span style="color:#EF4444; font-size:14px;">🔴 ${pct.toFixed(2)}%</span>`;
+
+  el.innerHTML = `<span style="color:${flashColor}; transition: color 0.3s;">$ ${newPrice.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}</span><br>${pctHtml}`;
+
+  const updEl = document.getElementById("updated");
+  if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
 }
 
-async function fetchLiveCrypto() {
+// 1. OKX биржээс 2 секунд тутамд бодит ханш татна
+async function fetchOKXLive() {
   try {
-    // 1. OKX биржээс бодит цагийн ханш татна (Монголын сүлжээнд хаагддаггүй)
-    const [btcRes, ethRes, solRes] = await Promise.all([
-      fetch("https://okx.com"),
-      fetch("https://okx.com"),
-      fetch("https://okx.com")
+    const [b, e, s] = await Promise.all([
+      fetch("https://okx.com").then(r => r.json()),
+      fetch("https://okx.com").then(r => r.json()),
+      fetch("https://okx.com").then(r => r.json())
     ]);
 
-    const [btcJson, ethJson, solJson] = await Promise.all([
-      btcRes.json(), ethRes.json(), solRes.json()
-    ]);
-
-    const coins = [
-      { id: "btc", data: btcJson.data[0] },
-      { id: "eth", data: ethJson.data[0] },
-      { id: "sol", data: solJson.data[0] }
+    const list = [
+      { id: "btc", item: b.data[0] },
+      { id: "eth", item: e.data[0] },
+      { id: "sol", item: s.data[0] }
     ];
 
-    let totalPct = 0;
-
-    coins.forEach(c => {
-      const last = parseFloat(c.data.last);
-      const open24 = parseFloat(c.data.open24h);
-      const pct = ((last - open24) / open24) * 100;
-      totalPct += pct;
-
-      const el = document.getElementById(c.id);
-      if (el) {
-        el.innerHTML = "$ " + last.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) + "<br>" + formatChange(pct);
-      }
+    let sumPct = 0;
+    list.forEach(x => {
+      if (!x.item) return;
+      const last = parseFloat(x.item.last);
+      const open = parseFloat(x.item.open24h);
+      const pct = ((last - open) / open) * 100;
+      sumPct += pct;
+      updateCoinUI(x.id, last, pct);
     });
 
-    const avg = totalPct / 3;
-    const marketEl = document.getElementById("market");
-    if (marketEl) {
-      if (avg >= 1.5) marketEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
-      else if (avg <= -1.5) marketEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
-      else marketEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Market Consolidating</span>';
+    const avg = sumPct / 3;
+    const mEl = document.getElementById("market");
+    if (mEl) {
+      if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
+      else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
+      else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Consolidation</span>';
     }
-
-    const updEl = document.getElementById("updated");
-    if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
-
   } catch (err) {
-    // Нөөц хувилбар: Kraken биржээс татна
-    try {
-      const kraken = await fetch("https://kraken.com").then(r => r.json());
-      const r = kraken.result;
-      const map = [
-        { id: "btc", obj: r.XXBTZUSD },
-        { id: "eth", obj: r.XETHZUSD },
-        { id: "sol", obj: r.SOLUSD }
-      ];
-      map.forEach(m => {
-        const last = parseFloat(m.obj.c[0]);
-        const open = parseFloat(m.obj.o);
-        const pct = ((last - open) / open) * 100;
-        const el = document.getElementById(m.id);
-        if (el) {
-          el.innerHTML = "$ " + last.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "<br>" + formatChange(pct);
-        }
-      });
-      document.getElementById("updated").textContent = new Date().toLocaleTimeString("en-GB");
-    } catch (e2) {
-      console.log("Backup feed active");
-    }
+    console.log("Polling...");
   }
 }
 
-fetchLiveCrypto();
-setInterval(fetchLiveCrypto, 5000);
+// 2. Binance WebSocket (0.5 секунд тутамд шууд урсгал)
+try {
+  const ws = new WebSocket("wss://://binance.com");
+  ws.onmessage = function(event) {
+    const msg = JSON.parse(event.data);
+    if (!msg || !msg.data) return;
+    const d = msg.data;
+    const sym = d.s;
+    const last = parseFloat(d.c);
+    const pct = parseFloat(d.P);
+    if (sym === "BTCUSDT") updateCoinUI("btc", last, pct);
+    if (sym === "ETHUSDT") updateCoinUI("eth", last, pct);
+    if (sym === "SOLUSDT") updateCoinUI("sol", last, pct);
+  };
+} catch (e) {}
+
+fetchOKXLive();
+setInterval(fetchOKXLive, 2000);
 </script>
 
 </body>
 </html>
+
