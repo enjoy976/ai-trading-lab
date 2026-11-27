@@ -145,48 +145,59 @@ data-i18n="system_active">
 
 
 <!-- ========================= -->
-<!-- USER ACCOUNT -->
+<!-- USER ACCOUNT & SNIPER PROFILE -->
 <!-- ========================= -->
+<div class="result" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
 
-<div class="result">
+  <!-- ЗҮҮН ТАЛ: ХЭРЭГЛЭГЧИЙН МЭДЭЭЛЭЛ -->
+  <div>
+    <h2 data-i18n="user_account" style="margin-bottom: 10px;">👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ</h2>
+    <hr style="margin-bottom: 14px;">
+    <p style="line-height: 1.8;">
+      <span data-i18n="email" style="color: var(--text-muted); font-size: 12px;">И-мэйл хаяг:</span><br>
+      <b id="userEmail" style="font-size: 16px; color: #FFFFFF;">Loading...</b><br><br>
+      <span data-i18n="status" style="color: var(--text-muted); font-size: 12px;">Төлөв:</span>
+      <span data-i18n="active" style="font-weight: 700; color: #22C55E;">🟢 Идэвхтэй</span>
+      &nbsp;|&nbsp;
+      <span style="font-family: var(--mono); font-size: 12px; color: var(--gold-bright); background: rgba(212,175,55,0.14); padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4);">🏆 SNIPER MEMBER</span>
+    </p>
+  </div>
 
-<h2 data-i18n="user_account">
+  <!-- БАРУУН ТАЛ: ӨНӨӨДРИЙН ТЕРМИНАЛ СТАТИСТИК БА ШУУРХАЙ ТОВЧ -->
+  <div style="background: rgba(7, 10, 15, 0.75); border: 1px solid var(--border-strong); border-radius: 14px; padding: 18px; font-family: var(--mono);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
+      <span style="font-size: 12px; color: var(--gold-bright); font-weight: 700;">🇲🇳 УЛААНБААТАР ЦАГ</span>
+      <b id="ub-live-clock" style="font-size: 16px; color: #FFFFFF;">00:00:00</b>
+    </div>
 
-👤 ХЭРЭГЛЭГЧИЙН БҮРТГЭЛ
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; font-size: 12px;">
+      <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px;">
+        <div style="color: var(--text-muted); font-size: 10px;">ӨНӨӨДРИЙН ЗОРИЛТ</div>
+        <div style="color: #22C55E; font-weight: 700; margin-top: 2px;">+1.5% / +3.0%</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px;">
+        <div style="color: var(--text-muted); font-size: 10px;">MAX ЭРСДЭЛ</div>
+        <div style="color: #EF4444; font-weight: 700; margin-top: 2px;">1.0% PER TRADE</div>
+      </div>
+    </div>
 
-</h2>
-
-<hr>
-
-
-<p>
-
-<span data-i18n="email">
-И-мэйл
-</span>
-
-<br>
-
-<b id="userEmail">
-Loading...
-</b>
-
-<br><br>
-
-
-<span data-i18n="status">
-Төлөв
-</span>
-
-:
-
-<span data-i18n="active">
-🟢 Идэвхтэй
-</span>
-
-</p>
+    <div style="display: flex; gap: 10px;">
+      <a href="risk.html" style="flex: 1; text-align: center; text-decoration: none; background: rgba(212,175,55,0.16); border: 1px solid var(--gold); color: var(--gold-bright); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">🧮 ЭРСДЭЛ ТООЦОХ</a>
+      <a href="checklist.html" style="flex: 1; text-align: center; text-decoration: none; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">📋 CHECKLIST</a>
+    </div>
+  </div>
 
 </div>
+
+<script>
+  setInterval(() => {
+    const ubEl = document.getElementById("ub-live-clock");
+    if (ubEl) {
+      ubEl.textContent = new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Ulaanbaatar", hour12: false });
+    }
+  }, 1000);
+</script>
+
 
 
 <!-- ========================= -->
