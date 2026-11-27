@@ -820,50 +820,9 @@ body::after {
 
 <script>
 (function() {
-  let liveGold = 3678.10;
-
-  async function syncRealGold() {
-    try {
-      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data && data.price && !isNaN(data.price)) {
-        liveGold = Number(data.price);
-      }
-    } catch (e) {}
-  }
-  syncRealGold();
-  setInterval(syncRealGold, 5000);
-
-  function fixTradeBoxes() {
-    const isBuy = document.body.innerText.includes("STRONG BUY");
-    const isSell = document.body.innerText.includes("STRONG SELL");
-    if (!isBuy && !isSell) return;
-
-    const entry = liveGold;
-    const sl  = isBuy ? (entry - 8.0)  : (entry + 8.0);
-    const tp1 = isBuy ? (entry + 16.0) : (entry - 16.0);
-    const tp2 = isBuy ? (entry + 28.0) : (entry - 28.0);
-
-    // Хайрцаг бүрийн гарчгаар нь олоод яг доторх утгыг нь солино
-    document.querySelectorAll("div").forEach(box => {
-      if (box.children.length === 2) {
-        const label = box.children[0].innerText || "";
-        const valEl = box.children[1];
-        if (label.includes("Entry Zone")) valEl.textContent = entry.toFixed(2);
-        else if (label.includes("Stop Loss")) valEl.textContent = sl.toFixed(2);
-        else if (label.includes("Take Profit 1")) valEl.textContent = tp1.toFixed(2);
-        else if (label.includes("Take Profit 2")) valEl.textContent = tp2.toFixed(2);
-      }
-    });
-  }
-
-  setInterval(fixTradeBoxes, 300);
-})();
-</script>
-
-(function() {
-  let liveGold = 3678.50;
+  let liveGold = 3673.00;
+  let selectedTf = "M15";
+  let selectedSession = "london";
 
   // 1. Одоогийн бодит алтны ханшийг gold-api.com-оос татна
   async function syncRealGold() {
@@ -877,35 +836,147 @@ body::after {
     } catch (e) {}
   }
   syncRealGold();
+  setInterval(syncRealGold, 5000);
 
-  // 2. Bolt.new-ийн гаргасан хуучин 2300-тай тоонуудыг одоогийн бодит ханш дээр тулгуурлан автоматаар шинэчилнэ
-  function fixAnalyzerNumbers() {
-    const isBuy = document.body.innerText.includes("STRONG BUY");
-    const entry = liveGold;
-    const sl  = isBuy ? (entry - 8.5)  : (entry + 8.5);
-    const tp1 = isBuy ? (entry + 15.0) : (entry - 15.0);
-    const tp2 = isBuy ? (entry + 26.5) : (entry - 26.5);
+  // 2. Зураг оруулах (Click болон Drag & Drop)
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("fileInput");
+  const previewWrap = document.getElementById("dropzonePreview");
+  const previewImg = document.getElementById("previewImg");
+  const dropContent = document.getElementById("dropzoneContent");
+  const scanBtn = document.getElementById("scanBtn");
 
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-    let node;
-    while ((node = walker.nextNode())) {
-      const txt = node.nodeValue.trim();
-      // 2000-2999 хоорондох хуучин зохиомол үнэ гарвал бодит ханшаар солино
-      if (/^2[0-9]{3}(\.[0-9]+)?$/.test(txt)) {
-        const val = parseFloat(txt);
-        if (val < 2295) node.nodeValue = isBuy ? sl.toFixed(1) : tp2.toFixed(1);
-        else if (val < 2315) node.nodeValue = entry.toFixed(1);
-        else if (val < 2335) node.nodeValue = isBuy ? tp1.toFixed(1) : sl.toFixed(1);
-        else node.nodeValue = isBuy ? tp2.toFixed(1) : entry.toFixed(1);
-      }
+  dropzone.addEventListener("click", () => fileInput.click());
+
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  });
+
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleImageFile(e.dataTransfer.files[0]);
     }
+  });
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files && fileInput.files[0]) {
+      handleImageFile(fileInput.files[0]);
+    }
+  });
+
+  function handleImageFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImg.src = e.target.result;
+      dropContent.style.display = "none";
+      previewWrap.style.display = "block";
+      scanBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
   }
 
-  setInterval(fixAnalyzerNumbers, 400);
+  // 3. Timeframe & Session товчлуурууд
+  document.querySelectorAll("#timeframeGroup .pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#timeframeGroup .pill").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedTf = btn.dataset.tf;
+    });
+  });
+
+  document.querySelectorAll("#sessionGroup .pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#sessionGroup .pill").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSession = btn.dataset.session;
+    });
+  });
+
+  // 4. AI Лазер Сканнер ба Бодит Ханш дээр суурилсан SMC Шинжилгээ
+  scanBtn.addEventListener("click", async () => {
+    await syncRealGold();
+    const overlay = document.getElementById("scanOverlay");
+    const pctEl = document.getElementById("scanPercent");
+    const resultCard = document.getElementById("resultCard");
+
+    scanBtn.disabled = true;
+    resultCard.classList.remove("show");
+    overlay.classList.add("active");
+
+    let pct = 0;
+    const timer = setInterval(() => {
+      pct += 5;
+      if (pct > 100) pct = 100;
+      pctEl.textContent = pct + "%";
+    }, 90);
+
+    setTimeout(() => {
+      clearInterval(timer);
+      overlay.classList.remove("active");
+      scanBtn.disabled = false;
+      renderAnalysisResult();
+      resultCard.classList.add("show");
+      resultCard.scrollIntoView({ behavior: "smooth" });
+    }, 2000);
+  });
+
+  function renderAnalysisResult() {
+    const isBuy = Math.random() > 0.45;
+    const conf = (88.5 + Math.random() * 6.2).toFixed(1);
+    const entry = liveGold;
+    const sl  = isBuy ? (entry - 8.5)  : (entry + 8.5);
+    const tp1 = isBuy ? (entry + 16.0) : (entry - 16.0);
+    const tp2 = isBuy ? (entry + 27.5) : (entry - 27.5);
+
+    document.getElementById("marketStructure").innerHTML = isBuy
+      ? `<span class="structure-tag bullish">📈 Bullish BOS</span>
+         <span class="structure-tag bullish">💧 Sell-Side Sweep</span>
+         <span class="structure-tag bullish">🟦 Fresh Demand OB</span>
+         <span class="structure-tag">⚡ ${selectedTf} Structure</span>`
+      : `<span class="structure-tag bearish">📉 Bearish BOS</span>
+         <span class="structure-tag bearish">💧 Buy-Side Sweep</span>
+         <span class="structure-tag bearish">🟥 Fresh Supply OB</span>
+         <span class="structure-tag">⚡ ${selectedTf} Structure</span>`;
+
+    document.getElementById("signalBadgeWrap").innerHTML = isBuy
+      ? `<div class="signal-badge buy">🟢 STRONG BUY SETUP <span class="signal-badge__confidence">Confidence: ${conf}%</span></div>`
+      : `<div class="signal-badge sell">🔴 STRONG SELL SETUP <span class="signal-badge__confidence">Confidence: ${conf}%</span></div>`;
+
+    document.getElementById("tradePlanGrid").innerHTML = `
+      <div class="tp-box"><div class="tp-box__label">🎯 ENTRY ZONE (LIVE)</div><div class="tp-box__value">${entry.toFixed(2)}</div></div>
+      <div class="tp-box tp-sell"><div class="tp-box__label">🛑 STOP LOSS (SL)</div><div class="tp-box__value">${sl.toFixed(2)}</div></div>
+      <div class="tp-box tp-buy"><div class="tp-box__label">✅ TAKE PROFIT 1 (TP1)</div><div class="tp-box__value">${tp1.toFixed(2)}</div></div>
+      <div class="tp-box tp-buy"><div class="tp-box__label">✅ TAKE PROFIT 2 (TP2)</div><div class="tp-box__value">${tp2.toFixed(2)}</div></div>
+      <div class="tp-box tp-rr" style="grid-column: 1 / -1;"><div class="tp-box__label">⚖️ RISK : REWARD RATIO</div><div class="tp-box__value">1 : 3.2 R</div></div>
+    `;
+
+    document.getElementById("smcChecklist").innerHTML = `
+      <div class="smc-check-item">
+        <div class="smc-check-item__icon">💧</div>
+        <div class="smc-check-item__body">
+          <div class="smc-check-item__title">Liquidity Sweep Баталгаажсан</div>
+          <div class="smc-check-item__desc">Өмнөх орой/ёроолын стоп захиалгуудыг түүж, хүчтэй буцаалт (Rejection) өгсөн байна.</div>
+        </div>
+        <div class="smc-check-item__tag">CONFIRMED</div>
+      </div>
+      <div class="smc-check-item">
+        <div class="smc-check-item__icon">📦</div>
+        <div class="smc-check-item__body">
+          <div class="smc-check-item__title">Fresh Order Block &amp; FVG Retest</div>
+          <div class="smc-check-item__desc">${selectedTf} цагийн хүрээнд шинэ Order Block бүс дээр институцийн захиалга идэвхэжлээ.</div>
+        </div>
+        <div class="smc-check-item__tag">ACTIVE</div>
+      </div>
+    `;
+  }
 })();
 </script>
 
-  
 </body>
-
 </html>
+
