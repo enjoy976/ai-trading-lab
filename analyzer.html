@@ -745,28 +745,23 @@ body::after {
 
 <script>
 (function() {
-  // Өөрийн Telegram username-ийг энд бичнэ үү
-  const tgUser = "https://t.me/Stryx_golzonetrader";
+  const tgUser = "Stryx_golzonetrader";
   const tgBtn = document.getElementById("vip-tg-btn");
   if (tgBtn) tgBtn.href = ["https:", "", "t.me", tgUser].join("/");
 
-  let currentEmail = "";
-  for (let i = 0; i < localStorage.length; i++) {
-    const val = localStorage.getItem(localStorage.key(i)) || "";
-    const match = val.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-    if (match) { currentEmail = match.toLowerCase(); break; }
-  }
+  const activeEmail = (sessionStorage.getItem("stryx_active_user") || "").toLowerCase().trim();
 
   const allowed = (typeof APPROVED_VIP_EMAILS !== "undefined")
     ? APPROVED_VIP_EMAILS.map(e => e.toLowerCase().trim())
     : [];
 
-  if (!currentEmail || !allowed.includes(currentEmail)) {
+  if (!activeEmail || !allowed.includes(activeEmail)) {
     const lock = document.getElementById("vip-lock-screen");
     if (lock) lock.style.display = "flex";
   }
 })();
 </script>
+
 
 
 <!-- ===== HEADER ===== -->
