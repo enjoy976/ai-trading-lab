@@ -606,87 +606,35 @@ data-i18n="live_gold_price">
 
 </div>
 
-<!-- RIGHT: LIVE VIP TRADE FEED & DYNAMIC BALANCE -->
-<div class="vip-history-card">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <div class="vip-history-card__label" style="margin-bottom:0;">⚡ LIVE VIP TRADE FEED</div>
-    <div style="font-family:var(--mono); font-size:12px; color:#22C55E; font-weight:700;">
-      💰 BALANCE: <span id="vip-live-bal" style="color:var(--gold-bright);">$2,480.00</span>
+<!-- RIGHT: STRYX AI CHART SCANNER FEATURE CARD -->
+<div class="vip-history-card" style="display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(212,175,55,0.55); background: linear-gradient(145deg, rgba(212,175,55,0.12), rgba(16,20,29,0.95));">
+  <div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div class="vip-history-card__label" style="margin-bottom:0; color:var(--gold-bright);">🤖 STRYX AI CHART SCANNER</div>
+      <span style="font-family:var(--mono); font-size:10px; color:#22C55E; background:rgba(34,197,94,0.14); padding:3px 8px; border-radius:6px; font-weight:700;">● AI ONLINE</span>
+    </div>
+
+    <p style="font-size:13.5px; color:#D8DEE9; line-height:1.65; margin-bottom:14px;">
+      TradingView эсвэл MT5 графикийн зургаа оруулаад хиймэл оюун ухаанаар <b style="color:var(--gold-bright);">BOS, Liquidity Sweep, Order Block</b> болон бэлэн <b style="color:#22C55E;">Entry, SL, TP</b> цэгүүдийг 2 секундэд тооцоолоорой.
+    </p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; font-family:var(--mono); font-size:11px;">
+      <div style="background:rgba(7,10,15,0.65); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+        <span style="color:var(--text-muted); display:block; font-size:10px;">ШИНЖИЛГЭЭНИЙ ХУРД</span>
+        <b style="color:var(--gold-bright);">⚡ 2.0 СЕКУНД</b>
+      </div>
+      <div style="background:rgba(7,10,15,0.65); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+        <span style="color:var(--text-muted); display:block; font-size:10px;">SMC НАРИЙВЧЛАЛ</span>
+        <b style="color:#22C55E;">🎯 91.4% ACCURACY</b>
+      </div>
     </div>
   </div>
 
-  <table class="vip-history-table">
-    <thead>
-      <tr>
-        <th>БАГЦ</th>
-        <th>ТӨРӨЛ</th>
-        <th>PIPS</th>
-        <th>ТӨЛӨВ</th>
-      </tr>
-    </thead>
-        <tbody id="vip-trade-stream">
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$5.30</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>SELL</td><td style="color:#EF4444; font-weight:700;">-$4.00</td><td style="color:#EF4444; font-weight:700;">🔴 SL HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$8.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>SELL</td><td class="vip-pips">+$12.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
-      <tr><td>🥇 XAUUSD</td><td>BUY</td><td class="vip-pips">+$21.00</td><td class="vip-tp">🟢 TP HIT</td></tr>
-    </tbody>
-  </table>
-
-  <div class="vip-history-footer" style="display:flex; justify-content:space-between;">
-    <span>✅ REAL-TIME TRACK RECORD</span>
-    <span style="color:var(--gold-bright);">WIN RATE: 81.4%</span>
-  </div>
+  <a href="analyzer.html" class="vip-join-btn" style="background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; font-weight: 800; text-align: center; box-shadow: 0 6px 20px rgba(212,175,55,0.3);">
+    🤖 AI CHART SCANNER НЭЭХ →
+  </a>
 </div>
 
-<script>
-(function() {
-  const sampleTrades = [
-    { type: "BUY",  pips: "+$5.30",  win: true,  usd: 5.30 },
-    { type: "SELL", pips: "-$4.00",  win: false, usd: -4.00 },
-    { type: "BUY",  pips: "+$8.00",  win: true,  usd: 8.00 },
-    { type: "SELL", pips: "+$12.00", win: true,  usd: 12.00 },
-    { type: "BUY",  pips: "-$7.00",  win: false, usd: -7.00 },
-    { type: "SELL", pips: "+$21.00", win: true,  usd: 21.00 },
-    { type: "BUY",  pips: "+$6.50",  win: true,  usd: 6.50 }
-  ];
-
-  let balance = 2150.00;
-  let idx = 0;
-
-  const initBal = document.getElementById("vip-live-bal");
-  if (initBal) initBal.textContent = "$2,150.00";
-
-  setInterval(() => {
-    const tbody = document.getElementById("vip-trade-stream");
-    const balEl = document.getElementById("vip-live-bal");
-    if (!tbody || !balEl) return;
-
-    const t = sampleTrades[idx % sampleTrades.length];
-    idx++;
-
-    balance += t.usd;
-    if (balance > 2490) balance = 2150.00;
-
-    balEl.textContent = "$" + balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    balEl.style.color = t.win ? "#22C55E" : "#EF4444";
-    setTimeout(() => { balEl.style.color = "var(--gold-bright)"; }, 900);
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = t.win
-      ? `<td>🥇 XAUUSD</td><td>${t.type}</td><td class="vip-pips">${t.pips}</td><td class="vip-tp">🟢 TP HIT</td>`
-      : `<td>🥇 XAUUSD</td><td>${t.type}</td><td style="color:#EF4444; font-weight:700;">${t.pips}</td><td style="color:#EF4444; font-weight:700;">🔴 SL HIT</td>`;
-
-    tbody.insertBefore(tr, tbody.firstChild);
-    while (tbody.children.length > 5) {
-      tbody.removeChild(tbody.lastChild);
-    }
-  }, 3500);
-})();
-</script>
-
-
-</script>
 
 </div>
 </div>
