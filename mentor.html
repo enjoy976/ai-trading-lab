@@ -513,287 +513,84 @@ body::after {
 
 <script>
 (function() {
+  let liveGold = 3646.60;
 
-  // ===== ELEMENTS =====
-  var chatMessages    = document.getElementById('chatMessages');
-  var typingIndicator = document.getElementById('typingIndicator');
-  var chatInput       = document.getElementById('chatInput');
-  var sendBtn         = document.getElementById('sendBtn');
-  var chipsContainer  = document.getElementById('suggestionChips');
-  var priceBadge      = document.getElementById('priceBadge');
-  var xauPriceEl      = document.getElementById('xauPrice');
+  // 1. Одоогийн бодит алтны ханшийг gold-api.com-оос татна
+  async function syncGoldPrice() {
+    try {
+      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.price && !isNaN(data.price)) {
+        liveGold = Number(data.price);
+        document.querySelectorAll("span, div, b").forEach(el => {
+          if (el.children.length === 0 && (el.textContent.includes("Loading") || el.textContent.includes("XAUUSD:"))) {
+            el.textContent = "🥇 XAUUSD: $" + liveGold.toFixed(2);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+  syncGoldPrice();
+  setInterval(syncGoldPrice, 15000);
 
-  var xauPrice = '';
-  var isTyping = false;
+  // 2. Чатын талбаруудыг автоматаар олно
+  const input = document.querySelector("input[type='text'], textarea");
+  const sendBtn = document.querySelector("button[type='submit'], #sendBtn, .send-btn") || Array.from(document.querySelectorAll("button")).pop();
+  const chatBox = document.querySelector(".chat-messages, .messages, #chatMessages, #messages") || input?.parentElement?.previousElementSibling;
 
-  // ===== FETCH XAUUSD PRICE =====
-  function fetchPrice() {
-    fetch('https://api.gold-api.com/price/XAU')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data && data.price) {
-          xauPrice = '$' + Number(data.price).toFixed(2);
-          xauPriceEl.textContent = xauPrice;
-          priceBadge.classList.remove('loading');
-        }
-      })
-      .catch(function() {
-        xauPriceEl.textContent = 'LIVE';
-        priceBadge.classList.remove('loading');
-      });
+  if (!input || !chatBox) return;
+
+  function appendBubble(text, isUser) {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = isUser
+      ? "align-self:flex-end; background:linear-gradient(135deg,#F0CE6E,#D4AF37); color:#0B0E14; padding:12px 16px; border-radius:14px 14px 2px 14px; max-width:80%; margin:8px 0; font-size:14px; font-weight:600; margin-left:auto;"
+      : "align-self:flex-start; background:rgba(22,27,39,0.92); border:1px solid rgba(212,175,55,0.4); color:#E8ECF2; padding:14px 18px; border-radius:14px 14px 14px 2px; max-width:85%; margin:8px 0; font-size:14px; line-height:1.65; white-space:pre-line;";
+    wrap.innerHTML = isUser ? text : `<div style="font-size:11px; color:#F0CE6E; font-weight:700; margin-bottom:5px;">🧠 STRYX AI MENTOR</div>${text}`;
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  fetchPrice();
-  setInterval(fetchPrice, 30000);
-
-  // ===== SCROLL =====
-  function scrollToBottom() {
-    requestAnimationFrame(function() {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
+  function generateSmartReply(q) {
+    const s = q.toLowerCase();
+    if (s.includes("xau") || s.includes("алт") || s.includes("ханш") || s.includes("одоо")) {
+      return `🥇 **Одоогийн XAUUSD амьд ханш: $${liveGold.toFixed(2)}**\n\n• **Анхаарах бүс:** M15 болон H1 дээр өмнөх орой/ёроолын Liquidity-г түүсний дараа Fresh Order Block дээр баталгаажуулалт (CHoCH) хүлээгээрэй.\n• **Эрсдэл:** Нэг арилжаанд дансны 1%-иас илүү эрсдэл бүү гарга, заавал SL тавь!`;
+    }
+    if (s.includes("sl") || s.includes("алда") || s.includes("айдас") || s.includes("цохиул")) {
+      return `🛡️ **Сэтгэл зүйн алтан дүрэм (2 дараалан SL цохиулсны дараа):**\n\n1. **Терминалаа 2 цаг хаа:** Уураар арилжаанд орох (Revenge Trading) нь данс шатаах #1 шалтгаан.\n2. **Алдаагаа шалга:** Killzone цагаас бусад үед эсвэл HTF чиглэлийн эсрэг орсон эсэхээ хар.\n3. Дараагийн арилжаан дээр Lot хэмжээгээ 2 дахин багасгаж сэтгэл зүйгээ тогтворжуул.`;
+    }
+    if (s.includes("order block") || s.includes("ob") || s.includes("таних")) {
+      return `📦 **Хүчинтэй (Valid) Order Block таних 3 шалгуур:**\n\n1. **Liquidity Sweep:** Өмнөх High эсвэл Low-ийг сэтэлж стоп түүсэн байх.\n2. **BOS / Displacement:** Тэр цэгээс хүчтэй импульс лаа гарч бүтэц эвдсэн байх.\n3. **FVG (Imbalance):** Хажууд нь хоосон зай буюу Fair Value Gap үүссэн байвал хамгийн өндөр магадлалтай!`;
+    }
+    if (s.includes("killzone") || s.includes("цаг") || s.includes("хэдээс")) {
+      return `⏰ **Улаанбаатарын цагаар (ULAT) Алтны Killzone цагууд:**\n\n• **🇬🇧 London Killzone:** 16:00 – 18:00 цаг (Өдрийн хамгийн цэвэр хөдөлгөөн эхэлдэг).\n• **🇺🇸 New York Killzone:** 21:00 – 23:00 цаг (Хамгийн өндөр хэлбэлзэлтэй оргил үе).\n• Энэ хоёр цагаас бусад үед зах зээл хуурамч хөдөлгөөн их хийдэг тул хүлээцтэй байгаарай.`;
+    }
+    if (s.includes("lot") || s.includes("эрсдэл") || s.includes("500") || s.includes("данс")) {
+      return `💰 **$500 дансны эрсдэлийн тооцоо (1% дүрэм):**\n\n• Нэг арилжааны Max алдагдал: **$5.00** (1%).\n• Хэрэв таны SL = **50 pips ($5.00 хөдөлгөөн)** бол **0.01 Lot** орно.\n• Хэрэв SL = **25 pips ($2.50 хөдөлгөөн)** бол **0.02 Lot** орох нь хамгийн аюулгүй!`;
+    }
+    return `🎯 **STRYX AI Зөвлөмж (XAUUSD: $${liveGold.toFixed(2)}):**\n\nЗах зээл дээр яарах хэрэггүй — эхлээд H1 чиглэлээ тодорхойлоод, London (16:00) эсвэл New York (21:00) Killzone цагаар Liquidity Sweep хийхийг хүлээгээрэй. Тодорхой сэдэв асуух бол **Order Block, SL, Lot, Killzone** гэж бичээрэй!`;
   }
 
-  // ===== ADD MESSAGE =====
-  function addMessage(author, body, isBot) {
-    var div = document.createElement('div');
-    div.className = 'msg ' + (isBot ? 'msg--bot' : 'msg--user');
-    div.innerHTML =
-      '<div class="msg__author">' + author + '</div>' +
-      '<div class="msg__body">' + body + '</div>';
-    chatMessages.appendChild(div);
-    scrollToBottom();
+  function handleSend(customText) {
+    const q = (customText || input.value).trim();
+    if (!q) return;
+    if (!customText) input.value = "";
+    appendBubble(q, true);
+
+    setTimeout(() => {
+      appendBubble(generateSmartReply(q), false);
+    }, 550);
   }
 
-  // ===== TYPING THEN REPLY =====
-  function showTypingThenReply(text) {
-    if (isTyping) return;
-    isTyping = true;
-    typingIndicator.classList.add('show');
-    scrollToBottom();
+  if (sendBtn) sendBtn.addEventListener("click", (e) => { e.preventDefault(); handleSend(); });
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); handleSend(); } });
 
-    setTimeout(function() {
-      typingIndicator.classList.remove('show');
-      isTyping = false;
-      addMessage('STRYX AI MENTOR', text, true);
-    }, 1100 + Math.random() * 700);
-  }
-
-  // ===== AI BRAIN =====
-  function getReply(input) {
-    var q = input.toLowerCase();
-
-    // Gold / XAU
-    if (/(gold|xau|xauusd|алт|золото|одоо|анхаар)/i.test(q)) {
-      var priceLine = xauPrice
-        ? 'Одоогийн XAUUSD үнэ: <b>' + xauPrice + '</b>\n\n'
-        : '';
-      return priceLine +
-        '🥇 XAUUSD шинжилгээ:\n\n' +
-        '1. <b>Market Structure:</b> H1 дээр өндрөөр шинэ Higher High үүсгэсэн эсэхийг шалга.\n' +
-        '2. <b>Liquidity:</b> Өмнөх өдрийн Asian range-н liquidity-г sweep хийсэн эсэхийг хар.\n' +
-        '3. <b>Order Block:</b> M15 дээр шинэ OB-г test хийж байгаа эсэхийг хянана.\n' +
-        '4. <b>FVG:</b> Imbalance бүс дотор entry авах боломжтой юу гэж шалга.\n\n' +
-        '<span class="highlight">✅ Хэрвээ бүх нөхцөл нийцвэл — Killzone-н дотор entry ав.</span>';
-    }
-
-    // SL / Loss / Fear / Tilt
-    if (/(sl|алдагдал|айдас|цохиул|tilt|страха|daraalan|2 дараа| serial|loss|эмоц|уур)/i.test(q)) {
-      return '😰 Хоёр дараалан SL цохиулсан байна. Энэ маш чухал мөч:\n\n' +
-        '1. <b>Зогсоох:</b> Даруй арилжаагаа зогсоо. Өнөөдөр дахин орохгүй.\n' +
-        '2. <b>Шалтгаан:</b> Entry чинь SMC规则-нд нийцсэн байсан уу? Гэхдээ structure дотор орох ёстой.\n' +
-        '3. <b>Эмоц:</b> Айдас болон уур хөдөлгөөнд орохгүй. "Нэг алдагдал — нэг арилжаа" гэж бод.\n' +
-        '4. <b>Журнал:</b> Алдагдлын шалтгааныг бич. Паттерн олдоно.\n' +
-        '5. <b>Хэмжээ:</b> Дараагийн өдөр lot-оо хагасал. Сэтгэл амар сууж шинэ setup хар.\n\n' +
-        '<span class="warn">⚠️ Тогтвортой бай. Тогтвортой трейдер бол өгөөжтэй.</span>';
-    }
-
-    // Order Block
-    if (/(order block|ob|ордер блок|ордер|об|valid ob|таних)/i.test(q)) {
-      return '📦 Valid Order Block таних дүрмүүд:\n\n' +
-        '1. <b>Гэрэлтэй хөдөлгөөн:</b> OB-н дотор байгаа свчинь нь хүчтэй (strong impulse) байх ёстой.\n' +
-        '2. <b>Шинэ OB:</b> Хамгийн сүүлд үүссэн OB-г ав. Хуучин OB-ууд үлдэгдэл болсон байна.\n' +
-        '3. <b>Imbalance/FVG:</b> OB-н дотор FVG (Fair Value Gap) байвал илүү баталгаатай.\n' +
-        '4. <b>Liquidity Sweep:</b> OB-н дээр liquidity цугларсан байх ёстой.\n' +
-        '5. <b>Retest:</b> Үнэ OB-г дахин тестлэх ёстой. Breakdown-р орох гэж байгаал гэхдээ шууд биш.\n\n' +
-        '<span class="highlight">✅ Valid OB = Strong move + FVG + Liquidity + Fresh retest</span>';
-    }
-
-    // FVG / Imbalance
-    if (/(fvg|imbalance|fair value|тэнцвэргүй| imbalance)/i.test(q)) {
-      return '⚡ FVG (Fair Value Gap) — Imbalance:\n\n' +
-        'FVG бол гурван свчний дундах gap буюу хоосон орон зай юм.\n\n' +
-        '<b>Хэрхэн таних:</b>\n' +
-        '• 1-р свчн нь эхлэл\n' +
-        '• 2-р свчн нь том (gap үүсгэсэн)\n' +
-        '• 3-р свчн нь 1-р свчн-н дээд тал-с дээгүүр харагдана\n\n' +
-        '<b>Ашиглах:</b>\n' +
-        '• FVG-г OB-н дотор хайна — илүү хүчтэй setup\n' +
-        '• Үнэ FVG-г дүүргэх (fill) магадлалтай — тэр дотор entry авах боломжтой\n' +
-        '• Гэхдээ FVG ганцаараа нэг причина болохгүй. Structure + OB-тэй хослуул.\n\n' +
-        '<span class="highlight">✅ FVG = Үнэ хурдан дүүргэх магадлалтай хоосон бүс</span>';
-    }
-
-    // Liquidity
-    if (/(liquidity|ликвид|долд|хөв/шингэн|liq|sweep)/i.test(q)) {
-      return '💧 Liquidity — Институциональ хөдөлгөөн:\n\n' +
-        'Liquidity гэдэг нь stop loss-ууд цугларсан бүс юм. Институуд эдгээр бүс-р үнэ хөдөлгөж liquidity-г авдаг.\n\n' +
-        '<b>Төрлүүд:</b>\n' +
-        '• <b>BSL (Buy-side Liquidity):</b> Өндөр (equal highs) дээр\n' +
-        '• <b>SSL (Sell-side Liquidity):</b> Доод (equal lows) дор\n' +
-        '• <b>Asian Range Liquidity:</b> Asian session-н өндөр/доод\n' +
-        '• <b>Previous Day High/Low:</b> Өмнөх өдрийн шинэ өндөр/доод\n\n' +
-        '<b>Хэрхэн ашиглах:</b>\n' +
-        'Liquidity sweep хийгдсэний дараа үнэ буцааж structure-г бутааж (BOS) гарна. Энэ дотор entry авна.\n\n' +
-        '<span class="highlight">✅ Liquidity Sweep = Stop hunt хийгдсэн → буцааж structure break → entry</span>';
-    }
-
-    // Lot / Risk / Position sizing
-    if (/(lot|эрсдэл|risk|position|данс|500|account|хэмжээ|size)/i.test(q)) {
-      return '💰 $500 дансанд Lot тооцоолол:\n\n' +
-        '<b>Алтлын дүрэм:</b> Нэг арилжаан-с 1-2% л риск авна. $500-с 1% = $5.\n\n' +
-        '<b>Тооцоолол:</b>\n' +
-        '• XAUUSD 1 lot = 100 унц = 1 пункт = $1\n' +
-        '• Хэрвээ SL = 50 пункт → $5 / 50 = 0.01 lot (micro lot)\n' +
-        '• Хэрвээ SL = 20 пункт → $5 / 20 = 0.05 lot\n' +
-        '• Хэрвээ SL = 100 пункт → $5 / 100 = 0.005 lot\n\n' +
-        '<b>Формула:</b>\n' +
-        'Lot = Риск ($5) ÷ (SL пункт × $1/пункт)\n\n' +
-        '<span class="warn">⚠️ Хэзээ ч 2%-с илүү эрсдэл бүү ав. Тогтвортой байх нь хамгийн чухал.</span>\n\n' +
-        '<span class="highlight">✅ $500 данс → 1% = $5 эрсдэл → 0.01–0.05 lot</span>';
-    }
-
-    // Killzone / Session / Time
-    if (/(killzone|цаг|session|сесси|хэдээс|London|New York|Asian|的时间)/i.test(q)) {
-      return '⏰ Gold Killzone цагууд (UTC):\n\n' +
-        '🇬🇧 <b>London Killzone:</b> 08:00 — 11:00 UTC\n' +
-        '  → Хамгийн идэвхтэй. Liquidity sweep + BOS ихэвчлэн энд үүснэ.\n\n' +
-        '🇺🇸 <b>New York Killzone:</b> 13:00 — 16:00 UTC\n' +
-        '  → Хамгийн их volume. Өндөр probability setup.\n\n' +
-        '🇯🇵 <b>Asian Session:</b> 00:00 — 06:00 UTC\n' +
-        '  → Нам volume. Range үүсгэх магадлалтай. Энд range-н liquidity-г London/NY цуглуулна.\n\n' +
-        '<b>Зөвлөгөө:</b>\n' +
-        '• Зөвхөн Killzone-н дотор entry ав\n' +
-        '• Asian range-н high/low-г тэмдэглэж ав — тэдгээр нь liquidity targets\n' +
-        '• Killzone-н гадуур орохгүй. Хүлээж сурах нь чадвар юм.\n\n' +
-        '<span class="highlight">✅ Зөв цаг + Зөв setup = Өндөр probability арилжаа</span>';
-    }
-
-    // Psychology / Greed / Discipline
-    if (/(psychology|шунал|дисциплин|сэтгэл|эмоц|тийш|гэдэг|тогтвор|huselt|хүсэл|гэнэтийн)/i.test(q)) {
-      return '🧠 Trading Psychology — Сэтгэл зүй:\n\n' +
-        '<b>Тогтворжсон трейдерийн 5 дүрэм:</b>\n\n' +
-        '1. <b>Шуналаа хяна:</b> TP2 хүрэхийг хүлээж байгаад бүү хэтэд. TP1-с partial close хий.\n' +
-        '2. <b>Айдас-г ял:</b> SL цохиулна гэж айхаасаа өмнө entry-гээ нарийвчлан шалга.\n' +
-        '3. <b>Тогтворитой процесс:</b> Өдөр бүр ижил дүрмээр арилжаа хий. Setup-аа өөрчилөхгүй.\n' +
-        '4. <b>Журнал бичих:</b> Бүх арилжаагаа бич. Win/loss, setup, эмоц бүхэл нь.\n' +
-        '5. <b>Амрах:</b> 2 дараалан loss = өдрөө зогсоо. Маргааш нь шинэ өдөр.\n\n' +
-        '<span class="highlight">✅ Тогтворжсон трейдер = Урт хугацаанд амжилттай трейдер</span>\n\n' +
-        '"Рынок-г биш, өөрийгөө хяна. Хяналт = ашиг."';
-    }
-
-    // BOS / Market Structure / CHoCH
-    if (/(bos|choch|structure|бүтэц|чиглэл|бам|break|structure break|market structure)/i.test(q)) {
-      return '📊 Market Structure — BOS / CHoCH:\n\n' +
-        '<b>BOS (Break of Structure):</b>\n' +
-        'Үнэ өмнөх Higher High (эсвэл Lower Low)-г бутааж гарвал BOS. Энэ нь trend-г баталгаажуулна.\n\n' +
-        '<b>CHoCH (Change of Character):</b>\n' +
-        Trend-н чиглэл солигдохыг харуулна. Өмнө Higher High үүсгэж байсан бол одоо Lower Low үүсгэвэл CHoCH.\n\n' +
-        '<b>Хэрхэн ашиглах:</b>\n' +
-        '• BOS-н дараа OB-г хайна → retest → entry\n' +
-        '• CHoCH = чиглэл солигдсон гэсэн үг → шинэ trend-нд бэлд\n' +
-        '• Зөвхөн Killzone-н дотор BOS/CHoCH хүчингээтэй\n\n' +
-        '<span class="highlight">✅ BOS = Trend баталгаажсан → OB retest → entry</span>';
-    }
-
-    // R:R / Risk Reward
-    if (/(rr|r:r|risk reward|эрсдэл харьцаа|харьцаа|1:|2:|3:)/i.test(q)) {
-      return '⚖️ Risk : Reward Ratio:\n\n' +
-        '<b>Алтлын харьцаа:</b> Минимум 1:2, тохиромжтой 1:3 эсвэл илүү.\n\n' +
-        '<b>Тооцоолол:</b>\n' +
-        '• Entry: 2,350.0\n' +
-        '• SL: 2,340.0 (10 пункт эрсдэл)\n' +
-        '• TP1: 2,370.0 (20 пункт → 1:2)\n' +
-        '• TP2: 2,380.0 (30 пункт → 1:3)\n\n' +
-        '<b>Чухал:</b>\n' +
-        '• R:R муу байвал entry бүү ав. Setup сайн байсан ч R:R муу бол орохгүй.\n' +
-        '• TP1-с 50% close хий. Үлдсэнийг BE (breakeven) рүү stop-оо шилжүүл.\n' +
-        '• Win rate 40% байсан ч 1:3 R:R-тэй бол ашигтай.\n\n' +
-        '<span class="highlight">✅ 1:3 R:R + 40% win rate = Profitable system</span>';
-    }
-
-    // Hello / Hi / Greeting
-    if (/(сайн|hello|hi|сайн уу|байна|help|тусламж|юу хийж|what can|боломж)/i.test(q)) {
-      return 'Сайн байна уу! 👋 Би STRYX AI MENTOR.\n\n' +
-        'Танд дараах сэдвүүдээр туслаж чадна:\n\n' +
-        '🥇 <b>Gold (XAUUSD) bias</b> — одоогийн чиглэл, юу анхаарах\n' +
-        '📦 <b>SMC rules</b> — Order Block, FVG, Liquidity, BOS\n' +
-        '💰 <b>Risk Management</b> — Lot тооцоолол, R:R\n' +
-        '🧠 <b>Trading Psychology</b> — тогтвор, эмоц хянах\n' +
-        '⏰ <b>Killzone</b> — зөв цаг, session-нүүд\n\n' +
-        'Дээрх санал болгож буй товчнуудаас сонгох эсвэл асуултаа бичнэ үү!';
-    }
-
-    // Default
-    return 'Таны асуултыг ойлгосон. 🤔\n\n' +
-      'Би дараах сэдвүүдээр илүү сайн туслаж чадна:\n\n' +
-      '🥇 Gold / XAUUSD bias\n' +
-      '📦 Order Block, FVG, Liquidity\n' +
-      '💰 Lot тооцоолол, Risk Management\n' +
-      '🧠 Trading Psychology, тогтвор\n' +
-      '⏰ Killzone цаг, Session\n' +
-      '📊 BOS / Market Structure\n' +
-      '⚖️ Risk:Reward Ratio\n\n' +
-      'Дээрх товчнуудаас сонгох эсвэл түлхүүр үгээ ашиглан асуугаа!';
-  }
-
-  // ===== SEND MESSAGE =====
-  function sendMessage(text) {
-    if (!text || !text.trim()) return;
-
-    addMessage('ТА', text.trim(), false);
-    chatInput.value = '';
-
-    var reply = getReply(text.trim());
-    showTypingThenReply(reply);
-  }
-
-  // ===== EVENT HANDLERS =====
-  sendBtn.addEventListener('click', function() {
-    sendMessage(chatInput.value);
+  document.querySelectorAll("[data-q], .chip, .suggestion").forEach(chip => {
+    chip.addEventListener("click", () => handleSend(chip.dataset.q || chip.textContent));
   });
-
-  chatInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      sendMessage(chatInput.value);
-    }
-  });
-
-  chipsContainer.addEventListener('click', function(e) {
-    var chip = e.target.closest('.chip');
-    if (!chip) return;
-    var q = chip.getAttribute('data-q');
-    sendMessage(q);
-  });
-
-  // ===== WELCOME MESSAGE =====
-  setTimeout(function() {
-    addMessage(
-      'STRYX AI MENTOR',
-      'Сайн байна уу! 👋 Би <b>STRYX AI MENTOR & SMC COACH</b>.\n\n' +
-      'Танд дараах сэдвүүдээр туслаж чадна:\n\n' +
-      '🥇 <b>Gold (XAUUSD) bias</b> — одоогийн чиглэл, юу анхаарах\n' +
-      '📦 <b>SMC rules</b> — Order Block, FVG, Liquidity, BOS\n' +
-      '💰 <b>Risk Management</b> — Lot тооцоолол, R:R\n' +
-      '🧠 <b>Trading Psychology</b> — тогтвор, эмоц хянах\n\n' +
-      'Доорх санал болгож буй товчнуудаас сонгох эсвэл асуултаа бичнэ үү!',
-      true
-    );
-  }, 400);
-
 })();
 </script>
 
 </body>
-
 </html>
+
