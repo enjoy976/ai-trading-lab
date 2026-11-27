@@ -1,350 +1,181 @@
 <!DOCTYPE html>
 <html lang="mn">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Forex Live Market</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forex & Metals Terminal | STRYX ZONE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .fx-wrap { max-width: 1100px; margin: 90px auto 50px; padding: 0 18px; }
+    .fx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 24px 0; }
+    .fx-card { background: rgba(16, 20, 29, 0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: all 0.25s ease; }
+    .fx-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.18); border-color: var(--gold); }
+    .fx-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .fx-name { font-weight: 700; font-size: 16px; color: var(--gold-bright); }
+    .fx-tag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(212,175,55,0.12); color: var(--gold); }
+    .fx-val { font-family: var(--mono); font-size: 25px; font-weight: 700; color: #FFFFFF; line-height: 1.4; }
+    .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.85); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
+    .strength-box { background: rgba(16,20,29,0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; }
+    .str-row { margin-bottom: 14px; font-family: var(--mono); font-size: 12px; }
+    .str-bar-bg { width: 100%; height: 10px; background: #1E293B; border-radius: 6px; overflow: hidden; margin-top: 6px; }
+  </style>
 </head>
-
-
 <body>
 
-
-<div class="container">
-
-
-<h1>
-🌍 FOREX LIVE MARKET
-</h1>
-
-
-<p class="subtitle">
-Real Time Currency Monitor
-</p>
-
-
-
-<div class="status">
-
-🟢 MARKET DATA ONLINE
-
+<div class="header-bar" style="top: 0;">
+  <a href="dashboard.html" style="text-decoration:none; color:var(--gold-bright); font-family:var(--mono); font-weight:700; font-size:13px;">← DASHBOARD</a>
+  <div style="font-family:var(--mono); color:#22C55E; font-size:12px; font-weight:700;">🟢 FOREX ENGINE LIVE</div>
 </div>
 
+<div class="fx-wrap">
+  <div class="terminal-title" style="margin-bottom: 10px;">
+    <h1>📊 STRYX FOREX &amp; METALS</h1>
+    <p class="subtitle">XAUUSD • XAGUSD • EURUSD • GBPUSD • USDJPY Real-Time Feed</p>
+  </div>
 
+  <!-- LIVE METALS & FOREX CARDS -->
+  <div class="fx-grid">
+    <!-- XAUUSD -->
+    <div class="fx-card" style="border-color: rgba(212,175,55,0.6);">
+      <div class="fx-head">
+        <span class="fx-name">🥇 GOLD SPOT</span>
+        <span class="fx-tag">XAU / USD</span>
+      </div>
+      <div class="fx-val" id="fx-xau">Loading...</div>
+      <div id="stat-xau" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">Checking...</div>
+    </div>
 
+    <!-- XAGUSD -->
+    <div class="fx-card">
+      <div class="fx-head">
+        <span class="fx-name">🥈 SILVER SPOT</span>
+        <span class="fx-tag">XAG / USD</span>
+      </div>
+      <div class="fx-val" id="fx-xag">Loading...</div>
+      <div id="stat-xag" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">Checking...</div>
+    </div>
 
+    <!-- EURUSD -->
+    <div class="fx-card">
+      <div class="fx-head">
+        <span class="fx-name">💶 EURO / DOLLAR</span>
+        <span class="fx-tag">EUR / USD</span>
+      </div>
+      <div class="fx-val" id="fx-eur">Loading...</div>
+      <div id="stat-eur" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
+    </div>
 
-<div class="result">
+    <!-- GBPUSD -->
+    <div class="fx-card">
+      <div class="fx-head">
+        <span class="fx-name">💷 POUND / DOLLAR</span>
+        <span class="fx-tag">GBP / USD</span>
+      </div>
+      <div class="fx-val" id="fx-gbp">Loading...</div>
+      <div id="stat-gbp" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
+    </div>
 
+    <!-- USDJPY -->
+    <div class="fx-card">
+      <div class="fx-head">
+        <span class="fx-name">💴 DOLLAR / YEN</span>
+        <span class="fx-tag">USD / JPY</span>
+      </div>
+      <div class="fx-val" id="fx-jpy">Loading...</div>
+      <div id="stat-jpy" style="font-family:var(--mono); font-size:12px; color:#22C55E; margin-top:6px;">🟢 LIVE FOREX</div>
+    </div>
+  </div>
 
-<h2>
-📊 LIVE FOREX PRICES
-</h2>
+  <!-- STATUS STRIP -->
+  <div class="status-strip">
+    <div>📊 Data Feed: <b style="color:#22C55E;">🟢 INSTITUTIONAL FEED</b></div>
+    <div>⚡ Spread Status: <b style="color:var(--gold-bright);">LOW (RAW)</b></div>
+    <div>⏱️ Last Update: <b id="fx-upd" style="color:var(--gold-bright);">--:--:--</b></div>
+  </div>
 
+  <!-- CURRENCY STRENGTH METER -->
+  <div class="strength-box">
+    <div style="font-family:var(--mono); font-size:13px; color:var(--gold-bright); margin-bottom:16px; font-weight:700;">🔥 CURRENCY &amp; GOLD STRENGTH METER (ХҮЧНИЙ ХЭМЖҮҮР)</div>
 
-<hr>
+    <div class="str-row">
+      <div style="display:flex; justify-content:space-between;"><span style="color:#F0CE6E; font-weight:700;">🥇 XAU (GOLD)</span><span id="str-xau-txt" style="color:#22C55E; font-weight:700;">82% STRONG</span></div>
+      <div class="str-bar-bg"><div id="str-xau-bar" style="width:82%; height:100%; background:linear-gradient(90deg, #D4AF37, #22C55E); transition:width 1s;"></div></div>
+    </div>
 
+    <div class="str-row">
+      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇺🇸 USD (DOLLAR)</span><span id="str-usd-txt" style="color:#F0CE6E; font-weight:700;">54% NEUTRAL</span></div>
+      <div class="str-bar-bg"><div id="str-usd-bar" style="width:54%; height:100%; background:#F0CE6E; transition:width 1s;"></div></div>
+    </div>
 
-
-<div id="market" class="forex-grid">
-
-
-<div class="forex-card">
-
-Loading...
-
+    <div class="str-row" style="margin-bottom:0;">
+      <div style="display:flex; justify-content:space-between;"><span style="color:#E8ECF2; font-weight:700;">🇪🇺 EUR (EURO)</span><span id="str-eur-txt" style="color:#38BDF8; font-weight:700;">61% BULLISH</span></div>
+      <div class="str-bar-bg"><div id="str-eur-bar" style="width:61%; height:100%; background:#38BDF8; transition:width 1s;"></div></div>
+    </div>
+  </div>
 </div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<br>
-
-
-
-<a href="dashboard.html" class="signup-btn">
-
-⬅ BACK DASHBOARD
-
-</a>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="auth.js"></script>
-
-
-
-
 
 <script>
+const prevFx = { XAU: 0, XAG: 0 };
 
+async function loadMetal(sym, valId, statId, decimals) {
+  try {
+    const res = await fetch("https://gold-api.com" + sym);
+    const data = await res.json();
+    const price = Number(data.price);
 
-// ===============================
-// LOGIN CHECK
-// ===============================
+    const old = prevFx[sym];
+    prevFx[sym] = price;
 
+    let color = "#FFFFFF";
+    let statusText = "🟢 LIVE METAL DATA";
+    if (old > 0 && price > old) {
+      color = "#22C55E";
+      statusText = "🟢 ▲ +$" + (price - old).toFixed(decimals);
+    } else if (old > 0 && price < old) {
+      color = "#EF4444";
+      statusText = "🔴 ▼ -$" + (old - price).toFixed(decimals);
+    }
 
-async function checkAccess(){
-
-
-const {data} = await supabaseClient.auth.getSession();
-
-
-
-if(!data.session){
-
-
-window.location.href="login.html";
-
-
-return;
-
-
+    const vEl = document.getElementById(valId);
+    const sEl = document.getElementById(statId);
+    if (vEl) {
+      vEl.innerHTML = '<span style="color:' + color + '; transition:color 0.3s;">$' +
+        price.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + '</span>';
+    }
+    if (sEl) {
+      sEl.style.color = color === "#EF4444" ? "#EF4444" : "#22C55E";
+      sEl.textContent = statusText;
+    }
+    document.getElementById("fx-upd").textContent = new Date().toLocaleTimeString("en-GB");
+  } catch (e) {}
 }
 
+async function loadCurrencies() {
+  try {
+    const res = await fetch("https://er-api.com");
+    const data = await res.json();
+    const rates = data.rates;
 
+    const eurusd = 1 / rates.EUR;
+    const gbpusd = 1 / rates.GBP;
+    const usdjpy = rates.JPY;
+
+    document.getElementById("fx-eur").textContent = eurusd.toFixed(5);
+    document.getElementById("fx-gbp").textContent = gbpusd.toFixed(5);
+    document.getElementById("fx-jpy").textContent = usdjpy.toFixed(3);
+    document.getElementById("fx-upd").textContent = new Date().toLocaleTimeString("en-GB");
+  } catch (e) {}
 }
 
-
-checkAccess();
-
-
-
-
-
-
-
-
-// ===============================
-// FOREX API
-// ===============================
-
-
-const pairs = [
-
-"EURUSD",
-"GBPUSD",
-"USDJPY",
-"AUDUSD",
-"USDCAD",
-"USDCHF",
-"NZDUSD",
-"EURJPY",
-"GBPJPY",
-"EURGBP"
-
-];
-
-
-
-
-
-
-
-async function loadForex(){
-
-
-try{
-
-
-const response = await fetch(
-
-"https://open.er-api.com/v6/latest/USD"
-
-);
-
-
-
-const data = await response.json();
-
-
-
-let html = "";
-
-
-
-pairs.forEach(pair=>{
-
-
-let base = pair.substring(0,3);
-
-let quote = pair.substring(3,6);
-
-
-
-let price = 0;
-
-
-
-if(base==="USD"){
-
-
-price = data.rates[quote];
-
-
+function updateForexTerminal() {
+  loadMetal("XAU", "fx-xau", "stat-xau", 2);
+  loadMetal("XAG", "fx-xag", "stat-xag", 3);
+  loadCurrencies();
 }
 
-
-else if(quote==="USD"){
-
-
-price = 1 / data.rates[base];
-
-
-}
-
-
-else{
-
-
-price = data.rates[quote] / data.rates[base];
-
-
-}
-
-
-
-
-
-let decimals = pair.includes("JPY") ? 3 : 5;
-
-
-
-
-html += `
-
-
-<div class="forex-card">
-
-
-<div class="pair">
-
-${pair}
-
-</div>
-
-
-
-<div class="price">
-
-${price.toFixed(decimals)}
-
-</div>
-
-
-
-<div class="market-live">
-
-🟢 LIVE
-
-</div>
-
-
-
-<div class="update">
-
-Last Update:
-
-${new Date().toLocaleTimeString()}
-
-</div>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-
-document.getElementById("market").innerHTML = html;
-
-
-
-}
-
-
-
-catch(error){
-
-
-console.log(error);
-
-
-
-document.getElementById("market").innerHTML =
-
-
-`
-
-<div class="forex-card">
-
-❌ API Connection Error
-
-</div>
-
-`;
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-loadForex();
-
-
-
-setInterval(loadForex,60000);
-
-
-
+updateForexTerminal();
+setInterval(updateForexTerminal, 5000);
 </script>
 
-
-
-
-
-
 </body>
-
 </html>
