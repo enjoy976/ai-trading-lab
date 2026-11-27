@@ -749,7 +749,7 @@ body::after {
   const tgBtn = document.getElementById("vip-tg-btn");
   if (tgBtn) tgBtn.href = ["https:", "", "t.me", tgUser].join("/");
 
-  const activeEmail = (sessionStorage.getItem("stryx_active_user") || "").toLowerCase().trim();
+  const activeEmail = (localStorage.getItem("stryx_verified_email") || "").toLowerCase().trim();
 
   const allowed = (typeof APPROVED_VIP_EMAILS !== "undefined")
     ? APPROVED_VIP_EMAILS.map(e => e.toLowerCase().trim())
@@ -761,6 +761,7 @@ body::after {
   }
 })();
 </script>
+
 
 
 
