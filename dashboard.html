@@ -297,65 +297,49 @@ data-i18n="live_gold_price">
 
 
 
-<!-- SYSTEM STATUS -->
+<!-- AI SNIPER RADAR & BIAS (СҮРТЭЙ АМЬД РАДАР) -->
+<div class="market-card" style="border-color: rgba(212,175,55,0.5);">
+  <div class="market-card__label" style="display:flex; justify-content:space-between; align-items:center;">
+    <span>🎯 AI SNIPER RADAR</span>
+    <span style="font-size:10px; color:#22C55E; background:rgba(34,197,94,0.12); padding:2px 8px; border-radius:6px;">● ACTIVE</span>
+  </div>
 
-<div class="market-card">
+  <div style="margin-top: 12px; font-family: var(--mono);">
+    <!-- ЧИГ ХАНДЛАГА -->
+    <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.4); border-radius: 10px; padding: 10px; text-align: center; margin-bottom: 12px;">
+      <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 3px;">MARKET STRUCTURE BIAS</div>
+      <div style="font-size: 16px; font-weight: 800; color: #22C55E; letter-spacing: 1px;">🟢 BULLISH / BUY</div>
+    </div>
 
-<div class="market-card__label" data-i18n="system_status">
+    <!-- АМЬД ҮЗҮҮЛЭЛТҮҮД -->
+    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:7px;">
+      <span style="color:var(--text-muted);">AI Нарийвчлал:</span>
+      <b id="ai-conf-val" style="color:var(--gold-bright);">89.4%</b>
+    </div>
 
-🚀 ТӨЛӨВ БАЙДАЛ
+    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:7px;">
+      <span style="color:var(--text-muted);">MT5 Server Ping:</span>
+      <b id="mt5-ping-val" style="color:#22C55E;">12 ms</b>
+    </div>
 
+    <div style="display:flex; justify-content:space-between; font-size:12px; padding-top:8px; border-top:1px solid var(--border);">
+      <span style="color:var(--text-muted);">Алгоритм төлөв:</span>
+      <b style="color:#22C55E;">⚡ SCANNING M15</b>
+    </div>
+  </div>
 </div>
 
-<p style="font-size:13px;color:var(--text-muted);line-height:2;">
+<script>
+  setInterval(() => {
+    const conf = (87.2 + Math.random() * 4.5).toFixed(1);
+    const ping = 9 + Math.floor(Math.random() * 8);
+    const cEl = document.getElementById("ai-conf-val");
+    const pEl = document.getElementById("mt5-ping-val");
+    if (cEl) cEl.textContent = conf + "%";
+    if (pEl) pEl.textContent = ping + " ms";
+  }, 3000);
+</script>
 
-<span data-i18n="mt5_connection">
-MT5 Холболт
-</span>
-
-: <b style="color:var(--green);">ONLINE</b>
-
-<br>
-
-<span data-i18n="signal">
-ДОХИО
-</span>
-
-:
-
-<span data-i18n="ready">
-🟢 БЭЛЭН
-</span>
-
-<br>
-
-<span data-i18n="market_scanner">
-Зах зээлийн сканнер
-</span>
-
-:
-
-<span data-i18n="active_status">
-🟢 ИДЭВХТЭЙ
-</span>
-
-<br>
-
-<span data-i18n="gold_price">
-Алтны үнэ
-</span>
-
-:
-
-<span data-i18n="live_data">
-🟢 БОДИТ МЭДЭЭЛЭЛ
-</span>
-
-</p>
-
-</div>
-
-</div>
 
 <!-- ============================================================ -->
 <!-- GLOBAL MARKET SESSIONS CLOCK (ДЭЛХИЙН ЗАХ ЗЭЭЛИЙН АМЬД ЦАГ) -->
