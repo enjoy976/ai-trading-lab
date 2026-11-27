@@ -8,21 +8,21 @@
   <style>
     .crypto-wrap { max-width: 1100px; margin: 90px auto 50px; padding: 0 18px; }
     .crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 24px 0; }
-    .coin-card { background: rgba(16, 20, 29, 0.9); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: all 0.25s ease; }
+    .coin-card { background: rgba(16, 20, 29, 0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; transition: all 0.25s ease; }
     .coin-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.18); border-color: var(--gold); }
     .coin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .coin-name { font-weight: 700; font-size: 16px; color: var(--gold-bright); }
     .coin-tag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(212,175,55,0.12); color: var(--gold); }
     .coin-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: #FFFFFF; line-height: 1.4; }
-    .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.8); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
-    .dominance-box { background: rgba(16,20,29,0.9); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; }
+    .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(16,20,29,0.85); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-family: var(--mono); font-size: 13px; }
+    .dominance-box { background: rgba(16,20,29,0.92); border: 1px solid var(--border-strong); border-radius: 16px; padding: 22px; }
   </style>
 </head>
 <body>
 
 <div class="header-bar" style="top: 0;">
   <a href="dashboard.html" style="text-decoration:none; color:var(--gold-bright); font-family:var(--mono); font-weight:700; font-size:13px;">← DASHBOARD</a>
-  <div style="font-family:var(--mono); color:#22C55E; font-size:12px; font-weight:700;">🟢 CRYPTO ENGINE ONLINE</div>
+  <div style="font-family:var(--mono); color:#22C55E; font-size:12px; font-weight:700;">🟢 CRYPTO ENGINE LIVE</div>
 </div>
 
 <div class="crypto-wrap">
@@ -31,14 +31,13 @@
     <p class="subtitle">BTC • ETH • SOL Real-Time Market Intelligence</p>
   </div>
 
-  <!-- 3 COIN CARDS -->
   <div class="crypto-grid">
     <div class="coin-card">
       <div class="coin-head">
         <span class="coin-name">🟠 BITCOIN</span>
         <span class="coin-tag">BTC / USD</span>
       </div>
-      <div class="coin-val" id="btc">$ 87,420.00<br><span style="color:#22C55E; font-size:14px;">🟢 +1.85%</span></div>
+      <div class="coin-val" id="btc-box">⏳ Ачааллаж байна...</div>
     </div>
 
     <div class="coin-card">
@@ -46,7 +45,7 @@
         <span class="coin-name">🔷 ETHEREUM</span>
         <span class="coin-tag">ETH / USD</span>
       </div>
-      <div class="coin-val" id="eth">$ 2,945.50<br><span style="color:#22C55E; font-size:14px;">🟢 +2.14%</span></div>
+      <div class="coin-val" id="eth-box">⏳ Ачааллаж байна...</div>
     </div>
 
     <div class="coin-card">
@@ -54,18 +53,16 @@
         <span class="coin-name">🟣 SOLANA</span>
         <span class="coin-tag">SOL / USD</span>
       </div>
-      <div class="coin-val" id="sol">$ 142.80<br><span style="color:#22C55E; font-size:14px;">🟢 +3.40%</span></div>
+      <div class="coin-val" id="sol-box">⏳ Ачааллаж байна...</div>
     </div>
   </div>
 
-  <!-- STATUS STRIP -->
   <div class="status-strip">
-    <div>📊 Market Status: <b id="market" style="color:#22C55E;">🟢 Bullish Momentum</b></div>
-    <div>🤖 AI Scanner: <b style="color:#22C55E;">🟢 ACTIVE</b></div>
-    <div>⏱️ Last Update: <b id="updated" style="color:var(--gold-bright);">LIVE</b></div>
+    <div>📊 Market Status: <b id="mkt-status" style="color:var(--gold-bright);">Scanning...</b></div>
+    <div>🤖 Feed Source: <b id="feed-src" style="color:#22C55E;">REAL-TIME API</b></div>
+    <div>⏱️ Last Update: <b id="last-upd" style="color:var(--gold-bright);">--:--:--</b></div>
   </div>
 
-  <!-- CRYPTO MARKET DOMINANCE & POWER METER -->
   <div class="dominance-box">
     <div style="font-family:var(--mono); font-size:13px; color:var(--gold-bright); margin-bottom:14px; font-weight:700;">📊 CRYPTO MARKET DOMINANCE &amp; BUYER POWER</div>
     <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:12px; margin-bottom:6px;">
@@ -80,60 +77,64 @@
     </div>
   </div>
 </div>
+
 <script>
-const prices = { btc: 0, eth: 0, sol: 0 };
+const prevPrices = { btc: 0, eth: 0, sol: 0 };
 
-function updateCoinUI(id, newPrice, pct) {
-  const el = document.getElementById(id);
-  if (!el || isNaN(newPrice)) return;
+function renderCoin(key, elId, price, pct) {
+  const el = document.getElementById(elId);
+  if (!el || !price || isNaN(price)) return;
 
-  const oldPrice = prices[id];
-  prices[id] = newPrice;
+  const old = prevPrices[key];
+  prevPrices[key] = price;
 
-  let flashColor = "#FFFFFF";
-  if (oldPrice > 0 && newPrice > oldPrice) flashColor = "#22C55E";
-  else if (oldPrice > 0 && newPrice < oldPrice) flashColor = "#EF4444";
+  let color = "#FFFFFF";
+  if (old > 0 && price > old) color = "#22C55E";
+  else if (old > 0 && price < old) color = "#EF4444";
 
-  const pctHtml = pct >= 0
-    ? '<span style="color:#22C55E; font-size:14px;">🟢 +' + pct.toFixed(2) + '%</span>'
-    : '<span style="color:#EF4444; font-size:14px;">🔴 ' + pct.toFixed(2) + '%</span>';
+  const badge = pct >= 0
+    ? '<span style="color:#22C55E; font-size:14px;">🟢 +' + Number(pct).toFixed(2) + '%</span>'
+    : '<span style="color:#EF4444; font-size:14px;">🔴 ' + Number(pct).toFixed(2) + '%</span>';
 
-  el.innerHTML = '<span style="color:' + flashColor + '; transition: color 0.3s;">$ ' + newPrice.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }) + '</span><br>' + pctHtml;
-
-  const updEl = document.getElementById("updated");
-  if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
+  el.innerHTML = '<span style="color:' + color + '; transition:color 0.3s;">$ ' +
+    Number(price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+    '</span><br>' + badge;
 }
 
-async function fetchCryptoCompare() {
+async function loadCryptoPrices() {
   try {
-    const res = await fetch("https://cryptocompare.com");
-    const json = await res.json();
-    const raw = json.RAW;
+    const url = "https://cryptocompare.com" + Date.now();
+    const res = await fetch(url);
+    const data = await res.json();
+    const r = data.RAW;
 
-    updateCoinUI("btc", raw.BTC.USD.PRICE, raw.BTC.USD.CHANGEPCT24HOUR);
-    updateCoinUI("eth", raw.ETH.USD.PRICE, raw.ETH.USD.CHANGEPCT24HOUR);
-    updateCoinUI("sol", raw.SOL.USD.PRICE, raw.SOL.USD.CHANGEPCT24HOUR);
+    renderCoin("btc", "btc-box", r.BTC.USD.PRICE, r.BTC.USD.CHANGEPCT24HOUR);
+    renderCoin("eth", "eth-box", r.ETH.USD.PRICE, r.ETH.USD.CHANGEPCT24HOUR);
+    renderCoin("sol", "sol-box", r.SOL.USD.PRICE, r.SOL.USD.CHANGEPCT24HOUR);
 
-    const avg = (raw.BTC.USD.CHANGEPCT24HOUR + raw.ETH.USD.CHANGEPCT24HOUR + raw.SOL.USD.CHANGEPCT24HOUR) / 3;
-    const mEl = document.getElementById("market");
+    const avg = (r.BTC.USD.CHANGEPCT24HOUR + r.ETH.USD.CHANGEPCT24HOUR + r.SOL.USD.CHANGEPCT24HOUR) / 3;
+    const mEl = document.getElementById("mkt-status");
     if (mEl) {
       if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
       else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
       else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
     }
-  } catch (e) {
-    console.log("Retrying...");
+    document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
+  } catch (err) {
+    // Нөөц: CoinGecko
+    try {
+      const cg = await fetch("https://coingecko.com").then(x => x.json());
+      renderCoin("btc", "btc-box", cg.bitcoin.usd, cg.bitcoin.usd_24h_change);
+      renderCoin("eth", "eth-box", cg.ethereum.usd, cg.ethereum.usd_24h_change);
+      renderCoin("sol", "sol-box", cg.solana.usd, cg.solana.usd_24h_change);
+      document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
+    } catch (e2) {}
   }
 }
 
-fetchCryptoCompare();
-setInterval(fetchCryptoCompare, 2000);
+loadCryptoPrices();
+setInterval(loadCryptoPrices, 2000);
 </script>
 
 </body>
 </html>
-
-
