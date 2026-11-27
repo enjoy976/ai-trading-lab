@@ -977,10 +977,12 @@ body::after {
           livePrice: liveGold.toFixed(2)
         })
       });
-      const json = await apiRes.json();
+            const json = await apiRes.json();
+      window.lastAiReason = json.reason || "CONNECTED";
       if (!json.fallback && json.result) {
         aiResult = json.result;
       }
+
     } catch (err) {}
 
     clearInterval(timer);
