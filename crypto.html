@@ -90,25 +90,23 @@ function updateCoinUI(id, newPrice, pct) {
   const oldPrice = prices[id];
   prices[id] = newPrice;
 
-  // Үнэ өсвөл ногоон, унавал улаанаар гялалзана
   let flashColor = "#FFFFFF";
   if (oldPrice > 0 && newPrice > oldPrice) flashColor = "#22C55E";
   else if (oldPrice > 0 && newPrice < oldPrice) flashColor = "#EF4444";
 
   const pctHtml = pct >= 0
-    ? `<span style="color:#22C55E; font-size:14px;">🟢 +${pct.toFixed(2)}%</span>`
-    : `<span style="color:#EF4444; font-size:14px;">🔴 ${pct.toFixed(2)}%</span>`;
+    ? '<span style="color:#22C55E; font-size:14px;">🟢 +' + pct.toFixed(2) + '%</span>'
+    : '<span style="color:#EF4444; font-size:14px;">🔴 ' + pct.toFixed(2) + '%</span>';
 
-  el.innerHTML = `<span style="color:${flashColor}; transition: color 0.3s;">$ ${newPrice.toLocaleString("en-US", {
+  el.innerHTML = '<span style="color:' + flashColor + '; transition: color 0.3s;">$ ' + newPrice.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  })}</span><br>${pctHtml}`;
+  }) + '</span><br>' + pctHtml;
 
   const updEl = document.getElementById("updated");
   if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
 }
 
-// 1. OKX биржээс 2 секунд тутамд бодит ханш татна
 async function fetchOKXLive() {
   try {
     const [b, e, s] = await Promise.all([
@@ -118,9 +116,9 @@ async function fetchOKXLive() {
     ]);
 
     const list = [
-      { id: "btc", item: b.data[0] },
-      { id: "eth", item: e.data[0] },
-      { id: "sol", item: s.data[0] }
+      { id: "btc", item: b.data && b.data[0] },
+      { id: "eth", item: e.data && e.data[0] },
+      { id: "sol", item: s.data && s.data[0] }
     ];
 
     let sumPct = 0;
@@ -138,26 +136,25 @@ async function fetchOKXLive() {
     if (mEl) {
       if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
       else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
-      else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Consolidation</span>';
+      else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
     }
   } catch (err) {
-    console.log("Polling...");
+    console.log("Fetching...");
   }
 }
 
-// 2. Binance WebSocket (0.5 секунд тутамд шууд урсгал)
+// Binance WebSocket шууд урсгал (0.5 секунд тутамд хөдөлнө)
 try {
   const ws = new WebSocket("wss://://binance.com");
   ws.onmessage = function(event) {
     const msg = JSON.parse(event.data);
     if (!msg || !msg.data) return;
     const d = msg.data;
-    const sym = d.s;
     const last = parseFloat(d.c);
     const pct = parseFloat(d.P);
-    if (sym === "BTCUSDT") updateCoinUI("btc", last, pct);
-    if (sym === "ETHUSDT") updateCoinUI("eth", last, pct);
-    if (sym === "SOLUSDT") updateCoinUI("sol", last, pct);
+    if (d.s === "BTCUSDT") updateCoinUI("btc", last, pct);
+    if (d.s === "ETHUSDT") updateCoinUI("eth", last, pct);
+    if (d.s === "SOLUSDT") updateCoinUI("sol", last, pct);
   };
 } catch (e) {}
 
@@ -167,4 +164,5 @@ setInterval(fetchOKXLive, 2000);
 
 </body>
 </html>
+
 
