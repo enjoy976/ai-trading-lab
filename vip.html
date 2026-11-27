@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>👑 STRYX VIP ГИШҮҮНЧЛЭЛ &amp; ЭРХ ИДЭВХЖҮҮЛЭХ</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --obsidian:       #0B0E14;
+  --obsidian-2:     #11151F;
+  --obsidian-3:     #161B27;
+  --surface:        rgba(22, 27, 39, 0.72);
+  --surface-2:      rgba(17, 21, 31, 0.85);
+  --border:         rgba(212, 175, 55, 0.14);
+  --border-strong:  rgba(212, 175, 55, 0.30);
+  --gold:           #D4AF37;
+  --gold-bright:    #F0CE6E;
+  --gold-dim:       #8E7423;
+  --gold-glow:      rgba(212, 175, 55, 0.18);
+  --text:           #E8ECF2;
+  --text-muted:     #8A93A6;
+  --text-dim:       #5C6478;
+  --green:          #22C55E;
+  --green-glow:     rgba(34, 197, 94, 0.15);
+  --radius:         16px;
+  --radius-sm:      10px;
+  --mono:           'JetBrains Mono', 'Courier New', monospace;
+  --sans:           'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--obsidian);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(212,175,55,0.04), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+}
+
+/* ===== HEADER ===== */
+.vip-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 24px;
+  background: rgba(11, 14, 20, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--gold-glow);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.back-link:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateX(-3px);
+}
+
+.vip-header__title {
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== LAYOUT ===== */
+.vip-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 20px 56px;
+}
+
+/* ===== HERO TEXT ===== */
+.vip-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.vip-hero__icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(212,175,55,0.3));
+  animation: crown-float 3s ease-in-out infinite;
+}
+
+@keyframes crown-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.vip-hero__title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.vip-hero__title span {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.vip-hero__sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ===== PRICING CARDS ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.price-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 26px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+}
+
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.4;
+}
+
+.price-card--featured {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 1px var(--gold),
+    0 0 30px var(--gold-glow),
+    inset 0 0 30px rgba(212,175,55,0.04);
+  animation: featured-pulse 3s ease-in-out infinite;
+}
+
+@keyframes featured-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--gold), 0 0 24px var(--gold-glow), inset 0 0 30px rgba(212,175,55,0.04); }
+  50%      { box-shadow: 0 0 0 1px var(--gold-bright), 0 0 40px rgba(212,175,55,0.3), inset 0 0 30px rgba(212,175,55,0.06); }
+}
+
+.price-card--featured::before {
+  opacity: 0.8;
+  height: 3px;
+}
+
+.price-card__badge {
+  position: absolute;
+  top: 18px;
+  right: -32px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: var(--obsidian);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 5px 36px;
+  transform: rotate(35deg);
+  text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+}
+
+.price-card__icon {
+  font-size: 36px;
+  margin-bottom: 14px;
+}
+
+.price-card__name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.price-card__name--gold {
+  color: var(--gold-bright);
+}
+
+.price-card__price {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px var(--gold-glow);
+  margin-bottom: 4px;
+}
+
+.price-card__period {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+.price-card__features {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 26px;
+}
+
+.price-card__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(212,175,55,0.06);
+}
+
+.price-card__features li:last-child {
+  border-bottom: none;
+}
+
+.price-card__features li .feat-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.price-card__features li b {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.price-card__btn {
+  width: 100%;
+  border: none;
+  padding: 15px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.price-card__btn--pro {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--gold);
+}
+
+.price-card__btn--pro:hover {
+  background: var(--gold-glow);
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.price-card__btn--vip {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--obsidian);
+}
+
+.price-card__btn--vip:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 28px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.price-card__btn.selected {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold)) !important;
+  color: var(--obsidian) !important;
+  border-color: var(--gold-bright) !important;
+  box-shadow: 0 0 24px var(--gold-glow) !important;
+}
+
+.price-card__btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+.price-card__btn:hover::after {
+  left: 100%;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+/* ===== BANK BOX ===== */
+.bank-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bank-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+}
+
+.bank-card__intro {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  line-height: 1.7;
+}
+
+.bank-card__intro b {
+  color: var(--gold-bright);
+}
+
+.bank-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.bank-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.25s ease;
+}
+
+.bank-row:hover {
+  border-color: var(--border-strong);
+}
+
+.bank-row__label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bank-row__label-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.bank-row__value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px var(--gold-glow);
+  letter-spacing: 0.5px;
+}
+
+.bank-row__value--sm {
+  font-size: 14px;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: var(--gold-glow);
+  border: 1px solid var(--border-strong);
+  color: var(--gold);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: var(--mono);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.copy-btn:hover {
+  background: var(--gold);
+  color: var(--obsidian);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+.copy-btn.copied {
+  background: var(--green-glow);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.bank-note {
+  padding: 16px 18px;
+  background: rgba(212,175,55,0.06);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.bank-note b {
+  color: var(--gold-bright);
+}
+
+/* ===== TELEGRAM BUTTON ===== */
+.tg-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--obsidian);
+  border: none;
+  padding: 18px 28px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 15px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 24px var(--gold-glow);
+}
+
+.tg-btn:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 40px rgba(212,175,55,0.4);
+  transform: translateY(-2px);
+}
+
+.tg-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.tg-btn:hover::after {
+  left: 100%;
+}
+
+.tg-btn__icon {
+  font-size: 20px;
+}
+
+/* ===== TRUST ROW ===== */
+.trust-row {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.trust-item .trust-icon {
+  font-size: 16px;
+}
+
+/* ===== SELECTED PLAN INDICATOR ===== */
+.selected-plan-bar {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--gold-glow);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+  animation: plan-in 0.4s ease;
+}
+
+.selected-plan-bar.show { display: flex; }
+
+@keyframes plan-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 680px) {
+  .vip-header { padding: 12px 14px; gap: 8px; }
+  .back-link { padding: 7px 12px; font-size: 12px; }
+  .vip-header__title { font-size: 13px; }
+  .vip-container { padding: 28px 14px 44px; }
+  .vip-hero__icon { font-size: 40px; }
+  .vip-hero__title { font-size: 20px; }
+  .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+  .price-card { padding: 26px 22px; }
+  .price-card__price { font-size: 24px; }
+  .bank-card { padding: 22px 18px; }
+  .bank-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .bank-row__value { font-size: 14px; }
+  .copy-btn { align-self: flex-end; }
+  .tg-btn { font-size: 14px; padding: 16px 20px; }
+  .trust-row { gap: 18px; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::selection { background: var(--gold-glow); color: var(--gold-bright); }
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="vip-header">
+  <a href="dashboard.html" class="back-link">← DASHBOARD</a>
+  <div class="vip-header__title">👑 STRYX VIP ГИШҮҮНЧЛЭЛ &amp; ЭРХ ИДЭВХЖҮҮЛЭХ</div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="vip-container">
+
+  <!-- ===== HERO ===== -->
+  <div class="vip-hero">
+    <span class="vip-hero__icon">👑</span>
+    <h1 class="vip-hero__title"><span>STRYX VIP</span> ГИШҮҮНЧЛЭЛ</h1>
+    <p class="vip-hero__sub">Институциональ түвшний AI хэрэгсэл + SMC сигнал — нэг дор</p>
+  </div>
+
+  <!-- ===== PRICING CARDS ===== -->
+  <div class="pricing-grid">
+
+    <!-- CARD 1: SNIPER PRO -->
+    <div class="price-card" id="cardPro">
+      <div class="price-card__icon">🥈</div>
+      <div class="price-card__name">SNIPER PRO (1 САР)</div>
+      <div class="price-card__price">89,000₮</div>
+      <div class="price-card__period">/ сар · Сард нэг удаа сэргээгдэнэ</div>
+      <ul class="price-card__features">
+        <li><span class="feat-icon">🤖</span><span><b>AI Chart Scanner</b> — Чарт зураг шинжилэх</span></li>
+        <li><span class="feat-icon">🔒</span><span><b>VIP XAUUSD Signals</b> — Өдөрт 2-3 сигнал</span></li>
+        <li><span class="feat-icon">🧠</span><span><b>AI Mentor</b> — SMC coach 24/7</span></li>
+        <li><span class="feat-icon">📚</span><span><b>Full SMC Academy</b> — Бүх хичээл</span></li>
+      </ul>
+      <button class="price-card__btn price-card__btn--pro" id="btnPro" data-plan="SNIPER PRO (1 САР)">СОНГОХ</button>
+    </div>
+
+    <!-- CARD 2: LIFETIME VIP -->
+    <div class="price-card price-card--featured" id="cardVip">
+      <div class="price-card__badge">🔥 ХАМГИЙН ЭРЭЛТТЭЙ</div>
+      <div class="price-card__icon">👑</div>
+      <div class="price-card__name price-card__name--gold">LIFETIME VIP (ХЯЗГААРГҮЙ)</div>
+      <div class="price-card__price">249,000₮</div>
+      <div class="price-card__period">/ нэг удаа · Бүх насан туршийн эрх</div>
+      <ul class="price-card__features">
+        <li><span class="feat-icon">🤖</span><span><b>AI Chart Scanner</b> — Хязгааргүй</span></li>
+        <li><span class="feat-icon">🔒</span><span><b>VIP XAUUSD Signals</b> — Хязгааргүй</span></li>
+        <li><span class="feat-icon">🧠</span><span><b>AI Mentor</b> — Хязгааргүй</span></li>
+        <li><span class="feat-icon">📚</span><span><b>Full SMC Academy</b> + Шинэ хичээл</span></li>
+        <li><span class="feat-icon">⚡</span><span><b>Priority Support</b> — Уурхайлсан дэмжлэг</span></li>
+        <li><span class="feat-icon">🎮</span><span><b>Simulator + Analyzer</b> — Бүх хэрэгсэл</span></li>
+      </ul>
+      <button class="price-card__btn price-card__btn--vip" id="btnVip" data-plan="LIFETIME VIP (ХЯЗГААРГҮЙ)">СОНГОХ</button>
+    </div>
+
+  </div>
+
+  <!-- ===== BANK TRANSFER & ACTIVATION ===== -->
+  <div class="section-title">🏦 ДАНСРУУ ШИЛЖҮҮЛЭХ &amp; ЭРХ ИДЭВХЖҮҮЛЭХ</div>
+
+  <div class="selected-plan-bar" id="selectedPlanBar">
+    <span>✅ СОНГОСОН ТӨЛӨВЛӨГӨӨ:</span>
+    <span id="selectedPlanName">—</span>
+  </div>
+
+  <div class="bank-card" id="bankSection">
+
+    <p class="bank-card__intro">
+      Доорх данс руу гүйлгээ хийсний дараа <b>төлбөрийн баримтаа</b> Telegram-н илгээж байна.
+      <b>24 цагийн дотор</b> таны эрх идэвхжүүлэгдэнэ.
+    </p>
+
+    <div class="bank-details">
+
+      <div class="bank-row">
+        <div class="bank-row__label">
+          <span class="bank-row__label-text">🏦 Банкны нэр</span>
+          <span class="bank-row__value">Хаан Банк / Khan Bank</span>
+        </div>
+      </div>
+
+      <div class="bank-row">
+        <div class="bank-row__label">
+          <span class="bank-row__label-text">💳 Дансны дугаар</span>
+          <span class="bank-row__value" id="accountNumber">5000000000</span>
+        </div>
+        <button class="copy-btn" id="copyBtn">📋 ДАНС ХУУЛАХ</button>
+      </div>
+
+      <div class="bank-row">
+        <div class="bank-row__label">
+          <span class="bank-row__label-text">👤 Дансны эзэмшигч</span>
+          <span class="bank-row__value">STRYX ZONE</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bank-note">
+      ⚠️ <b>Гүйлгээний утга:</b> Гүйлгээний утга дээр <b>бүртгэлтэй И-МЭЙЛ хаягаа</b> бичнэ үү. Жишээ нь: <b>"your@email.com — LIFETIME VIP"</b>. Ингэснээр таны эрх хурдан идэвхжих болно.
+    </div>
+
+    <a href="https://t.me/Stryx_golzonetrader" target="_blank" rel="noopener noreferrer" class="tg-btn">
+      <span class="tg-btn__icon">💬</span>
+      ТӨЛБӨРИЙН БАРИМТ ИЛГЭЭХ (@Stryx_golzonetrader)
+    </a>
+
+  </div>
+
+  <!-- ===== TRUST ROW ===== -->
+  <div class="trust-row">
+    <div class="trust-item"><span class="trust-icon">🔒</span> Аюулгүй төлбөр</div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> 24цаг идэвхжүүлэх</div>
+    <div class="trust-item"><span class="trust-icon">✅</span> Баталгаат үйлчилгээ</div>
+    <div class="trust-item"><span class="trust-icon">🤝</span> 500+ идэвхтэй гишүүн</div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  // ===== ELEMENTS =====
+  var btnPro           = document.getElementById('btnPro');
+  var btnVip           = document.getElementById('btnVip');
+  var copyBtn          = document.getElementById('copyBtn');
+  var accountNumber    = document.getElementById('accountNumber');
+  var bankSection      = document.getElementById('bankSection');
+  var selectedPlanBar  = document.getElementById('selectedPlanBar');
+  var selectedPlanName = document.getElementById('selectedPlanName');
+
+  var selectedPlan = null;
+
+  // ===== PLAN SELECTION =====
+  function selectPlan(planName, btnEl) {
+    selectedPlan = planName;
+    selectedPlanName.textContent = planName;
+    selectedPlanBar.classList.add('show');
+
+    // Reset all buttons
+    btnPro.classList.remove('selected');
+    btnVip.classList.remove('selected');
+    btnPro.textContent = 'СОНГОХ';
+    btnVip.textContent = 'СОНГОХ';
+
+    // Mark selected
+    btnEl.classList.add('selected');
+    btnEl.textContent = '✅ СОНГОГДСОН';
+
+    // Scroll to bank section
+    bankSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btnPro.addEventListener('click', function() {
+    selectPlan(this.getAttribute('data-plan'), this);
+  });
+
+  btnVip.addEventListener('click', function() {
+    selectPlan(this.getAttribute('data-plan'), this);
+  });
+
+  // ===== COPY ACCOUNT NUMBER =====
+  copyBtn.addEventListener('click', function() {
+    var num = accountNumber.textContent.trim();
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(num).then(function() {
+        showCopied();
+      }).catch(function() {
+        fallbackCopy(num);
+      });
+    } else {
+      fallbackCopy(num);
+    }
+  });
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showCopied();
+    } catch (e) {
+      showCopied();
+    }
+    document.body.removeChild(ta);
+  }
+
+  function showCopied() {
+    copyBtn.classList.add('copied');
+    copyBtn.textContent = '✅ Хуулагдлаа!';
+    setTimeout(function() {
+      copyBtn.classList.remove('copied');
+      copyBtn.textContent = '📋 ДАНС ХУУЛАХ';
+    }, 2500);
+  }
+
+})();
+</script>
+
+</body>
+
+</html>
