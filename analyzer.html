@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🤖 STRYX AI CHART & SMC SCANNER</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --obsidian:       #0B0E14;
+  --obsidian-2:     #11151F;
+  --obsidian-3:     #161B27;
+  --surface:        rgba(22, 27, 39, 0.72);
+  --surface-hover:  rgba(28, 34, 48, 0.82);
+  --border:         rgba(212, 175, 55, 0.14);
+  --border-strong:  rgba(212, 175, 55, 0.30);
+  --gold:           #D4AF37;
+  --gold-bright:    #F0CE6E;
+  --gold-dim:       #8E7423;
+  --gold-glow:      rgba(212, 175, 55, 0.18);
+  --text:           #E8ECF2;
+  --text-muted:     #8A93A6;
+  --text-dim:       #5C6478;
+  --green:          #22C55E;
+  --green-glow:     rgba(34, 197, 94, 0.15);
+  --red:            #EF4444;
+  --red-glow:       rgba(239, 68, 68, 0.15);
+  --radius:         16px;
+  --radius-sm:      10px;
+  --mono:           'JetBrains Mono', 'Courier New', monospace;
+  --sans:           'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--obsidian);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(212,175,55,0.04), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+}
+
+/* ===== HEADER ===== */
+.analyzer-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 28px;
+  background: rgba(11, 14, 20, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.analyzer-header__title {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--gold-glow);
+  transition: all 0.25s ease;
+}
+
+.back-link:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateX(-3px);
+}
+
+.analyzer-header__badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  background: var(--green-glow);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.analyzer-header__badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ===== CONTAINER ===== */
+.analyzer-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* ===== GLASS CARD ===== */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-strong);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+}
+
+.card-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+/* ===== DROPZONE ===== */
+.dropzone {
+  position: relative;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 50px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(11, 14, 20, 0.4);
+  overflow: hidden;
+}
+
+.dropzone:hover {
+  border-color: var(--gold);
+  background: rgba(11, 14, 20, 0.6);
+  box-shadow: inset 0 0 30px var(--gold-glow);
+}
+
+.dropzone.dragover {
+  border-color: var(--gold-bright);
+  background: var(--gold-glow);
+  box-shadow: inset 0 0 40px var(--gold-glow);
+}
+
+.dropzone__icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  filter: grayscale(0.2);
+}
+
+.dropzone__text {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.dropzone__sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.dropzone__preview {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+}
+
+.dropzone__preview img {
+  width: 100%;
+  display: block;
+  max-height: 360px;
+  object-fit: contain;
+  background: var(--obsidian-2);
+}
+
+/* ===== SCAN OVERLAY ===== */
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 14, 20, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.scan-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.scan-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold-bright), var(--gold), var(--gold-bright), transparent);
+  box-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold-glow);
+  top: 0;
+  animation: scan-sweep 2s ease-in-out;
+}
+
+@keyframes scan-sweep {
+  0%   { top: 0%; }
+  50%  { top: 100%; }
+  100% { top: 0%; }
+}
+
+.scan-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: scan-grid-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes scan-grid-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.scan-text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--gold-bright);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px var(--gold-glow);
+  z-index: 6;
+  text-align: center;
+}
+
+.scan-text .scan-percent {
+  display: block;
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 8px;
+  color: var(--gold);
+}
+
+/* ===== CONTROLS ===== */
+.controls-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.control-group {
+  text-align: left;
+}
+
+.control-group__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.pill-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--mono);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+
+.pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.pill.active {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: var(--gold-glow);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* ===== SCAN BUTTON ===== */
+.scan-btn {
+  width: 100%;
+  margin-top: 28px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--obsidian);
+  border: none;
+  padding: 16px 28px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 15px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-btn:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 0 28px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.scan-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.scan-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.scan-btn:hover::after {
+  left: 100%;
+}
+
+/* ===== RESULTS ===== */
+.result-card {
+  display: none;
+  animation: result-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.result-card.show {
+  display: block;
+}
+
+@keyframes result-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+/* Market Structure */
+.market-structure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.structure-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--border);
+  background: rgba(11,14,20,0.5);
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.structure-tag.bullish {
+  border-color: rgba(34, 197, 94, 0.35);
+  color: var(--green);
+  background: var(--green-glow);
+}
+
+.structure-tag.bearish {
+  border-color: rgba(239, 68, 68, 0.35);
+  color: var(--red);
+  background: var(--red-glow);
+}
+
+/* Signal Badge */
+.signal-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.signal-badge.buy {
+  background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(34,197,94,0.04));
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: var(--green);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.1);
+}
+
+.signal-badge.sell {
+  background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.04));
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: var(--red);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
+}
+
+.signal-badge__confidence {
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: rgba(11,14,20,0.5);
+  border: 1px solid currentColor;
+  letter-spacing: 0.5px;
+}
+
+/* Trade Plan Grid */
+.trade-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.tp-box {
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tp-box:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.tp-box__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.tp-box__value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 12px var(--gold-glow);
+  line-height: 1.1;
+}
+
+.tp-box.tp-sell .tp-box__value {
+  color: var(--red);
+  text-shadow: 0 0 12px var(--red-glow);
+}
+
+.tp-box.tp-buy .tp-box__value {
+  color: var(--green);
+  text-shadow: 0 0 12px var(--green-glow);
+}
+
+.tp-box.tp-rr .tp-box__value {
+  color: var(--gold);
+}
+
+/* SMC Checklist */
+.smc-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.smc-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+}
+
+.smc-check-item:hover {
+  border-color: var(--border-strong);
+}
+
+.smc-check-item__icon {
+  font-size: 18px;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.smc-check-item__body {
+  flex: 1;
+}
+
+.smc-check-item__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.smc-check-item__desc {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.smc-check-item__tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  color: var(--green);
+  background: var(--green-glow);
+  border: 1px solid rgba(34,197,94,0.3);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .analyzer-header {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+  }
+
+  .analyzer-header__title {
+    font-size: 15px;
+    order: 2;
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .analyzer-container {
+    padding: 28px 16px 48px;
+  }
+
+  .glass-card {
+    padding: 20px 16px;
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .trade-plan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dropzone {
+    padding: 36px 16px;
+  }
+
+  .dropzone__icon {
+    font-size: 36px;
+  }
+
+  .signal-badge {
+    font-size: 16px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tp-box__value {
+    font-size: 18px;
+  }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::selection { background: var(--gold-glow); color: var(--gold-bright); }
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="analyzer-header">
+  <a href="dashboard.html" class="back-link">← DASHBOARD</a>
+  <div class="analyzer-header__title">🤖 STRYX AI CHART &amp; SMC SCANNER</div>
+  <div class="analyzer-header__badge">
+    <span class="dot"></span>
+    AI ONLINE
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="analyzer-container">
+
+  <!-- ===== UPLOAD CARD ===== -->
+  <div class="glass-card">
+
+    <div class="card-label">📊 ЧАРТ ЗУРАГ БАЙРШУУЛАХ</div>
+
+    <div class="dropzone" id="dropzone">
+      <div class="dropzone__content" id="dropzoneContent">
+        <span class="dropzone__icon">🖼️</span>
+        <div class="dropzone__text">Чарт зургаа энд байршуулна уу</div>
+        <div class="dropzone__sub">Drag &amp; Drop эсвэл Click — TradingView / MT5 (XAUUSD, BTC, Forex)</div>
+      </div>
+      <div class="dropzone__preview" id="dropzonePreview" style="display:none;">
+        <img id="previewImg" src="" alt="Chart preview">
+        <div class="scan-overlay" id="scanOverlay">
+          <div class="scan-grid"></div>
+          <div class="scan-laser" id="scanLaser"></div>
+          <div class="scan-text">
+            ⚡ AI ШИНЖИЛГЭЭ ХИЙЖ БАЙНА...
+            <span class="scan-percent" id="scanPercent">0%</span>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-row">
+
+      <div class="control-group">
+        <span class="control-group__label">⏱ TIMEFRAME</span>
+        <div class="pill-group" id="timeframeGroup">
+          <button class="pill" data-tf="M5">M5</button>
+          <button class="pill active" data-tf="M15">M15</button>
+          <button class="pill" data-tf="H1">H1</button>
+          <button class="pill" data-tf="H4">H4</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-group__label">🌍 SESSION</span>
+        <div class="pill-group" id="sessionGroup">
+          <button class="pill" data-session="asian">Asian</button>
+          <button class="pill active" data-session="london">London KZ</button>
+          <button class="pill" data-session="ny">New York KZ</button>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="scan-btn" id="scanBtn" disabled>⚡ AI ШИНЖИЛГЭЭ ЭХЛҮҮЛЭХ</button>
+
+  </div>
+
+  <!-- ===== RESULT CARD ===== -->
+  <div class="glass-card result-card" id="resultCard">
+
+    <div class="card-label">🤖 SMC AI ANALYSIS RESULT</div>
+
+    <!-- Market Structure -->
+    <div class="result-section-title">MARKET STRUCTURE</div>
+    <div class="market-structure" id="marketStructure"></div>
+
+    <!-- Signal Badge -->
+    <div id="signalBadgeWrap"></div>
+
+    <!-- Trade Plan -->
+    <div class="result-section-title">TRADE PLAN</div>
+    <div class="trade-plan-grid" id="tradePlanGrid"></div>
+
+    <!-- SMC Checklist -->
+    <div class="result-section-title">SMC CHECKLIST — МОНГОЛ ТАЙЛБАР</div>
+    <div class="smc-checklist" id="smcChecklist"></div>
+
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  // ===== ELEMENTS =====
+  var dropzone       = document.getElementById('dropzone');
+  var dropzoneContent= document.getElementById('dropzoneContent');
+  var dropzonePreview= document.getElementById('dropzonePreview');
+  var previewImg     = document.getElementById('previewImg');
+  var fileInput      = document.getElementById('fileInput');
+  var scanBtn        = document.getElementById('scanBtn');
+  var scanOverlay    = document.getElementById('scanOverlay');
+  var scanLaser      = document.getElementById('scanLaser');
+  var scanPercent    = document.getElementById('scanPercent');
+  var resultCard     = document.getElementById('resultCard');
+  var tfGroup        = document.getElementById('timeframeGroup');
+  var sessionGroup   = document.getElementById('sessionGroup');
+
+  var selectedTF = 'M15';
+  var selectedSession = 'london';
+  var hasImage = false;
+
+  // ===== DROPZONE EVENTS =====
+  dropzone.addEventListener('click', function() {
+    if (!hasImage) fileInput.click();
+  });
+
+  dropzone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+
+  dropzone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+  });
+
+  dropzone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    var file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleFile(file);
+    }
+  });
+
+  fileInput.addEventListener('change', function() {
+    var file = fileInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleFile(file);
+    }
+  });
+
+  function handleFile(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      dropzoneContent.style.display = 'none';
+      dropzonePreview.style.display = 'block';
+      hasImage = true;
+      scanBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ===== PILL SELECTORS =====
+  tfGroup.addEventListener('click', function(e) {
+    var btn = e.target.closest('.pill');
+    if (!btn) return;
+    tfGroup.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    selectedTF = btn.getAttribute('data-tf');
+  });
+
+  sessionGroup.addEventListener('click', function(e) {
+    var btn = e.target.closest('.pill');
+    if (!btn) return;
+    sessionGroup.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    selectedSession = btn.getAttribute('data-session');
+  });
+
+  // ===== SCAN =====
+  scanBtn.addEventListener('click', function() {
+    if (!hasImage) return;
+    scanBtn.disabled = true;
+    scanOverlay.classList.add('active');
+
+    // Reset laser animation
+    scanLaser.style.animation = 'none';
+    void scanLaser.offsetHeight;
+    scanLaser.style.animation = 'scan-sweep 2s ease-in-out';
+
+    // Animate percentage
+    var pct = 0;
+    var pctInterval = setInterval(function() {
+      pct += Math.random() * 12;
+      if (pct >= 100) pct = 100;
+      scanPercent.textContent = Math.floor(pct) + '%';
+      if (pct >= 100) clearInterval(pctInterval);
+    }, 150);
+
+    setTimeout(function() {
+      scanOverlay.classList.remove('active');
+      scanBtn.disabled = false;
+      generateResult();
+    }, 2000);
+  });
+
+  // ===== ANALYSIS GENERATION =====
+  function generateResult() {
+
+    var isBuy = Math.random() > 0.4;
+    var confidence = (85 + Math.random() * 12).toFixed(1);
+    var basePrice = 2300 + Math.random() * 80;
+    var entry = basePrice.toFixed(1);
+    var sl, tp1, tp2;
+
+    if (isBuy) {
+      sl = (basePrice - 8 - Math.random() * 6).toFixed(1);
+      tp1 = (basePrice + 16 + Math.random() * 10).toFixed(1);
+      tp2 = (basePrice + 32 + Math.random() * 16).toFixed(1);
+    } else {
+      sl = (basePrice + 8 + Math.random() * 6).toFixed(1);
+      tp1 = (basePrice - 16 - Math.random() * 10).toFixed(1);
+      tp2 = (basePrice - 32 - Math.random() * 16).toFixed(1);
+    }
+
+    var risk = Math.abs(basePrice - parseFloat(sl));
+    var reward = Math.abs(parseFloat(tp2) - basePrice);
+    var rr = (reward / risk).toFixed(1);
+
+    // Market Structure
+    var structureHTML = '';
+    if (isBuy) {
+      structureHTML =
+        '<span class="structure-tag bullish">📈 Bullish BOS</span>' +
+        '<span class="structure-tag bullish">💧 Liquidity Sweep</span>' +
+        '<span class="structure-tag bullish">🟦 Bullish Order Block</span>' +
+        '<span class="structure-tag">⚡ ' + selectedTF + ' Structure</span>';
+    } else {
+      structureHTML =
+        '<span class="structure-tag bearish">📉 Bearish BOS</span>' +
+        '<span class="structure-tag bearish">💧 Liquidity Sweep</span>' +
+        '<span class="structure-tag bearish">🟥 Bearish Order Block</span>' +
+        '<span class="structure-tag">⚡ ' + selectedTF + ' Structure</span>';
+    }
+    document.getElementById('marketStructure').innerHTML = structureHTML;
+
+    // Signal Badge
+    var signalClass = isBuy ? 'buy' : 'sell';
+    var signalText  = isBuy ? '🟢 STRONG BUY SETUP' : '🔴 STRONG SELL SETUP';
+    document.getElementById('signalBadgeWrap').innerHTML =
+      '<div class="signal-badge ' + signalClass + '">' +
+        '<span>' + signalText + '</span>' +
+        '<span class="signal-badge__confidence">Confidence: ' + confidence + '%</span>' +
+      '</div>';
+
+    // Trade Plan
+    var tpBuyClass = isBuy ? 'tp-buy' : 'tp-sell';
+    document.getElementById('tradePlanGrid').innerHTML =
+      '<div class="tp-box ' + tpBuyClass + '">' +
+        '<div class="tp-box__label">🎯 Entry Zone</div>' +
+        '<div class="tp-box__value">' + entry + '</div>' +
+      '</div>' +
+      '<div class="tp-box tp-sell">' +
+        '<div class="tp-box__label">🛑 Stop Loss (SL)</div>' +
+        '<div class="tp-box__value">' + sl + '</div>' +
+      '</div>' +
+      '<div class="tp-box tp-buy">' +
+        '<div class="tp-box__label">✅ Take Profit 1 (TP1)</div>' +
+        '<div class="tp-box__value">' + tp1 + '</div>' +
+      '</div>' +
+      '<div class="tp-box tp-buy">' +
+        '<div class="tp-box__label">✅ Take Profit 2 (TP2)</div>' +
+        '<div class="tp-box__value">' + tp2 + '</div>' +
+      '</div>' +
+      '<div class="tp-box tp-rr" style="grid-column:1/-1;">' +
+        '<div class="tp-box__label">⚖️ RISK : REWARD RATIO</div>' +
+        '<div class="tp-box__value">1 : ' + rr + '</div>' +
+      '</div>';
+
+    // SMC Checklist
+    var sessionLabel = selectedSession === 'london' ? 'London Killzone' :
+                       selectedSession === 'ny' ? 'New York Killzone' : 'Asian Session';
+
+    document.getElementById('smcChecklist').innerHTML =
+      '<div class="smc-check-item">' +
+        '<span class="smc-check-item__icon">💧</span>' +
+        '<div class="smc-check-item__body">' +
+          '<div class="smc-check-item__title">Liquidity Sweep — Батлагдсан</div>' +
+          '<div class="smc-check-item__desc">Хууран мэхэлэлт амжилттай болсон. Өмнөх liquidity-г sweep хийсэн.</div>' +
+        '</div>' +
+        '<span class="smc-check-item__tag">CONFIRMED</span>' +
+      '</div>' +
+      '<div class="smc-check-item">' +
+        '<span class="smc-check-item__icon">🟦</span>' +
+        '<div class="smc-check-item__body">' +
+          '<div class="smc-check-item__title">Fresh Order Block Retest</div>' +
+          '<div class="smc-check-item__desc">Шинэ order block- дахин тестлээ. Үнэ OB дотор буцаж орсон.</div>' +
+        '</div>' +
+        '<span class="smc-check-item__tag">CONFIRMED</span>' +
+      '</div>' +
+      '<div class="smc-check-item">' +
+        '<span class="smc-check-item__icon">⚡</span>' +
+        '<div class="smc-check-item__body">' +
+          '<div class="smc-check-item__title">FVG Imbalance — Fair Value Gap</div>' +
+          '<div class="smc-check-item__desc">Тэнцвэргүй бүс (imbalance) илэрсэн. Үнэ хурдан дүүргэх магадлалтай.</div>' +
+        '</div>' +
+        '<span class="smc-check-item__tag">CONFIRMED</span>' +
+      '</div>' +
+      '<div class="smc-check-item">' +
+        '<span class="smc-check-item__icon">🕐</span>' +
+        '<div class="smc-check-item__body">' +
+          '<div class="smc-check-item__title">Session Timing — ' + sessionLabel + '</div>' +
+          '<div class="smc-check-item__desc">' + selectedTF + ' timeframe, ' + sessionLabel + ' цагт хийгдсэн шинжилгээ.</div>' +
+        '</div>' +
+        '<span class="smc-check-item__tag">ACTIVE</span>' +
+      '</div>';
+
+    resultCard.classList.add('show');
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+})();
+</script>
+
+</body>
+
+</html>
