@@ -549,8 +549,14 @@ body::after {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  function fallbackReply(q) {
-    const s = q.toLowerCase();
+    function fallbackReply(q) {
+    const s = q.toLowerCase().trim();
+    if (/^(сайн|hi|hello|менд|мэнд|өглөө|орой)/.test(s)) {
+      return `👋 Сайн байна уу! Би **STRYX AI MENTOR** байна. Өнөөдөр алтны ханш **$${liveGold.toFixed(2)}** байна. Танд SMC, XAUUSD эсвэл эрсдэлийн талаар юугаар туслах вэ?`;
+    }
+    if (s.includes("хэн") || s.includes("нэр") || s.includes("чи юу")) {
+      return `🤖 Намайг **STRYX AI MENTOR** гэдэг! Би **STRYX ZONE GOLD SNIPER** платформын албан ёсны хиймэл оюун ухаант арилжааны багш байна.`;
+    }
     if (s.includes("fvg") || s.includes("fair value") || s.includes("imbalance")) {
       return `⚡ **FVG (Fair Value Gap):** 3 дараалсан лааны 1 ба 3-р лааны сүүдэр шүргэлцэлгүй үлдсэн хоосон зай. Зах зээл тэр зайг нөхөхөөр буцаж ирдэг.`;
     }
@@ -566,23 +572,22 @@ body::after {
     if (s.includes("lot") || s.includes("эрсдэл") || s.includes("данс")) {
       return `💰 **Эрсдэлийн дүрэм:** Нэг арилжаанд дансны **1%-иас илүү** эрсдэл бүү гарга ($500 дансанд 0.01–0.02 Lot).`;
     }
-    return `🥇 **STRYX AI MENTOR (XAUUSD: $${liveGold.toFixed(2)}):**\n\nЗах зээл дээр эхлээд H1 чиглэлээ тодорхойлоод, Liquidity Sweep + Fresh Order Block баталгаажуулалт хүлээгээрэй!`;
+    return `🥇 **STRYX AI MENTOR (XAUUSD: $${liveGold.toFixed(2)}):**\n\n"${q}" асуултын хувьд: Зах зээл дээр эхлээд H1 чиглэлээ тодорхойлоод, Liquidity Sweep + Fresh Order Block баталгаажуулалт хүлээгээрэй!`;
   }
 
   async function askUnlimitedFreeAI(userQuestion) {
     try {
-      const sysPrompt = `ЧИНИЙ НЭР БОЛ ЗӨВХӨН "STRYX AI MENTOR". Хэзээ ч өөрийгөө ChatGPT эсвэл OpenAI гэж битгий хэл! Чи бол Монголын хамгийн шилдэг арилжааны платформ болох STRYX ZONE GOLD SNIPER (goldsniper.xyz)-ийн албан ёсны хиймэл оюун ухаант арилжааны багш юм. Одоогийн XAUUSD (Алт) бодит ханш $${liveGold.toFixed(2)} байна. Хэрэглэгчийн асуултад зөвхөн цэвэр МОНГОЛ хэлээр, SMC ба эрсдэлийн удирдлагын үүднээс товч, ойлгомжтой зөвлөгөө өг.`;
+      const prompt = `Чиний нэр STRYX AI MENTOR (ChatGPT биш). XAUUSD үнэ $${liveGold.toFixed(2)}. Монголоор товч, найрсаг хариул: ${userQuestion}`;
       const host = "https://" + "text." + "pollinations.ai" + "/";
-      const fullUrl = host + encodeURIComponent(sysPrompt + "\n\nАсуулт: " + userQuestion);
-
-      const res = await fetch(fullUrl);
+      const res = await fetch(host + encodeURIComponent(prompt));
       if (res.ok) {
         const aiText = await res.text();
-        if (aiText && aiText.trim().length > 5) return aiText.trim();
+        if (aiText && aiText.trim().length > 2) return aiText.trim();
       }
     } catch (e) {}
     return fallbackReply(userQuestion);
   }
+
 
   async function handleSend(customText) {
     const q = (customText || input.value).trim();
