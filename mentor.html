@@ -515,7 +515,6 @@ body::after {
 (function() {
   let liveGold = 3646.60;
 
-  // 1. Одоогийн бодит алтны ханшийг gold-api.com-оос татна
   async function syncGoldPrice() {
     try {
       const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
@@ -534,7 +533,6 @@ body::after {
   syncGoldPrice();
   setInterval(syncGoldPrice, 15000);
 
-  // 2. Чатын талбаруудыг автоматаар олно
   const input = document.querySelector("input[type='text'], textarea");
   const sendBtn = document.querySelector("button[type='submit'], #sendBtn, .send-btn") || Array.from(document.querySelectorAll("button")).pop();
   const chatBox = document.querySelector(".chat-messages, .messages, #chatMessages, #messages") || input?.parentElement?.previousElementSibling;
@@ -551,72 +549,56 @@ body::after {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-    function generateSmartReply(q) {
-    const s = q.toLowerCase().trim();
-
-    // 1. Мэндчилгээ
-    if (/^(сайн|сайн уу|юу байна|hi|hello|менд|мэнд|өглөө|орой)/.test(s)) {
-      return `👋 Сайн байна уу! Би **STRYX AI MENTOR** байна.\n\nОдоо алтны ханш **$${liveGold.toFixed(2)}** дээр арилжаалагдаж байна. Та **XAUUSD шинжилгээ, SMC, FVG, Order Block, Эрсдэлийн удирдлага** эсвэл **Сэтгэл зүйн** талаар хүссэн асуултаа чөлөөтэй бичээрэй!`;
+  function fallbackReply(q) {
+    const s = q.toLowerCase();
+    if (s.includes("fvg") || s.includes("fair value") || s.includes("imbalance")) {
+      return `⚡ **FVG (Fair Value Gap):** 3 дараалсан лааны 1 ба 3-р лааны сүүдэр шүргэлцэлгүй үлдсэн хоосон зай. Зах зээл тэр зайг нөхөхөөр буцаж ирдэг.`;
     }
-
-    // 2. FVG / Fair Value Gap / Imbalance
-    if (s.includes("fvg") || s.includes("fair value") || s.includes("imbalance") || s.includes("хоосон зай")) {
-      return `⚡ **FVG (Fair Value Gap / Imbalance) гэж юу вэ?**\n\n• 3 дараалсан лааны 1-р лааны сүүдэр ба 3-р лааны сүүдэр хоорондоо шүргэлцэлгүй үлдсэн **хоосон орон зайг** хэлнэ.\n• Институцүүд их хэмжээний захиалга оруулахад үнэ огцом хөдөлж FVG үүсгэдэг бөгөөд зах зээл дараа нь тэр зайг нөхөхөөр (Rebalance) буцаж ирдэг.`;
+    if (s.includes("order block") || s.includes("ob")) {
+      return `📦 **Valid Order Block:** Өмнөх High/Low-ийн Liquidity-г түүж, хүчтэй импульс лаагаар BOS хийсэн цэгийн сүүлийн эсрэг өнгийн лаа.`;
     }
-
-    // 3. BOS ба CHoCH ялгаа
-    if (s.includes("bos") || s.includes("choch") || s.includes("бүтэц") || s.includes("structure")) {
-      return `📊 **BOS болон CHoCH-ийн ялгаа:**\n\n• **BOS (Break of Structure):** Үндсэн трендийн чиглэлд өмнөх орой/ёроолыг сэтэлж тренд үргэлжилж байгааг батална.\n• **CHoCH (Change of Character):** Тренд эргэж байгаагийн хамгийн эхний дохио (жишээ нь өсөж байсан зах зээл сүүлийн Higher Low-ийг доош сэтлэх).`;
+    if (s.includes("sl") || s.includes("алда") || s.includes("шунал") || s.includes("сэтгэл")) {
+      return `🛡️ **Сэтгэл зүйн дүрэм:** 2 дараалан SL цохиулбал дэлгэцээ хааж амар. Уураар арилжаанд орох нь данс шатаах гол шалтгаан болдог.`;
     }
-
-    // 4. Liquidity / Стоп түүх
-    if (s.includes("liquidity") || s.includes("ликвид") || s.includes("стоп") || s.includes("sweep") || s.includes("хуурамч")) {
-      return `💧 **Liquidity Sweep (Стоп түүх хөдөлгөөн):**\n\n• Том банкууд захиалгаа дүүргэхийн тулд жижиг трейдерүүдийн Stop Loss бөөгнөрсөн **Equal Highs / Equal Lows** цэгүүдийг зориудаар сэтэлж түүгээд эсрэг зүгт огцом эргэдэг.\n• Тиймээс сэтэлмэгц шууд битгий ор — буцаад хүрээ рүүгээ орж ирэхийг (Rejection) хүлээ!`;
+    if (s.includes("killzone") || s.includes("цаг")) {
+      return `⏰ **УБ-ын цагаар Killzone:** Лондон **16:00–18:00**, Нью-Йорк **21:00–23:00** цагт оргил хөдөлгөөн гарна.`;
     }
-
-    // 5. Мэдээ / News
-    if (s.includes("мэдээ") || s.includes("news") || s.includes("cpi") || s.includes("nfp") || s.includes("fomc")) {
-      return `📰 **Эдийн засгийн мэдээний үеийн алтан дүрэм:**\n\n• **CPI, NFP, FOMC** зэрэг улаан мэдээ гарахаас **15 минутын өмнө** шинэ арилжаанд орохгүй байх.\n• Мэдээний эхний огцом савлагаа (Spike) дуусаж, чиглэл тодорхой болсны дараа л SMC бүтцээр орох нь хамгийн аюулгүй.`;
+    if (s.includes("lot") || s.includes("эрсдэл") || s.includes("данс")) {
+      return `💰 **Эрсдэлийн дүрэм:** Нэг арилжаанд дансны **1%-иас илүү** эрсдэл бүү гарга ($500 дансанд 0.01–0.02 Lot).`;
     }
-
-    // 6. Алтны ханш / XAUUSD
-    if (s.includes("xau") || s.includes("алт") || s.includes("ханш") || s.includes("buy") || s.includes("sell") || s.includes("чиглэл")) {
-      return `🥇 **Одоогийн XAUUSD амьд ханш: $${liveGold.toFixed(2)}**\n\n• **Орох дараалал:** Эхлээд H1 дээр чиглэлээ хар → M15 дээр Liquidity Sweep хүлээ → M5 дээр CHoCH баталгаажмагц Order Block дээрээс ор.\n• **Санамж:** Нэг арилжаанд дансны 1%-иас илүү эрсдэл бүү гарга!`;
-    }
-
-    // 7. Алдагдал / SL / Сэтгэл зүй / Шунал
-    if (s.includes("sl") || s.includes("алда") || s.includes("айдас") || s.includes("цохиул") || s.includes("шунал") || s.includes("сэтгэл")) {
-      return `🛡️ **Сэтгэл зүй ба Алдагдлыг удирдах дүрэм:**\n\n1. **2 дараалан SL цохиулбал:** Тэр өдрийн арилжаагаа шууд зогсоож дэлгэцээс холд.\n2. **Шуналаа дар:** TP1 хүрмэгц ашгийнхаа 50%-ийг хаагаад, үлдсэн дээр нь SL-ээ орох цэг (Breakeven) дээр тавь.\n3. Арилжаа бол спринт биш, урт хугацааны марафон юм.`;
-    }
-
-    // 8. Order Block
-    if (s.includes("order block") || s.includes("ob") || s.includes("таних")) {
-      return `📦 **Valid Order Block таних 3 алхам:**\n\n1. Өмнөх High/Low-ийн **Liquidity-г түүсэн** байх.\n2. Тэр цэгээс хүчтэй импульс лаа гарч **BOS хийсэн** байх.\n3. Хажууд нь **FVG (Imbalance)** үүссэн байвал 80%+ магадлалтай бүс болно.`;
-    }
-
-    // 9. Killzone / Цаг
-    if (s.includes("killzone") || s.includes("цаг") || s.includes("хэдээс") || s.includes("хэзээ")) {
-      return `⏰ **Улаанбаатарын цагаар (ULAT) Арилжааны Оргил Цагууд:**\n\n• **🇬🇧 London Killzone:** 16:00 – 18:00 цаг\n• **🇺🇸 New York Killzone:** 21:00 – 23:00 цаг\n• Өглөө болон үдээс өмнө зах зээл ихэвчлэн нарийн хүрээнд (Range) хэлбэлздэг тул хүлээцтэй байгаарай.`;
-    }
-
-    // 10. Lot / Данс / Мөнгө / Ашиг
-    if (s.includes("lot") || s.includes("эрсдэл") || s.includes("данс") || s.includes("мөнгө") || s.includes("хэдэн")) {
-      return `💰 **Мөнгөний менежментийн алтан томьёо:**\n\n• **$100 – $300 данс:** Зөвхөн **0.01 Lot** (1%–2% эрсдэл).\n• **$500 – $1,000 данс:** **0.01 – 0.03 Lot** (SL-ийн зайнаас хамаарна).\n• Том Lot-оор нэг өдөр баяжих гэж яарах нь данс шатаах цорын ганц шалтгаан болдог.`;
-    }
-
-    // 11. Ухаалаг ерөнхий хариу (Хэрэглэгчийн бичсэн үгийг давтаж ойлгосноо харуулна)
-    return `🤖 **"${q}"** гэсэн асуултын хувьд **STRYX AI MENTOR** зөвлөж байна:\n\n• Одоогийн **XAUUSD ($${liveGold.toFixed(2)})** зах зээл дээр хамгийн чухал нь **H1 трендийн дагуу + Liquidity Sweep + Order Block** гэсэн 3 давхар баталгаажуулалт юм.\n• Та илүү нарийвчилсан зөвлөгөө авахыг хүсвэл **FVG, BOS, CHoCH, Liquidity, News, Lot, Killzone** зэрэг сэдвүүдээс асуугаарай!`;
+    return `🥇 **STRYX AI MENTOR (XAUUSD: $${liveGold.toFixed(2)}):**\n\nЗах зээл дээр эхлээд H1 чиглэлээ тодорхойлоод, Liquidity Sweep + Fresh Order Block баталгаажуулалт хүлээгээрэй!`;
   }
 
-  function handleSend(customText) {
+  async function askUnlimitedFreeAI(userQuestion) {
+    try {
+      const sysPrompt = `Чи бол STRYX ZONE GOLD SNIPER платформын мэргэжлийн арилжааны багш юм. Одоогийн XAUUSD (Алт) бодит ханш $${liveGold.toFixed(2)} байна. Хэрэглэгчийн асуултад зөвхөн цэвэр МОНГОЛ хэлээр, SMC ба эрсдэлийн удирдлагын үүднээс товч, ойлгомжтой зөвлөгөө өг.`;
+      const host = "https://" + "text." + "pollinations.ai" + "/";
+      const fullUrl = host + encodeURIComponent(sysPrompt + "\n\nАсуулт: " + userQuestion);
+
+      const res = await fetch(fullUrl);
+      if (res.ok) {
+        const aiText = await res.text();
+        if (aiText && aiText.trim().length > 5) return aiText.trim();
+      }
+    } catch (e) {}
+    return fallbackReply(userQuestion);
+  }
+
+  async function handleSend(customText) {
     const q = (customText || input.value).trim();
     if (!q) return;
     if (!customText) input.value = "";
     appendBubble(q, true);
 
-    setTimeout(() => {
-      appendBubble(generateSmartReply(q), false);
-    }, 550);
+    const thinkingEl = document.createElement("div");
+    thinkingEl.style.cssText = "align-self:flex-start; background:rgba(22,27,39,0.7); border:1px dashed rgba(212,175,55,0.4); color:#F0CE6E; padding:10px 16px; border-radius:14px; margin:8px 0; font-size:13px; font-family:monospace;";
+    thinkingEl.textContent = "🧠 STRYX AI бодож байна...";
+    chatBox.appendChild(thinkingEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const reply = await askUnlimitedFreeAI(q);
+    thinkingEl.remove();
+    appendBubble(reply, false);
   }
 
   if (sendBtn) sendBtn.addEventListener("click", (e) => { e.preventDefault(); handleSend(); });
@@ -630,4 +612,5 @@ body::after {
 
 </body>
 </html>
+
 
