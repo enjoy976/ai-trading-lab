@@ -107,53 +107,33 @@ function updateCoinUI(id, newPrice, pct) {
   if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
 }
 
-async function fetchLiveCoins() {
+async function fetchCryptoCompare() {
   try {
-    // 1. OKX биржээс татна (.at(0) ашигласан тул алдаа гарахгүй)
-    const u = "https://okx.com";
-    const [b, e, s] = await Promise.all([
-      fetch(u + "BTC-USDT").then(r => r.json()),
-      fetch(u + "ETH-USDT").then(r => r.json()),
-      fetch(u + "SOL-USDT").then(r => r.json())
-    ]);
+    const res = await fetch("https://cryptocompare.com");
+    const json = await res.json();
+    const raw = json.RAW;
 
-    const items = [
-      { id: "btc", obj: b.data.at(0) },
-      { id: "eth", obj: e.data.at(0) },
-      { id: "sol", obj: s.data.at(0) }
-    ];
+    updateCoinUI("btc", raw.BTC.USD.PRICE, raw.BTC.USD.CHANGEPCT24HOUR);
+    updateCoinUI("eth", raw.ETH.USD.PRICE, raw.ETH.USD.CHANGEPCT24HOUR);
+    updateCoinUI("sol", raw.SOL.USD.PRICE, raw.SOL.USD.CHANGEPCT24HOUR);
 
-    let total = 0;
-    items.forEach(x => {
-      const last = parseFloat(x.obj.last);
-      const open = parseFloat(x.obj.open24h);
-      const pct = ((last - open) / open) * 100;
-      total += pct;
-      updateCoinUI(x.id, last, pct);
-    });
-
-    const avg = total / 3;
+    const avg = (raw.BTC.USD.CHANGEPCT24HOUR + raw.ETH.USD.CHANGEPCT24HOUR + raw.SOL.USD.CHANGEPCT24HOUR) / 3;
     const mEl = document.getElementById("market");
     if (mEl) {
       if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
       else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
       else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
     }
-  } catch (err) {
-    // 2. Нөөц: Таны анхны ажиллаж байсан CoinGecko API
-    try {
-      const cg = await fetch("https://coingecko.com").then(r => r.json());
-      updateCoinUI("btc", cg.bitcoin.usd, cg.bitcoin.usd_24h_change);
-      updateCoinUI("eth", cg.ethereum.usd, cg.ethereum.usd_24h_change);
-      updateCoinUI("sol", cg.solana.usd, cg.solana.usd_24h_change);
-    } catch (e2) {}
+  } catch (e) {
+    console.log("Retrying...");
   }
 }
 
-fetchLiveCoins();
-setInterval(fetchLiveCoins, 3000);
+fetchCryptoCompare();
+setInterval(fetchCryptoCompare, 2000);
 </script>
 
 </body>
 </html>
+
 
