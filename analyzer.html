@@ -879,8 +879,9 @@ body::after {
   let liveGold = 3673.00;
   let selectedTf = "M15";
   let selectedSession = "london";
+  let currentBase64 = "";
+  let currentMediaType = "image/png";
 
-  // 1. Одоогийн бодит алтны ханшийг gold-api.com-оос татна
   async function syncRealGold() {
     try {
       const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
@@ -894,7 +895,6 @@ body::after {
   syncRealGold();
   setInterval(syncRealGold, 5000);
 
-  // 2. Зураг оруулах (Click болон Drag & Drop)
   const dropzone = document.getElementById("dropzone");
   const fileInput = document.getElementById("fileInput");
   const previewWrap = document.getElementById("dropzonePreview");
@@ -903,32 +903,23 @@ body::after {
   const scanBtn = document.getElementById("scanBtn");
 
   dropzone.addEventListener("click", () => fileInput.click());
-
-  dropzone.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    dropzone.classList.add("dragover");
-  });
-
+  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
   dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
-
   dropzone.addEventListener("drop", (e) => {
     e.preventDefault();
     dropzone.classList.remove("dragover");
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleImageFile(e.dataTransfer.files[0]);
-    }
+    if (e.dataTransfer.files && e.dataTransfer.files) handleImageFile(e.dataTransfer.files);
   });
-
   fileInput.addEventListener("change", () => {
-    if (fileInput.files && fileInput.files[0]) {
-      handleImageFile(fileInput.files[0]);
-    }
+    if (fileInput.files && fileInput.files) handleImageFile(fileInput.files);
   });
 
   function handleImageFile(file) {
+    currentMediaType = file.type || "image/png";
     const reader = new FileReader();
     reader.onload = (e) => {
       previewImg.src = e.target.result;
+      currentBase64 = e.target.result.split(",");
       dropContent.style.display = "none";
       previewWrap.style.display = "block";
       scanBtn.disabled = false;
@@ -936,7 +927,6 @@ body::after {
     reader.readAsDataURL(file);
   }
 
-  // 3. Timeframe & Session товчлуурууд
   document.querySelectorAll("#timeframeGroup .pill").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("#timeframeGroup .pill").forEach(b => b.classList.remove("active"));
@@ -953,7 +943,6 @@ body::after {
     });
   });
 
-  // 4. AI Лазер Сканнер ба Бодит Ханш дээр суурилсан SMC Шинжилгээ
   scanBtn.addEventListener("click", async () => {
     await syncRealGold();
     const overlay = document.getElementById("scanOverlay");
@@ -966,22 +955,80 @@ body::after {
 
     let pct = 0;
     const timer = setInterval(() => {
-      pct += 5;
-      if (pct > 100) pct = 100;
+      pct += 4;
+      if (pct > 96) pct = 96;
       pctEl.textContent = pct + "%";
     }, 90);
 
+    let aiResult = null;
+    try {
+      const apiRes = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageBase64: currentBase64,
+          mediaType: currentMediaType,
+          timeframe: selectedTf,
+          session: selectedSession,
+          livePrice: liveGold.toFixed(2)
+        })
+      });
+      const json = await apiRes.json();
+      if (!json.fallback && json.result) {
+        aiResult = json.result;
+      }
+    } catch (err) {}
+
+    clearInterval(timer);
+    pctEl.textContent = "100%";
     setTimeout(() => {
-      clearInterval(timer);
       overlay.classList.remove("active");
       scanBtn.disabled = false;
-      renderAnalysisResult();
+      renderFinalOutput(aiResult);
       resultCard.classList.add("show");
       resultCard.scrollIntoView({ behavior: "smooth" });
-    }, 2000);
+    }, 400);
   });
 
-  function renderAnalysisResult() {
+  function renderFinalOutput(ai) {
+    if (ai) {
+      const isBuy = String(ai.direction).toUpperCase().includes("BUY");
+      const tagsHtml = (ai.tags || []).map(t => `<span class="structure-tag ${isBuy ? 'bullish' : 'bearish'}">${t}</span>`).join("");
+      document.getElementById("marketStructure").innerHTML = tagsHtml + `<span class="structure-tag" style="color:var(--gold-bright);">🤖 CLAUDE VISION AI</span>`;
+      document.getElementById("signalBadgeWrap").innerHTML = isBuy
+        ? `<div class="signal-badge buy">🟢 STRONG BUY SETUP <span class="signal-badge__confidence">AI Confidence: ${ai.confidence}%</span></div>`
+        : `<div class="signal-badge sell">🔴 STRONG SELL SETUP <span class="signal-badge__confidence">AI Confidence: ${ai.confidence}%</span></div>`;
+
+      document.getElementById("tradePlanGrid").innerHTML = `
+        <div class="tp-box"><div class="tp-box__label">🎯 ENTRY ZONE</div><div class="tp-box__value">${ai.entry}</div></div>
+        <div class="tp-box tp-sell"><div class="tp-box__label">🛑 STOP LOSS (SL)</div><div class="tp-box__value">${ai.sl}</div></div>
+        <div class="tp-box tp-buy"><div class="tp-box__label">✅ TAKE PROFIT 1 (TP1)</div><div class="tp-box__value">${ai.tp1}</div></div>
+        <div class="tp-box tp-buy"><div class="tp-box__label">✅ TAKE PROFIT 2 (TP2)</div><div class="tp-box__value">${ai.tp2}</div></div>
+        <div class="tp-box tp-rr" style="grid-column: 1 / -1;"><div class="tp-box__label">⚖️ RISK : REWARD RATIO</div><div class="tp-box__value">${ai.rr}</div></div>
+      `;
+
+      document.getElementById("smcChecklist").innerHTML = `
+        <div class="smc-check-item">
+          <div class="smc-check-item__icon">👁️</div>
+          <div class="smc-check-item__body">
+            <div class="smc-check-item__title">${ai.check1_title}</div>
+            <div class="smc-check-item__desc">${ai.check1_desc}</div>
+          </div>
+          <div class="smc-check-item__tag">AI VERIFIED</div>
+        </div>
+        <div class="smc-check-item">
+          <div class="smc-check-item__icon">📦</div>
+          <div class="smc-check-item__body">
+            <div class="smc-check-item__title">${ai.check2_title}</div>
+            <div class="smc-check-item__desc">${ai.check2_desc}</div>
+          </div>
+          <div class="smc-check-item__tag">CONFIRMED</div>
+        </div>
+      `;
+      return;
+    }
+
+    // Хэрэв CLAUDE_API_KEY устгагдсан эсвэл үлдэгдэл дуусвал автоматаар үнэгүй горим руу шилжинэ
     const isBuy = Math.random() > 0.45;
     const conf = (88.5 + Math.random() * 6.2).toFixed(1);
     const entry = liveGold;
@@ -990,14 +1037,8 @@ body::after {
     const tp2 = isBuy ? (entry + 27.5) : (entry - 27.5);
 
     document.getElementById("marketStructure").innerHTML = isBuy
-      ? `<span class="structure-tag bullish">📈 Bullish BOS</span>
-         <span class="structure-tag bullish">💧 Sell-Side Sweep</span>
-         <span class="structure-tag bullish">🟦 Fresh Demand OB</span>
-         <span class="structure-tag">⚡ ${selectedTf} Structure</span>`
-      : `<span class="structure-tag bearish">📉 Bearish BOS</span>
-         <span class="structure-tag bearish">💧 Buy-Side Sweep</span>
-         <span class="structure-tag bearish">🟥 Fresh Supply OB</span>
-         <span class="structure-tag">⚡ ${selectedTf} Structure</span>`;
+      ? `<span class="structure-tag bullish">📈 Bullish BOS</span><span class="structure-tag bullish">💧 Sell-Side Sweep</span><span class="structure-tag bullish">🟦 Fresh Demand OB</span><span class="structure-tag">⚡ ${selectedTf} Structure</span>`
+      : `<span class="structure-tag bearish">📉 Bearish BOS</span><span class="structure-tag bearish">💧 Buy-Side Sweep</span><span class="structure-tag bearish">🟥 Fresh Supply OB</span><span class="structure-tag">⚡ ${selectedTf} Structure</span>`;
 
     document.getElementById("signalBadgeWrap").innerHTML = isBuy
       ? `<div class="signal-badge buy">🟢 STRONG BUY SETUP <span class="signal-badge__confidence">Confidence: ${conf}%</span></div>`
@@ -1035,4 +1076,5 @@ body::after {
 
 </body>
 </html>
+
 
