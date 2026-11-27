@@ -16,9 +16,7 @@
   </div>
 </div>
 
-<div class="auth-glow-orb"></div>
-
-<div class="login-box" style="position: relative; z-index: 20;">
+<div class="login-box" style="position: relative; z-index: 50;">
 
   <div class="auth-brand">
     <div class="auth-brand__icon"></div>
@@ -30,25 +28,25 @@
 
   <h2 data-i18n="auth_login_title">🔐 SYSTEM LOGIN</h2>
 
-  <form class="auth-form" onsubmit="event.preventDefault(); loginUser();">
+  <form class="auth-form" onsubmit="event.preventDefault(); directLogin();">
 
     <label class="auth-field">
       <span data-i18n="auth_email_label">Email</span>
-      <input id="loginEmail" type="email" placeholder="Enter email хаягаа оруулна уу">
+      <input id="loginEmail" type="email" placeholder="Enter email хаягаа оруулна уу" required>
     </label>
 
     <label class="auth-field">
       <span data-i18n="auth_password_label">Нууц үг</span>
-      <input id="loginPassword" type="password" placeholder="Нууц үгээ оруулна уу">
+      <input id="loginPassword" type="password" placeholder="Нууц үгээ оруулна уу" required>
     </label>
 
-    <button class="access-btn" type="submit">
+    <button class="access-btn" type="submit" style="cursor: pointer;">
       <span data-i18n="auth_login_button">НЭВТРЭХ</span>
     </button>
 
   </form>
 
-  <p id="loginResult" class="auth-result"></p>
+  <p id="loginResult" class="auth-result" style="margin-top: 12px; font-weight: 600;"></p>
 
   <div class="auth-links">
     <a href="reset-password.html" style="color: #F0CE6E; font-weight: 600;">🔑 Нууц үгээ мартсан уу?</a>
@@ -58,9 +56,48 @@
 
 </div>
 
-<script src="https://jsdelivr.net"></script>
-<script src="auth.js"></script>
-<script src="language.js"></script>
+<script>
+const SB_URL = "https://" + "xkxcprkzubjwfglcrivg.supabase.co";
+const SB_KEY = "sb_publishable_7rRB4Trj5OfjENqzvpu_YQ_otz11jrh";
+
+async function directLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const resBox = document.getElementById("loginResult");
+
+  resBox.style.color = "#F0CE6E";
+  resBox.innerHTML = "⏳ Нэвтэрч байна...";
+
+  try {
+    const res = await fetch(SB_URL + "/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SB_KEY
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.access_token) {
+      resBox.style.color = "#EF4444";
+      resBox.innerHTML = "❌ Нэвтрэхэд алдаа гарлаа: " + (data.error_description || data.msg || "И-мэйл эсвэл нууц үг буруу байна");
+      return;
+    }
+
+    // Supabase session болон VIP шалгалтад зориулж хадгална
+    localStorage.setItem("sb-xkxcprkzubjwfglcrivg-auth-token", JSON.stringify(data));
+    localStorage.setItem("stryx_verified_email", email.toLowerCase());
+
+    resBox.style.color = "#22C55E";
+    resBox.innerHTML = "🟢 Амжилттай нэвтэрлээ! Dashboard руу шилжиж байна...";
+    setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+  } catch (err) {
+    resBox.style.color = "#EF4444";
+    resBox.innerHTML = "❌ Сүлжээний алдаа: " + err.message;
+  }
+}
+</script>
 
 </body>
 </html>
