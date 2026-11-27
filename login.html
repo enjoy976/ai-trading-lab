@@ -50,34 +50,8 @@
 
   <p id="loginResult" class="auth-result"></p>
 
-  <!-- НУУЦ ҮГ МАРТСАН ТОВЧ -->
-  <div style="margin: 14px 0 6px; text-align: center;">
-    <button id="openForgotModal" type="button" style="background: transparent; border: none; color: #F0CE6E; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline;">
-      🔑 Нууц үгээ мартсан уу?
-    </button>
-  </div>
-
-  <!-- НУУЦ ҮГ СЭРГЭЭХ ТУСГАЙ ЦОНХ -->
-  <div id="forgotBox" style="display: none; margin-top: 12px; padding: 16px; border-radius: 12px; background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.45);">
-    <div style="color: #F0CE6E; font-weight: 700; font-size: 13px; margin-bottom: 8px;">📩 И-МЭЙЛЭЭР НУУЦ ҮГ СЭРГЭЭХ</div>
-    <input id="forgotEmailInput" type="email" placeholder="Бүртгэлтэй Email хаягаа бичнэ үү" style="width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.4); background: #0B0E14; color: #fff; margin-bottom: 10px;">
-    <button id="sendResetBtn" type="button" class="access-btn" style="width: 100%; padding: 11px;">
-      📨 СЭРГЭЭХ ЛИНК ИЛГЭЭХ
-    </button>
-    <p id="forgotResult" style="margin-top: 10px; font-size: 13px; color: #E8ECF2;"></p>
-  </div>
-
-  <!-- И-МЭЙЛ ЛИНКЭЭР ОРЖ ИРЭХЭД ГАРАХ ШИНЭ НУУЦ ҮГ ОРУУЛАХ ЦОНХ -->
-  <div id="resetPasswordBox" style="display: none; margin-top: 12px; padding: 16px; border-radius: 12px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.45);">
-    <div style="color: #22C55E; font-weight: 700; font-size: 13px; margin-bottom: 8px;">🔐 ШИНЭ НУУЦ ҮГ ТОХИРУУЛАХ</div>
-    <input id="newPasswordInput" type="password" placeholder="Шинэ нууц үгээ бичнэ үү (6+ тэмдэгт)" style="width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid rgba(34,197,94,0.4); background: #0B0E14; color: #fff; margin-bottom: 10px;">
-    <button id="saveNewPassBtn" type="button" class="access-btn" style="width: 100%; padding: 11px;">
-      ✅ ШИНЭ НУУЦ ҮГ ХАДГАЛАХ
-    </button>
-    <p id="resetResult" style="margin-top: 10px; font-size: 13px; color: #E8ECF2;"></p>
-  </div>
-
   <div class="auth-links">
+    <a href="reset-password.html" style="color: #F0CE6E; font-weight: 600;">🔑 Нууц үгээ мартсан уу?</a>
     <a href="signup.html" data-i18n="auth_signup_link">Шинээр бүртгэл үүсгэх</a>
     <a href="index.html" data-i18n="auth_back_home">← Back Home</a>
   </div>
@@ -87,70 +61,6 @@
 <script src="https://jsdelivr.net"></script>
 <script src="auth.js"></script>
 <script src="language.js"></script>
-
-<script>
-(function() {
-  const sb = (typeof supabaseClient !== "undefined")
-    ? supabaseClient
-    : window.supabase.createClient("https://supabase.co", "sb_publishable_7rRB4Trj5OfjENqzvpu_YQ_otz11jrh");
-
-  const openBtn = document.getElementById("openForgotModal");
-  const forgotBox = document.getElementById("forgotBox");
-  if (openBtn && forgotBox) {
-    openBtn.addEventListener("click", function() {
-      forgotBox.style.display = forgotBox.style.display === "none" ? "block" : "none";
-      const typed = document.getElementById("loginEmail")?.value || "";
-      if (typed) document.getElementById("forgotEmailInput").value = typed;
-    });
-  }
-
-  const sendBtn = document.getElementById("sendResetBtn");
-  if (sendBtn) {
-    sendBtn.addEventListener("click", async function() {
-      const email = document.getElementById("forgotEmailInput").value.trim();
-      const resEl = document.getElementById("forgotResult");
-      if (!email) {
-        resEl.innerHTML = "⚠️ И-мэйл хаягаа бичнэ үү.";
-        return;
-      }
-      resEl.innerHTML = "⏳ Илгээж байна...";
-      const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/login.html"
-      });
-      if (error) {
-        resEl.innerHTML = "❌ Алдаа: " + error.message;
-      } else {
-        resEl.innerHTML = "🟢 <b>" + email + "</b> хаяг руу сэргээх линк илгээгдлээ! И-мэйлээ шалгана уу.";
-      }
-    });
-  }
-
-  sb.auth.onAuthStateChange(function(event) {
-    if (event === "PASSWORD_RECOVERY") {
-      document.getElementById("resetPasswordBox").style.display = "block";
-    }
-  });
-
-  const saveBtn = document.getElementById("saveNewPassBtn");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", async function() {
-      const newPass = document.getElementById("newPasswordInput").value;
-      const resEl = document.getElementById("resetResult");
-      if (!newPass || newPass.length < 6) {
-        resEl.innerHTML = "⚠️ Нууц үг дор хаяж 6 тэмдэгттэй байх ёстой.";
-        return;
-      }
-      const { error } = await sb.auth.updateUser({ password: newPass });
-      if (error) {
-        resEl.innerHTML = "❌ Алдаа: " + error.message;
-      } else {
-        resEl.innerHTML = "🟢 <b>Нууц үг амжилттай солигдлоо!</b> Dashboard руу орж байна...";
-        setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
-      }
-    });
-  }
-})();
-</script>
 
 </body>
 </html>
