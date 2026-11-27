@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STRYX ZONE — Chart Pattern Quiz</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .quiz-box { max-width: 720px; margin: 110px auto 50px; padding: 28px; }
+    .quiz-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; font-family: var(--mono); font-size: 13px; }
+    .quiz-badge { padding: 6px 14px; border-radius: 20px; background: var(--gold-glow); border: 1px solid var(--border-strong); color: var(--gold-bright); font-weight: 600; }
+    .chart-canvas { background: #080B10; border: 1px solid var(--border-strong); border-radius: 14px; padding: 16px; margin: 18px 0; text-align: center; }
+    .question-text { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 18px; line-height: 1.5; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+    .opt-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.25s ease; }
+    .opt-btn:hover { border-color: var(--gold); background: var(--gold-glow); }
+    .opt-btn.correct { border-color: #22C55E !important; background: rgba(34,197,94,0.18) !important; color: #22C55E !important; font-weight: 700; }
+    .opt-btn.wrong { border-color: #EF4444 !important; background: rgba(239,68,68,0.18) !important; color: #EF4444 !important; }
+    .explain-box { margin-top: 16px; padding: 14px; border-radius: 10px; background: rgba(212,175,55,0.08); border-left: 3px solid var(--gold); font-size: 13px; color: var(--text-muted); display: none; }
+    .next-btn { margin-top: 18px; width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); color: #0B0E14; font-weight: 700; font-size: 15px; cursor: pointer; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="header-bar" style="top: 0;">
+  <a href="dashboard.html" style="text-decoration:none; color:var(--gold-bright); font-family:var(--mono); font-weight:700; font-size:13px;">← DASHBOARD</a>
+  <div style="font-family:var(--mono); color:var(--gold); font-size:13px; font-weight:600;">⚡ SNIPER PATTERN TEST</div>
+</div>
+
+<div class="glass-card quiz-box">
+  <div id="quiz-area">
+    <div class="quiz-top">
+      <span class="quiz-badge" id="q-progress">Асуулт 1 / 5</span>
+      <span class="quiz-badge" id="q-score">Оноо: 0</span>
+    </div>
+    <div class="chart-canvas" id="chart-svg"></div>
+    <div class="question-text" id="q-text"></div>
+    <div class="options-grid" id="q-options"></div>
+    <div class="explain-box" id="q-explain"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">ДАРААГИЙН АСУУЛТ →</button>
+  </div>
+
+  <div id="result-area" style="display:none; text-align:center; padding: 20px 0;">
+    <div style="font-size: 48px; margin-bottom: 12px;">🏆</div>
+    <h2 style="color: var(--gold-bright); font-size: 26px; margin-bottom: 8px;">СОРИЛ ДУУСЛАА!</h2>
+    <p id="final-score" style="font-size: 18px; color: var(--text); margin-bottom: 8px;"></p>
+    <p id="final-rank" style="font-family: var(--mono); color: #22C55E; font-weight: 700; margin-bottom: 24px;"></p>
+    <button onclick="restartQuiz()" style="padding: 12px 28px; border:none; border-radius:10px; background:linear-gradient(135deg, var(--gold-bright), var(--gold)); color:#0B0E14; font-weight:700; cursor:pointer; margin-right:10px;">🔄 ДАХИН ӨГӨХ</button>
+    <a href="dashboard.html" style="display:inline-block; padding: 12px 24px; border-radius:10px; border:1px solid var(--gold); color:var(--gold-bright); text-decoration:none; font-weight:600;">DASHBOARD РУУ БУЦАХ</a>
+  </div>
+</div>
+<script>
+const questions = [
+  {
+    svg: '<svg viewBox="0 0 320 130" width="100%" height="130"><line x1="30" y1="30" x2="120" y2="95" stroke="#EF4444" stroke-width="3"/><line x1="120" y1="95" x2="165" y2="65" stroke="#22C55E" stroke-width="3"/><line x1="165" y1="65" x2="215" y2="110" stroke="#EF4444" stroke-width="3"/><line x1="140" y1="65" x2="290" y2="65" stroke="#D4AF37" stroke-dasharray="5,5" stroke-width="2"/><line x1="215" y1="110" x2="275" y2="35" stroke="#22C55E" stroke-width="4"/><text x="225" y="56" fill="#F0CE6E" font-size="12" font-family="monospace">CHoCH ↑</text></svg>',
+    q: "1. Уналтын трендийн сүүлийн дээд цэгийг (Lower High) хүчтэй сэтэлж дээш гарлаа. Энэ юу вэ?",
+    options: ["Bullish CHoCH (Чиглэл өөрчлөгдөх)", "Bearish BOS (Уналт үргэлжлэх)", "Equal Highs (Тэгш орой)", "Asian Range"],
+    answer: 0,
+    explain: "Зөв! Уналтын трендийн сүүлийн Lower High цэгийг дээш сэтэлбэл Bullish CHoCH буюу өсөлтийн дохио болдог."
+  },
+  {
+    svg: '<svg viewBox="0 0 320 130" width="100%" height="130"><line x1="20" y1="50" x2="290" y2="50" stroke="#EF4444" stroke-dasharray="4,4" stroke-width="2"/><text x="30" y="42" fill="#EF4444" font-size="11" font-family="monospace">BUY-SIDE LIQUIDITY ($$$)</text><rect x="90" y="55" width="14" height="45" fill="#22C55E"/><rect x="130" y="53" width="14" height="40" fill="#22C55E"/><line x1="187" y1="22" x2="187" y2="95" stroke="#EF4444" stroke-width="2"/><rect x="180" y="52" width="14" height="50" fill="#EF4444"/><text x="198" y="32" fill="#F0CE6E" font-size="11" font-family="monospace">Liquidity Sweep!</text></svg>',
+    q: "2. Ханш өмнөх тэгш оройнуудын (Equal Highs) дээш сүүдэр гаргаж стоп түүгээд буцаад доош уналаа. Ямар үйлдэл вэ?",
+    options: ["Breakout (Жинхэнэ сэтэлгээ)", "Liquidity Sweep (Стоп түүлгэлт)", "Double Bottom", "Support Bounce"],
+    answer: 1,
+    explain: "Яг зөв! Энэ бол банкууд дээр байрласан Stop Loss-уудыг шүүрдээд (Liquidity Sweep) эсрэг зүг рүү хүчтэй унадаг Sniper сетап юм."
+  },
+  {
+    svg: '<svg viewBox="0 0 320 130" width="100%" height="130"><rect x="70" y="75" width="16" height="35" fill="#EF4444"/><rect x="115" y="30" width="18" height="75" fill="#22C55E"/><rect x="160" y="15" width="16" height="25" fill="#22C55E"/><rect x="70" y="40" width="190" height="35" fill="rgba(212,175,55,0.2)" stroke="#D4AF37" stroke-dasharray="3,3"/><text x="195" y="62" fill="#F0CE6E" font-size="12" font-family="monospace">FVG (Imbalance)</text></svg>',
+    q: "3. Гурван лааны голын урт ногоон лааны 1 болон 3 дахь лааны сүүдэр хоорондын хоосон зайг SMC-д юу гэдэг вэ?",
+    options: ["Fair Value Gap (FVG)", "Trendline", "Fibonacci 50%", "Moving Average"],
+    answer: 0,
+    explain: "Зөв! Fair Value Gap (FVG) буюу үнийн тэнцвэргүй зай нь ханш буцаж ирээд ойх хамгийн хүчтэй соронзон бүс юм."
+  },
+  {
+    svg: '<svg viewBox="0 0 320 130" width="100%" height="130"><rect x="50" y="25" width="220" height="80" fill="rgba(34,197,94,0.08)" stroke="#22C55E"/><text x="95" y="60" fill="#22C55E" font-size="14" font-weight="bold" font-family="monospace">08:00 - 10:00 UTC</text><text x="105" y="82" fill="#E8ECF2" font-size="12" font-family="monospace">HIGH VOLUME XAUUSD</text></svg>',
+    q: "4. Алт (XAUUSD) дээр хамгийн өндөр хэлбэлзэл болон том тренд эхэлдэг 08:00 UTC цагийн үеийг юу гэдэг вэ?",
+    options: ["Asian Consolidation", "London Killzone", "Sydney Open", "Weekend Gap"],
+    answer: 1,
+    explain: "Маш сайн! 08:00 UTC бол London Killzone бөгөөд алтны зах зээлд хамгийн том хөрвөх чадвар орж ирдэг алтан цаг юм."
+  },
+  {
+    svg: '<svg viewBox="0 0 320 130" width="100%" height="130"><rect x="65" y="80" width="18" height="30" fill="#EF4444"/><rect x="65" y="80" width="210" height="30" fill="rgba(239,68,68,0.18)" stroke="#EF4444"/><line x1="95" y1="95" x2="145" y2="20" stroke="#22C55E" stroke-width="4"/><line x1="145" y1="20" x2="210" y2="85" stroke="#EF4444" stroke-width="2" stroke-dasharray="4,4"/><circle cx="210" cy="85" r="6" fill="#F0CE6E"/><text x="165" y="102" fill="#F0CE6E" font-size="11" font-family="monospace">ORDER BLOCK ENTRY</text></svg>',
+    q: "5. Хүчтэй өсөлтийн хөдөлгөөн эхлэхийн яг өмнөх сүүлийн улаан (уналтын) лааг юу гэж нэрлэдэг вэ?",
+    options: ["Bullish Order Block (OB)", "Resistance Line", "Doji Candle", "Bearish Flag"],
+    answer: 0,
+    explain: "Төгс! Том тоглогчдын захиалга төвлөрсөн сүүлийн улаан лааг Bullish Order Block гэх бөгөөд Sniper оролт хийх хамгийн шилдэг цэг юм."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  answered = false;
+  const item = questions[current];
+  document.getElementById("q-progress").textContent = `Асуулт ${current + 1} / ${questions.length}`;
+  document.getElementById("q-score").textContent = `Оноо: ${score}`;
+  document.getElementById("chart-svg").innerHTML = item.svg;
+  document.getElementById("q-text").textContent = item.q;
+  document.getElementById("q-explain").style.display = "none";
+  document.getElementById("next-btn").style.display = "none";
+
+  const optBox = document.getElementById("q-options");
+  optBox.innerHTML = "";
+  item.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(idx, btn);
+    optBox.appendChild(btn);
+  });
+}
+
+function selectAnswer(idx, btn) {
+  if (answered) return;
+  answered = true;
+  const item = questions[current];
+  const allBtns = document.querySelectorAll(".opt-btn");
+  if (idx === item.answer) {
+    btn.classList.add("correct");
+    score++;
+    document.getElementById("q-score").textContent = `Оноо: ${score}`;
+  } else {
+    btn.classList.add("wrong");
+    allBtns[item.answer].classList.add("correct");
+  }
+  const exp = document.getElementById("q-explain");
+  exp.textContent = item.explain;
+  exp.style.display = "block";
+  document.getElementById("next-btn").style.display = "block";
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById("quiz-area").style.display = "none";
+    document.getElementById("result-area").style.display = "block";
+    document.getElementById("final-score").textContent = `Та нийт ${questions.length} асуултаас ${score} зөв хариуллаа!`;
+    document.getElementById("final-rank").textContent = score >= 4 ? "🥇 ЦОЛ: GOLD SNIPER MASTER" : "🎯 ЦОЛ: SNIPER ТРЕЙДЕР (Дахин давт)";
+  }
+}
+
+function restartQuiz() {
+  current = 0; score = 0;
+  document.getElementById("quiz-area").style.display = "block";
+  document.getElementById("result-area").style.display = "none";
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
