@@ -81,7 +81,7 @@
 <script>
 const prevPrices = { btc: 0, eth: 0, sol: 0 };
 
-function renderCoin(key, elId, price, pct) {
+function renderCoin(key, elId, price) {
   const el = document.getElementById(elId);
   if (!el || !price || isNaN(price)) return;
 
@@ -89,52 +89,38 @@ function renderCoin(key, elId, price, pct) {
   prevPrices[key] = price;
 
   let color = "#FFFFFF";
-  if (old > 0 && price > old) color = "#22C55E";
-  else if (old > 0 && price < old) color = "#EF4444";
-
-  const badge = pct >= 0
-    ? '<span style="color:#22C55E; font-size:14px;">🟢 +' + Number(pct).toFixed(2) + '%</span>'
-    : '<span style="color:#EF4444; font-size:14px;">🔴 ' + Number(pct).toFixed(2) + '%</span>';
+  let arrow = "🟢 LIVE";
+  if (old > 0 && price > old) { color = "#22C55E"; arrow = "🟢 ▲ +$" + (price - old).toFixed(2); }
+  else if (old > 0 && price < old) { color = "#EF4444"; arrow = "🔴 ▼ -$" + (old - price).toFixed(2); }
 
   el.innerHTML = '<span style="color:' + color + '; transition:color 0.3s;">$ ' +
     Number(price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
-    '</span><br>' + badge;
+    '</span><br><span style="color:' + (color === "#EF4444" ? "#EF4444" : "#22C55E") + '; font-size:14px;">' + arrow + '</span>';
+
+  document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
+  document.getElementById("mkt-status").innerHTML = '<span style="color:#22C55E;">🟢 COINBASE LIVE FEED</span>';
 }
 
-async function loadCryptoPrices() {
+async function loadCoinbaseLive() {
   try {
-    const url = "https://cryptocompare.com" + Date.now();
-    const res = await fetch(url);
-    const data = await res.json();
-    const r = data.RAW;
+    const [b, e, s] = await Promise.all([
+      fetch("https://coinbase.com").then(r => r.json()),
+      fetch("https://coinbase.com").then(r => r.json()),
+      fetch("https://coinbase.com").then(r => r.json())
+    ]);
 
-    renderCoin("btc", "btc-box", r.BTC.USD.PRICE, r.BTC.USD.CHANGEPCT24HOUR);
-    renderCoin("eth", "eth-box", r.ETH.USD.PRICE, r.ETH.USD.CHANGEPCT24HOUR);
-    renderCoin("sol", "sol-box", r.SOL.USD.PRICE, r.SOL.USD.CHANGEPCT24HOUR);
-
-    const avg = (r.BTC.USD.CHANGEPCT24HOUR + r.ETH.USD.CHANGEPCT24HOUR + r.SOL.USD.CHANGEPCT24HOUR) / 3;
-    const mEl = document.getElementById("mkt-status");
-    if (mEl) {
-      if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
-      else if (avg <= -1.5) mEl.innerHTML = '<span style="color:#EF4444;">🔴 Bearish Momentum</span>';
-      else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
-    }
-    document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
+    renderCoin("btc", "btc-box", parseFloat(b.data.amount));
+    renderCoin("eth", "eth-box", parseFloat(e.data.amount));
+    renderCoin("sol", "sol-box", parseFloat(s.data.amount));
   } catch (err) {
-    // Нөөц: CoinGecko
-    try {
-      const cg = await fetch("https://coingecko.com").then(x => x.json());
-      renderCoin("btc", "btc-box", cg.bitcoin.usd, cg.bitcoin.usd_24h_change);
-      renderCoin("eth", "eth-box", cg.ethereum.usd, cg.ethereum.usd_24h_change);
-      renderCoin("sol", "sol-box", cg.solana.usd, cg.solana.usd_24h_change);
-      document.getElementById("last-upd").textContent = new Date().toLocaleTimeString("en-GB");
-    } catch (e2) {}
+    document.getElementById("mkt-status").innerHTML = '<span style="color:#EF4444;">⚠️ Сүлжээ шалгана уу</span>';
   }
 }
 
-loadCryptoPrices();
-setInterval(loadCryptoPrices, 2000);
+loadCoinbaseLive();
+setInterval(loadCoinbaseLive, 2000);
 </script>
 
 </body>
 </html>
+
