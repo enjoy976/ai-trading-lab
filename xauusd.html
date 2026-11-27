@@ -117,11 +117,14 @@
 <script>
 const prevFx = { XAU: 3645.30, XAG: 39.85 };
 
-// Эхлээд шууд харагдуулна (Loading... гэж гацахгүй)
+// Эхлээд 5 хослолыг тавууланг нь шууд харуулна (Loading... гарахгүй)
 document.getElementById("fx-xau").textContent = "$3,645.30";
 document.getElementById("stat-xau").textContent = "🟢 LIVE METAL DATA";
 document.getElementById("fx-xag").textContent = "$39.850";
 document.getElementById("stat-xag").textContent = "🟢 LIVE METAL DATA";
+document.getElementById("fx-eur").textContent = "1.08420";
+document.getElementById("fx-gbp").textContent = "1.26850";
+document.getElementById("fx-jpy").textContent = "154.320";
 
 async function loadMetal(sym, valId, statId, decimals) {
   try {
@@ -157,16 +160,29 @@ async function loadMetal(sym, valId, statId, decimals) {
   } catch (e) {}
 }
 
+async function loadCurrencies() {
+  try {
+    const res = await fetch("https://frankfurter.app");
+    const data = await res.json();
+    const r = data.rates;
+    document.getElementById("fx-eur").textContent = (1 / r.EUR).toFixed(5);
+    document.getElementById("fx-gbp").textContent = (1 / r.GBP).toFixed(5);
+    document.getElementById("fx-jpy").textContent = Number(r.JPY).toFixed(3);
+  } catch (e) {}
+}
+
 function updateForexTerminal() {
   loadMetal("XAU", "fx-xau", "stat-xau", 2);
   setTimeout(() => loadMetal("XAG", "fx-xag", "stat-xag", 3), 1000);
 }
 
+loadCurrencies();
 updateForexTerminal();
 setInterval(updateForexTerminal, 8000);
 </script>
 
 </body>
 </html>
+
 
 
