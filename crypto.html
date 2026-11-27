@@ -109,10 +109,11 @@ function updateCoinUI(id, newPrice, pct) {
 
 async function fetchOKXLive() {
   try {
+    const base = "https://okx.com";
     const [b, e, s] = await Promise.all([
-      fetch("https://okx.com").then(r => r.json()),
-      fetch("https://okx.com").then(r => r.json()),
-      fetch("https://okx.com").then(r => r.json())
+      fetch(base + "BTC-USDT").then(r => r.json()),
+      fetch(base + "ETH-USDT").then(r => r.json()),
+      fetch(base + "SOL-USDT").then(r => r.json())
     ]);
 
     const list = [
@@ -143,9 +144,10 @@ async function fetchOKXLive() {
   }
 }
 
-// Binance WebSocket шууд урсгал (0.5 секунд тутамд хөдөлнө)
 try {
-  const ws = new WebSocket("wss://://binance.com");
+  const wsHost = "wss://://binance.com";
+  const wsPath = "/stream?streams=btcusdt@ticker/ethusdt@ticker/solusdt@ticker";
+  const ws = new WebSocket(wsHost + wsPath);
   ws.onmessage = function(event) {
     const msg = JSON.parse(event.data);
     if (!msg || !msg.data) return;
@@ -164,5 +166,6 @@ setInterval(fetchOKXLive, 2000);
 
 </body>
 </html>
+
 
 
