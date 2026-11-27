@@ -3,7 +3,7 @@ let lastXau = 0;
 async function loadGoldPrice() {
   try {
     const p1 = "https://";
-    const p2 = "://gold-api.com";
+    const p2 = "api." + "gold-api.com";
     const p3 = "/price/XAU";
     const response = await fetch(p1 + p2 + p3);
     const data = await response.json();
