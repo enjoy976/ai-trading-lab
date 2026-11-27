@@ -93,6 +93,21 @@
 
 
   <p id="loginResult" class="auth-result"></p>
+  
+    <div style="text-align: right; margin: 10px 0 6px;">
+    <a href="#" onclick="event.preventDefault(); forgotPassword();" style="color: #F0CE6E; font-size: 13px; text-decoration: none; font-weight: 600;">
+      🔑 Нууц үгээ мартсан уу?
+    </a>
+  </div>
+
+  <!-- И-МЭЙЛ ЛИНКЭЭР ОРЖ ИРЭХЭД ГАРАХ ШИНЭ НУУЦ ҮГ ОРУУЛАХ ХЭСЭГ -->
+  <div id="resetPasswordBox" style="display: none; margin-top: 16px; padding: 16px; border-radius: 12px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.45);">
+    <div style="color: #F0CE6E; font-weight: 700; font-size: 14px; margin-bottom: 10px;">🔐 ШИНЭ НУУЦ ҮГ ТОХИРУУЛАХ</div>
+    <input id="newPasswordInput" type="password" placeholder="Шинэ нууц үгээ бичнэ үү (6+ тэмдэгт)" style="width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.4); background: #0B0E14; color: #fff; margin-bottom: 10px;">
+    <button type="button" onclick="updateNewPassword()" class="access-btn" style="width: 100%;">
+      ✅ ШИНЭ НУУЦ ҮГ ХАДГАЛАХ
+    </button>
+  </div>
 
 
   <div class="auth-links">
