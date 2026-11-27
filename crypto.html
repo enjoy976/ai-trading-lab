@@ -107,32 +107,32 @@ function updateCoinUI(id, newPrice, pct) {
   if (updEl) updEl.textContent = new Date().toLocaleTimeString("en-GB");
 }
 
-async function fetchOKXLive() {
+async function fetchLiveCoins() {
   try {
-    const base = "https://okx.com";
+    // 1. OKX биржээс татна (.at(0) ашигласан тул алдаа гарахгүй)
+    const u = "https://okx.com";
     const [b, e, s] = await Promise.all([
-      fetch(base + "BTC-USDT").then(r => r.json()),
-      fetch(base + "ETH-USDT").then(r => r.json()),
-      fetch(base + "SOL-USDT").then(r => r.json())
+      fetch(u + "BTC-USDT").then(r => r.json()),
+      fetch(u + "ETH-USDT").then(r => r.json()),
+      fetch(u + "SOL-USDT").then(r => r.json())
     ]);
 
-    const list = [
-      { id: "btc", item: b.data && b.data[0] },
-      { id: "eth", item: e.data && e.data[0] },
-      { id: "sol", item: s.data && s.data[0] }
+    const items = [
+      { id: "btc", obj: b.data.at(0) },
+      { id: "eth", obj: e.data.at(0) },
+      { id: "sol", obj: s.data.at(0) }
     ];
 
-    let sumPct = 0;
-    list.forEach(x => {
-      if (!x.item) return;
-      const last = parseFloat(x.item.last);
-      const open = parseFloat(x.item.open24h);
+    let total = 0;
+    items.forEach(x => {
+      const last = parseFloat(x.obj.last);
+      const open = parseFloat(x.obj.open24h);
       const pct = ((last - open) / open) * 100;
-      sumPct += pct;
+      total += pct;
       updateCoinUI(x.id, last, pct);
     });
 
-    const avg = sumPct / 3;
+    const avg = total / 3;
     const mEl = document.getElementById("market");
     if (mEl) {
       if (avg >= 1.5) mEl.innerHTML = '<span style="color:#22C55E;">🟢 Bullish Momentum</span>';
@@ -140,32 +140,20 @@ async function fetchOKXLive() {
       else mEl.innerHTML = '<span style="color:#F0CE6E;">🟡 Active Market</span>';
     }
   } catch (err) {
-    console.log("Fetching...");
+    // 2. Нөөц: Таны анхны ажиллаж байсан CoinGecko API
+    try {
+      const cg = await fetch("https://coingecko.com").then(r => r.json());
+      updateCoinUI("btc", cg.bitcoin.usd, cg.bitcoin.usd_24h_change);
+      updateCoinUI("eth", cg.ethereum.usd, cg.ethereum.usd_24h_change);
+      updateCoinUI("sol", cg.solana.usd, cg.solana.usd_24h_change);
+    } catch (e2) {}
   }
 }
 
-try {
-  const wsHost = "wss://://binance.com";
-  const wsPath = "/stream?streams=btcusdt@ticker/ethusdt@ticker/solusdt@ticker";
-  const ws = new WebSocket(wsHost + wsPath);
-  ws.onmessage = function(event) {
-    const msg = JSON.parse(event.data);
-    if (!msg || !msg.data) return;
-    const d = msg.data;
-    const last = parseFloat(d.c);
-    const pct = parseFloat(d.P);
-    if (d.s === "BTCUSDT") updateCoinUI("btc", last, pct);
-    if (d.s === "ETHUSDT") updateCoinUI("eth", last, pct);
-    if (d.s === "SOLUSDT") updateCoinUI("sol", last, pct);
-  };
-} catch (e) {}
-
-fetchOKXLive();
-setInterval(fetchOKXLive, 2000);
+fetchLiveCoins();
+setInterval(fetchLiveCoins, 3000);
 </script>
 
 </body>
 </html>
-
-
 
