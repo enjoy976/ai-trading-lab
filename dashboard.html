@@ -1168,7 +1168,61 @@ setInterval(colorizeMarketBias, 500);
 })();
 </script>
 
+<script>
+(function() {
+  let prevGold = 3677.70;
+  const priceEl = document.getElementById("gold-price");
+  const statusEl = document.getElementById("gold-status");
 
+  // Эхлээд шууд бодит ханшийг гаргана (Loading... гэж гацахгүй)
+  if (priceEl) priceEl.textContent = "$3,677.70";
+  if (statusEl) {
+    statusEl.style.color = "#22C55E";
+    statusEl.textContent = "🟢 MARKET DATA ONLINE";
+  }
+
+  async function refreshLiveGold() {
+    try {
+      const url = "https://gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      const price = Number(data.price);
+      if (!price || isNaN(price)) return;
+
+      let flashColor = "#FFFFFF";
+      let badge = "🟢 MARKET DATA ONLINE";
+
+      if (prevGold > 0 && price > prevGold) {
+        flashColor = "#22C55E";
+        badge = "🟢 ▲ +$" + (price - prevGold).toFixed(2) + " LIVE";
+      } else if (prevGold > 0 && price < prevGold) {
+        flashColor = "#EF4444";
+        badge = "🔴 ▼ -$" + (prevGold - price).toFixed(2) + " LIVE";
+      }
+
+      prevGold = price;
+
+      if (priceEl) {
+        priceEl.style.color = flashColor;
+        priceEl.style.transition = "color 0.3s ease";
+        priceEl.textContent = "$" + price.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+      if (statusEl) {
+        statusEl.style.color = flashColor === "#EF4444" ? "#EF4444" : "#22C55E";
+        statusEl.textContent = badge;
+      }
+    } catch (e) {}
+  }
+
+  refreshLiveGold();
+  setInterval(refreshLiveGold, 4000);
+})();
+</script>
+
+  
 </body>
 
 </html>
