@@ -1370,8 +1370,12 @@ document.querySelectorAll("button, a").forEach(el => {
 
 <script>
 (function() {
+  let isApplying = false;
+
   function syncGlobalSessionsWinter() {
-    // Одоогийн цагийг Улаанбаатарын цаг (UTC+8) руу хөрвүүлнэ
+    if (isApplying) return;
+    isApplying = true;
+
     const now = new Date();
     const ulat = new Date(now.getTime() + (8 * 3600000));
     const day = ulat.getUTCDay(); // 0=Ням, 1=Даваа ... 5=Баасан, 6=Бямба
@@ -1391,31 +1395,40 @@ document.querySelectorAll("button, a").forEach(el => {
       "NEW YORK": !isMarketClosedWeekend && (hour >= 21 || hour < 6)
     };
 
-    // Дэлгэц дээрх 4 биржийн картыг олж төлөвийг нь шинэчилнэ
     document.querySelectorAll("div, section, article").forEach(card => {
       const txt = card.textContent || "";
       Object.keys(sessions).forEach(city => {
         if (txt.includes(city) && card.children.length > 0 && card.children.length <= 5) {
           card.querySelectorAll("span, div, p, b").forEach(el => {
             if (el.children.length === 0 && (el.textContent.includes("OPEN") || el.textContent.includes("CLOSED"))) {
-              if (sessions[city]) {
-                el.textContent = "🟢 OPEN";
-                el.style.color = "#22C55E";
-              } else {
-                el.textContent = isMarketClosedWeekend ? "🔴 CLOSED (WEEKEND)" : "⚪ CLOSED";
-                el.style.color = isMarketClosedWeekend ? "#EF4444" : "#94A3B8";
+              const targetText = sessions[city]
+                ? "🟢 OPEN"
+                : (isMarketClosedWeekend ? "🔴 CLOSED (WEEKEND)" : "⚪ CLOSED");
+              const targetColor = sessions[city]
+                ? "#22C55E"
+                : (isMarketClosedWeekend ? "#EF4444" : "#94A3B8");
+
+              if (el.textContent !== targetText) {
+                el.textContent = targetText;
+                el.style.color = targetColor;
               }
             }
           });
         }
       });
     });
+
+    isApplying = false;
   }
 
   syncGlobalSessionsWinter();
-  setInterval(syncGlobalSessionsWinter, 1000);
+
+  // Хуучин скрипт текст өөрчлөх гэж оролдмогц тэр агшинд нь шууд дарж засна (огт анивчихгүй)
+  const observer = new MutationObserver(syncGlobalSessionsWinter);
+  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 })();
 </script>
+
   
   
 </body>
