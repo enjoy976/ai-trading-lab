@@ -1810,6 +1810,55 @@ document.querySelectorAll("button, a").forEach(el => {
     <span style="color: #D4AF37;">Powered by STRYX AI Engine v2.6</span>
   </div>
 </footer>
+
+<script>
+(function forceGoldFavicon() {
+  // Хуучин бүх icon-уудыг устгана
+  document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
+
+  // Canvas ашиглан 64x64 цэвэр PNG алтлаг Sniper лого зурна (Chrome 100% таньдаг формат)
+  const canvas = document.createElement("canvas");
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+
+  // Хар дугуй дэвсгэр + Алтлаг хүрээ
+  ctx.beginPath();
+  ctx.arc(32, 32, 30, 0, Math.PI * 2);
+  ctx.fillStyle = "#0B0E14";
+  ctx.fill();
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = "#D4AF37";
+  ctx.stroke();
+
+  // Доторх алтлаг цагариг
+  ctx.beginPath();
+  ctx.arc(32, 32, 16, 0, Math.PI * 2);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#F0CE6E";
+  ctx.stroke();
+
+  // Загалмай шугам
+  ctx.beginPath();
+  ctx.moveTo(32, 4); ctx.lineTo(32, 60);
+  ctx.moveTo(4, 32); ctx.lineTo(60, 32);
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = "#D4AF37";
+  ctx.stroke();
+
+  // Голын улаан бай
+  ctx.beginPath();
+  ctx.arc(32, 32, 6, 0, Math.PI * 2);
+  ctx.fillStyle = "#EF4444";
+  ctx.fill();
+
+  const link = document.createElement("link");
+  link.rel = "icon";
+  link.type = "image/png";
+  link.href = canvas.toDataURL("image/png");
+  document.head.appendChild(link);
+})();
+</script>
   
   
 </body>
