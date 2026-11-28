@@ -746,41 +746,49 @@ body::after {
 <script>
 (function() {
   // ========================================================
-  // ЭНД ЗӨВШӨӨРӨГДСӨН VIP ХЭРЭГЛЭГЧДИЙН И-МЭЙЛИЙГ БИЧНЭ ҮҮ
+  // ЗӨВХӨН ЭНД БИЧИГДСЭН И-МЭЙЛҮҮД Л ОРОХ ЭРХТЭЙ
   // ========================================================
   const APPROVED_VIP_EMAILS = [
-    "mansmus2@gmail.com",
-    "shineedavaa@yahoo.com"
-    "b.odmaa1981@gmail.com"
-    "azodamjilt2026@gmail.com"
+    "mansmus2@gmail.com"
   ];
 
   const tgUser = "Stryx_golzonetrader";
   const tgBtn = document.getElementById("vip-tg-btn");
   if (tgBtn) tgBtn.href = ["https:", "", "t.me", tgUser].join("/");
 
-  // 1. Эхлээд localStorage-аас шалгана
-  let activeEmail = (localStorage.getItem("stryx_verified_email") || "").toLowerCase().trim();
-
-  // 2. Хэрэв тэнд байхгүй бол бусад хадгалагдсан бүх санах ойгоос хайна
-  if (!activeEmail) {
-    for (let i = 0; i < localStorage.length; i++) {
-      const val = localStorage.getItem(localStorage.key(i)) || "";
-      const match = val.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-      if (match) { activeEmail = match.toLowerCase(); break; }
+  // 1. Зөвхөн Supabase-ийн албан ёсны токеноос нэвтэрсэн хэрэглэгчийн и-мэйлийг авна
+  let currentEmail = "";
+  try {
+    const raw = localStorage.getItem("sb-xkxcprkzubjwfglcrivg-auth-token");
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data && data.user && data.user.email) {
+        currentEmail = data.user.email.toLowerCase().trim();
+      }
     }
+  } catch (e) {}
+
+  // 2. Хэрэв тэр хоосон бол login.html-ээс хадгалсан и-мэйлийг шалгана
+  if (!currentEmail) {
+    currentEmail = (localStorage.getItem("stryx_verified_email") || "").toLowerCase().trim();
   }
 
   const allowed = APPROVED_VIP_EMAILS.map(e => e.toLowerCase().trim());
 
-  if (!activeEmail || !allowed.includes(activeEmail)) {
+  // 3. Жагсаалтад байхгүй бол 100% ТҮГЖИНЭ!
+  if (!currentEmail || !allowed.includes(currentEmail)) {
     const info = document.getElementById("detected-email-info");
-    if (info) info.textContent = "Таны и-мэйл: " + (activeEmail || "Нэвтрээгүй байна");
+    if (info) {
+      info.textContent = currentEmail
+        ? "Таны бүртгэл (" + currentEmail + ") VIP эрхгүй байна."
+        : "Та эхлээд нэвтэрч орно уу.";
+    }
     const lock = document.getElementById("vip-lock-screen");
     if (lock) lock.style.display = "flex";
   }
 })();
 </script>
+
 
 
 
