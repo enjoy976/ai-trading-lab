@@ -1032,6 +1032,30 @@ body::after {
   init();
 
 })();
+
+// Амралтын өдөр (Бямба, Ням) зах зээл хаалттайг шалгана
+(function checkWeekendPause() {
+  const now = new Date();
+  const utcDay = now.getUTCDay(); // 6 = Бямба, 0 = Ням
+  const utcHour = now.getUTCHours();
+  const isWeekend = (utcDay === 6) || (utcDay === 0 && utcHour < 22) || (utcDay === 5 && utcHour >= 22);
+
+  if (isWeekend) {
+    // Бүх автомат шинэчлэлтийг (setInterval) зогсоож тоонуудыг тогтвортой барина
+    let id = window.setInterval(() => {}, 99999);
+    while (id--) window.clearInterval(id);
+
+    const badge = document.querySelector(".price-badge, header span, header div");
+    if (badge) {
+      const notice = document.createElement("div");
+      notice.style.cssText = "background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.5); color:#FBBF24; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; text-align:center; margin:10px auto; max-width:420px;";
+      notice.textContent = "⏸️ ЗАХ ЗЭЭЛ АМАРЧ БАЙНА (Даваа гараг 06:00 УБ цагт нээгдэнэ)";
+      document.querySelector("header")?.after(notice);
+    }
+  }
+})();
+  
+  
 </script>
 
 </body>
