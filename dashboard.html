@@ -1398,8 +1398,6 @@ document.querySelectorAll("button, a").forEach(el => {
               el.textContent = "0 LOTS (WEEKEND)";
               el.style.color = "#94A3B8";
             }
-            if (t.includes("BUYERS:")) el.textContent = "BUYERS: 50%";
-            if (t.includes("SELLERS:")) el.textContent = "SELLERS: 50%";
             if (t.includes("ӨНДӨР (HIGH)") || t.includes("ДУНД")) {
               el.textContent = "⏸️ ЗАХ ЗЭЭЛ ХААЛТТАЙ";
               el.style.color = "#FBBF24";
