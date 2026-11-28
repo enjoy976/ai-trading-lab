@@ -1200,6 +1200,17 @@ setInterval(() => {
   setInterval(syncRadarWithRealMarket, 5000);
 })();
 </script>
+
+<script>
+document.querySelectorAll("button, a").forEach(el => {
+  if (el.textContent.includes("Гарах") || el.textContent.toLowerCase().includes("logout")) {
+    el.addEventListener("click", () => {
+      localStorage.removeItem("stryx_verified_email");
+      localStorage.removeItem("sb-xkxcprkzubjwfglcrivg-auth-token");
+    });
+  }
+});
+</script>
   
   
 </body>
