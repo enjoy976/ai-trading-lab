@@ -1428,16 +1428,19 @@ document.querySelectorAll("button, a").forEach(el => {
       }
     });
 
-        // Амралтын өдрөөр хуучин скрипт BUYERS / SELLERS-ийг хөдөлгөх гэж оролдмогц 0.000 сек-д дарж түгжинэ
+            // Амралтын өдөр BUYERS / SELLERS мөрийг бүхлээр нь болон зураасыг нь 100% түгжинэ
     if (isMarketClosedWeekend) {
-      document.querySelectorAll("span, div, p, b, strong").forEach(el => {
-        if (el.children.length === 0) {
-          const txt = el.textContent.trim();
-          if (txt.startsWith("BUYERS:") && txt !== "BUYERS: 39%") el.textContent = "BUYERS: 39%";
-          if (txt.startsWith("SELLERS:") && txt !== "SELLERS: 61%") el.textContent = "SELLERS: 61%";
+      document.querySelectorAll("div, p, span").forEach(el => {
+        const txt = (el.textContent || "").trim();
+        if (txt.startsWith("BUYERS:") && txt.length < 20 && txt !== "BUYERS: 39%") {
+          el.textContent = "BUYERS: 39%";
+        }
+        if (txt.startsWith("SELLERS:") && txt.length < 20 && txt !== "SELLERS: 61%") {
+          el.textContent = "SELLERS: 61%";
         }
       });
     }
+
 
     
     isApplying = false;
