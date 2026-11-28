@@ -1428,7 +1428,7 @@ document.querySelectorAll("button, a").forEach(el => {
       }
     });
 
-            // Амралтын өдөр BUYERS / SELLERS мөрийг бүхлээр нь болон зураасыг нь 100% түгжинэ
+                // Амралтын өдөр BUYERS / SELLERS мөрийг болон доорх ногоон/улаан зураасны өргөнийг 39% / 61% дээр 100% түгжинэ
     if (isMarketClosedWeekend) {
       document.querySelectorAll("div, p, span").forEach(el => {
         const txt = (el.textContent || "").trim();
@@ -1438,8 +1438,21 @@ document.querySelectorAll("button, a").forEach(el => {
         if (txt.startsWith("SELLERS:") && txt.length < 20 && txt !== "SELLERS: 61%") {
           el.textContent = "SELLERS: 61%";
         }
+        // Доорх ногоон ба улаан зураасны өргөнийг яг 39% ба 61% болгож гагнана
+        if (el.style && el.style.width && el.style.width.includes("%")) {
+          const cardText = el.closest("div, section")?.parentElement?.textContent || "";
+          if (cardText.includes("BUYERS:") && cardText.includes("SELLERS:")) {
+            const bg = (el.style.background || el.style.backgroundColor || "").toLowerCase();
+            if (bg.includes("22c55e") || bg.includes("00ff") || bg.includes("green") || el.previousElementSibling === null) {
+              if (el.style.width !== "39%") el.style.width = "39%";
+            } else {
+              if (el.style.width !== "61%") el.style.width = "61%";
+            }
+          }
+        }
       });
     }
+
 
 
     
