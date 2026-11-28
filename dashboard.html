@@ -1531,6 +1531,75 @@ document.querySelectorAll("button, a").forEach(el => {
 })();
 </script>
 
+<style>
+@keyframes liquidGoldShine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes sniperRingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes sniperPulseCore {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(212, 175, 55, 0.55), inset 0 0 12px rgba(239, 68, 68, 0.4); }
+  50% { transform: scale(1.06); box-shadow: 0 0 34px rgba(240, 206, 110, 0.95), inset 0 0 20px rgba(239, 68, 68, 0.8); }
+}
+
+/* Голын STRYX ZONE GOLD SNIPER гарчгийг шингэн алт шиг гялалзуулна */
+.stryx-vip-title {
+  background: linear-gradient(90deg, #B8860B 0%, #FFF3B0 25%, #D4AF37 50%, #FFF8DC 75%, #B8860B 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquidGoldShine 4s linear infinite;
+  text-shadow: 0 4px 28px rgba(212, 175, 55, 0.35);
+  letter-spacing: 3px !important;
+  font-weight: 900 !important;
+}
+
+/* Sniper дуран логог амьд радар шиг болгоно */
+.stryx-vip-reticle {
+  position: relative;
+  border: 2px solid rgba(240, 206, 110, 0.85) !important;
+  animation: sniperPulseCore 3s ease-in-out infinite;
+}
+.stryx-vip-reticle::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(212, 175, 55, 0.65);
+  animation: sniperRingSpin 14s linear infinite;
+  pointer-events: none;
+}
+.stryx-vip-reticle::after {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  border-top: 2px solid #F0CE6E;
+  border-bottom: 2px solid transparent;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  animation: sniperRingSpin 4s linear infinite reverse;
+  pointer-events: none;
+}
+</style>
+
+<script>
+(function() {
+  // Голын STRYX ZONE GOLD SNIPER гарчгийг олж VIP алтлаг эффект өгнө
+  document.querySelectorAll("h1").forEach(h1 => {
+    if (h1.textContent.toUpperCase().includes("STRYX ZONE")) {
+      h1.classList.add("stryx-vip-title");
+      // Дээр нь байгаа дугуй логог олж эргэлддэг радар болгоно
+      const logo = h1.previousElementSibling;
+      if (logo) logo.classList.add("stryx-vip-reticle");
+    }
+  });
+})();
+</script>
+  
   
 </body>
 </html>
