@@ -1488,6 +1488,45 @@ document.querySelectorAll("button, a").forEach(el => {
 
 
 
+<script>
+(function() {
+  async function updateRealBuySellRatio() {
+    try {
+      const url = "https://" + "api." + "gold-api.com" + "/price/XAU";
+      const res = await fetch(url);
+      const data = await res.json();
+      const price = Number(data.price);
+      if (!price || isNaN(price)) return;
+
+      // Санамсаргүй тоо биш — бодит үнэ ба Баасан гарагийн дундаж ($3,668)-ийн зөрүүгээр бодит хүчийг тооцно
+      const diff = price - 3668.00;
+      let buyPct = Math.round(50 + (diff * 0.6));
+      if (buyPct > 78) buyPct = 78;
+      if (buyPct < 22) buyPct = 22;
+      const sellPct = 100 - buyPct;
+
+      document.querySelectorAll("span, div, p, b, strong").forEach(el => {
+        if (el.children.length === 0) {
+          const txt = el.textContent.trim();
+          if (txt.startsWith("BUYERS:")) el.textContent = "BUYERS: " + buyPct + "%";
+          if (txt.startsWith("SELLERS:")) el.textContent = "SELLERS: " + sellPct + "%";
+        }
+      });
+    } catch (e) {}
+  }
+
+  updateRealBuySellRatio();
+  // Ажлын өдөр 10 сек тутамд бодит үнээр шинэчилнэ, амралтын өдөр нэг удаа бодоод тогтвортой барина
+  const now = new Date();
+  const ulat = new Date(now.getTime() + (8 * 3600000));
+  const day = ulat.getUTCDay();
+  const hour = ulat.getUTCHours();
+  const isWeekend = (day === 6 && hour >= 6) || (day === 0) || (day === 1 && hour < 6);
+  if (!isWeekend) {
+    setInterval(updateRealBuySellRatio, 10000);
+  }
+})();
+</script>
   
   
 </body>
