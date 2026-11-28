@@ -1447,17 +1447,24 @@ document.querySelectorAll("button, a").forEach(el => {
       });
     }
 
-    isApplying = false;
+        isApplying = false;
   }
 
   syncAllWeekendStates();
 
   const observer = new MutationObserver(syncAllWeekendStates);
-  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["style"]
+  });
 })();
 </script>
 
 </body>
 </html>
+
 
 
