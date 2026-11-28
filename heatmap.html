@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🔥 AI WHALE &amp; LIQUIDITY HEATMAP</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --obsidian:       #0B0E14;
+  --obsidian-2:     #11151F;
+  --obsidian-3:     #161B27;
+  --surface:        rgba(22, 27, 39, 0.72);
+  --surface-2:      rgba(17, 21, 31, 0.85);
+  --border:         rgba(212, 175, 55, 0.14);
+  --border-strong:  rgba(212, 175, 55, 0.30);
+  --gold:           #D4AF37;
+  --gold-bright:    #F0CE6E;
+  --gold-dim:       #8E7423;
+  --gold-glow:      rgba(212, 175, 55, 0.18);
+  --text:           #E8ECF2;
+  --text-muted:     #8A93A6;
+  --text-dim:       #5C6478;
+  --green:          #22C55E;
+  --green-bright:   #4ADE80;
+  --green-glow:     rgba(34, 197, 94, 0.15);
+  --cyan:           #06B6D4;
+  --cyan-glow:      rgba(6, 182, 212, 0.15);
+  --red:            #EF4444;
+  --red-bright:     #F87171;
+  --red-glow:       rgba(239, 68, 68, 0.15);
+  --orange:         #F97316;
+  --orange-glow:    rgba(249, 115, 22, 0.15);
+  --radius:         16px;
+  --radius-sm:      10px;
+  --mono:           'JetBrains Mono', 'Courier New', monospace;
+  --sans:           'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--obsidian);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(212,175,55,0.04), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, black, transparent 80%);
+}
+
+/* ===== HEADER ===== */
+.whale-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 24px;
+  background: rgba(11, 14, 20, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--gold-glow);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.back-link:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateX(-3px);
+}
+
+.whale-header__title {
+  font-size: 17px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 30px;
+  background: var(--obsidian-2);
+  border: 1px solid var(--border-strong);
+  flex-shrink: 0;
+}
+
+.price-badge__icon { font-size: 14px; }
+
+.price-badge__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.price-badge__value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.price-badge.loading .price-badge__value {
+  color: var(--text-dim);
+  text-shadow: none;
+}
+
+/* ===== LAYOUT ===== */
+.whale-container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 20px 52px;
+}
+
+/* ===== GLASS CARD ===== */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+}
+
+.card-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+/* ===== HEATMAP ===== */
+.heatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== LIQUIDITY ROW ===== */
+.liq-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 90px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(11, 14, 20, 0.5);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.liq-row:hover {
+  border-color: var(--border-strong);
+  transform: translateX(4px);
+}
+
+.liq-row--buy {
+  border-left: 3px solid var(--red);
+}
+
+.liq-row--buy.tier-1 { border-left-color: var(--orange); }
+.liq-row--buy.tier-2 { border-left-color: var(--red); }
+.liq-row--buy.tier-3 { border-left-color: var(--red-bright); }
+
+.liq-row--sell {
+  border-left: 3px solid var(--green);
+}
+
+.liq-row--sell.tier-1 { border-left-color: var(--cyan); }
+.liq-row--sell.tier-2 { border-left-color: var(--green); }
+.liq-row--sell.tier-3 { border-left-color: var(--green-bright); }
+
+.liq-row--magnet {
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  animation: magnet-pulse 2s ease-in-out infinite;
+}
+
+@keyframes magnet-pulse {
+  0%, 100% { box-shadow: 0 0 16px var(--gold-glow); }
+  50%      { box-shadow: 0 0 32px rgba(212,175,55,0.35); }
+}
+
+/* ===== LIQ INFO ===== */
+.liq-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.liq-info__type {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.liq-row--buy .liq-info__type { color: var(--red-bright); }
+.liq-row--sell .liq-info__type { color: var(--green-bright); }
+
+.liq-info__offset {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.liq-info__price {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ===== LIQ BAR ===== */
+.liq-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.liq-bar-track {
+  height: 14px;
+  background: rgba(11, 14, 20, 0.6);
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+}
+
+.liq-bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  position: relative;
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.liq-row--buy .liq-bar-fill {
+  background: linear-gradient(90deg, var(--orange), var(--red));
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.liq-row--buy.tier-3 .liq-bar-fill {
+  background: linear-gradient(90deg, var(--red), var(--red-bright));
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+}
+
+.liq-row--sell .liq-bar-fill {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+.liq-row--sell.tier-3 .liq-bar-fill {
+  background: linear-gradient(90deg, var(--green), var(--green-bright));
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+}
+
+.liq-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  animation: bar-shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes bar-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.liq-bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liq-bar-label__pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.liq-row--buy .liq-bar-label__pct { color: var(--red-bright); }
+.liq-row--sell .liq-bar-label__pct { color: var(--green-bright); }
+
+.liq-bar-label__lots {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ===== LIQ BADGE ===== */
+.liq-badge {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.liq-badge__magnet {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: none;
+}
+
+.liq-row--magnet .liq-badge__magnet { display: block; }
+
+.liq-badge__vol {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.liq-badge__vol-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ===== CENTER PRICE BAR ===== */
+.price-center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.04));
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 30px var(--gold-glow);
+  position: relative;
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+.price-center::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+  animation: center-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes center-shimmer {
+  0%   { left: -100%; }
+  100% { left: 100%; }
+}
+
+.price-center__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.price-center__body {
+  flex: 1;
+}
+
+.price-center__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2px;
+}
+
+.price-center__value {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  text-shadow: 0 0 16px var(--gold-glow);
+  letter-spacing: 1px;
+}
+
+.price-center__change {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.price-center__change.up {
+  color: var(--green);
+  background: var(--green-glow);
+}
+
+.price-center__change.down {
+  color: var(--red);
+  background: var(--red-glow);
+}
+
+/* ===== SECTION DIVIDER ===== */
+.heatmap-section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heatmap-section-label--buy { color: var(--red-bright); }
+.heatmap-section-label--sell { color: var(--green-bright); }
+
+.heatmap-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.3;
+}
+
+/* ===== MAGNET ANALYZER ===== */
+.magnet-card {
+  background: linear-gradient(135deg, rgba(11,14,20,0.6), rgba(22,27,39,0.4));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 22px 22px;
+  transition: all 0.3s ease;
+}
+
+.magnet-card--active {
+  border-color: var(--gold);
+  box-shadow: 0 0 28px var(--gold-glow);
+}
+
+.magnet-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.magnet-card__icon {
+  font-size: 22px;
+}
+
+.magnet-card__name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.magnet-card__status {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.magnet-card__status .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.magnet-card__target {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(11,14,20,0.5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+}
+
+.magnet-card__target-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.magnet-card__target-value {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px var(--gold-glow);
+}
+
+.magnet-card__target-side {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+.magnet-card__target-side.buy {
+  color: var(--red-bright);
+  background: var(--red-glow);
+  border: 1px solid rgba(239,68,68,0.3);
+}
+
+.magnet-card__target-side.sell {
+  color: var(--green-bright);
+  background: var(--green-glow);
+  border: 1px solid rgba(34,197,94,0.3);
+}
+
+.magnet-card__insight {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.magnet-card__insight b { color: var(--gold-bright); }
+.magnet-card__insight .sweep { color: var(--red-bright); font-weight: 600; }
+.magnet-card__insight .reverse { color: var(--green-bright); font-weight: 600; }
+.magnet-card__insight .neutral { color: var(--gold); font-weight: 600; }
+
+/* ===== LEGEND ===== */
+.legend {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot--buy { background: var(--red); box-shadow: 0 0 8px var(--red-glow); }
+.legend-dot--sell { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+.legend-dot--magnet { background: var(--gold); box-shadow: 0 0 8px var(--gold-glow); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .whale-header { padding: 12px 14px; gap: 8px; }
+  .back-link { padding: 7px 12px; font-size: 12px; }
+  .whale-header__title { font-size: 14px; }
+  .price-badge { padding: 6px 12px; }
+  .price-badge__value { font-size: 13px; }
+  .whale-container { padding: 24px 12px 40px; }
+  .glass-card { padding: 20px 16px; }
+  .liq-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px;
+  }
+  .liq-badge { align-items: flex-start; text-align: left; }
+  .price-center { padding: 16px 18px; flex-wrap: wrap; }
+  .price-center__value { font-size: 22px; }
+  .magnet-card { padding: 18px 16px; }
+  .magnet-card__target { flex-wrap: wrap; }
+  .magnet-card__target-value { font-size: 18px; }
+  .legend { gap: 12px; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::selection { background: var(--gold-glow); color: var(--gold-bright); }
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="whale-header">
+  <a href="dashboard.html" class="back-link">← DASHBOARD</a>
+  <div class="whale-header__title">🔥 AI WHALE &amp; LIQUIDITY HEATMAP</div>
+  <div class="price-badge loading" id="priceBadge">
+    <span class="price-badge__icon">🥇</span>
+    <div>
+      <div class="price-badge__label">XAUUSD</div>
+      <div class="price-badge__value" id="xauPrice">...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="whale-container">
+
+  <!-- ===== HEATMAP CARD ===== -->
+  <div class="glass-card">
+
+    <div class="card-label">🌊 LIQUIDITY HEATMAP &amp; ORDERBOOK FLOW</div>
+
+    <div class="heatmap">
+
+      <!-- BUY-SIDE (above price) -->
+      <div class="heatmap-section-label heatmap-section-label--buy">
+        🔴 BUY-SIDE LIQUIDITY — ШОРТ СТОП БӨӨГНӨРӨЛ (above price)
+      </div>
+
+      <div id="buySidePools"></div>
+
+      <!-- CENTER PRICE -->
+      <div class="price-center">
+        <span class="price-center__icon">🥇</span>
+        <div class="price-center__body">
+          <div class="price-center__label">CURRENT XAUUSD SPOT PRICE</div>
+          <div class="price-center__value" id="centerPrice">$3,660.00</div>
+        </div>
+        <div class="price-center__change up" id="priceChange">+0.00</div>
+      </div>
+
+      <!-- SELL-SIDE (below price) -->
+      <div class="heatmap-section-label heatmap-section-label--sell">
+        🟢 SELL-SIDE LIQUIDITY — ЛОНГ СТОП БӨӨГНӨРӨЛ (below price)
+      </div>
+
+      <div id="sellSidePools"></div>
+
+    </div>
+
+    <div class="legend" style="margin-top:20px;">
+      <div class="legend-item"><span class="legend-dot legend-dot--buy"></span> Buy-side (Short Stops)</div>
+      <div class="legend-item"><span class="legend-dot legend-dot--sell"></span> Sell-side (Long Stops)</div>
+      <div class="legend-item"><span class="legend-dot legend-dot--magnet"></span> Magnet Pool (Highest)</div>
+    </div>
+
+  </div>
+
+  <!-- ===== MAGNET ANALYZER CARD ===== -->
+  <div class="glass-card">
+
+    <div class="card-label">🧲 AI SMART MONEY MAGNET ANALYZER</div>
+
+    <div class="magnet-card" id="magnetCard">
+      <div class="magnet-card__header">
+        <span class="magnet-card__icon">🧲</span>
+        <span class="magnet-card__name">SMART MONEY MAGNET</span>
+        <span class="magnet-card__status"><span class="dot"></span>LIVE</span>
+      </div>
+      <div class="magnet-card__target">
+        <div>
+          <div class="magnet-card__target-label">MAGNET TARGET</div>
+          <div class="magnet-card__target-value" id="magnetTarget">—</div>
+        </div>
+        <div class="magnet-card__target-side" id="magnetSide">—</div>
+      </div>
+      <div class="magnet-card__insight" id="magnetInsight">Шинжилгээ хийгдэж байна...</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  // ===== ELEMENTS =====
+  var priceBadge    = document.getElementById('priceBadge');
+  var xauPriceEl    = document.getElementById('xauPrice');
+  var centerPriceEl = document.getElementById('centerPrice');
+  var priceChangeEl = document.getElementById('priceChange');
+  var buySideEl     = document.getElementById('buySidePools');
+  var sellSideEl    = document.getElementById('sellSidePools');
+  var magnetCard    = document.getElementById('magnetCard');
+  var magnetTarget  = document.getElementById('magnetTarget');
+  var magnetSide    = document.getElementById('magnetSide');
+  var magnetInsight = document.getElementById('magnetInsight');
+
+  // ===== STATE =====
+  var xauPrice   = 3660;
+  var prevPrice  = 3660;
+
+  // Pool offsets (dollars from spot)
+  var buyOffsets  = [7, 14, 22];
+  var sellOffsets = [7, 14, 22];
+
+  // Pool data
+  var buyPools  = [];
+  var sellPools = [];
+
+  // ===== GENERATE POOL DATA =====
+  function generatePools() {
+    buyPools = [];
+    sellPools = [];
+
+    for (var i = 0; i < 3; i++) {
+      buyPools.push({
+        offset: buyOffsets[i],
+        price: xauPrice + buyOffsets[i],
+        intensity: 65 + Math.random() * 30,
+        lots: Math.round((80 + Math.random() * 400) * 10) / 10,
+        tier: i + 1
+      });
+    }
+
+    for (var j = 0; j < 3; j++) {
+      sellPools.push({
+        offset: sellOffsets[j],
+        price: xauPrice - sellOffsets[j],
+        intensity: 65 + Math.random() * 30,
+        lots: Math.round((80 + Math.random() * 400) * 10) / 10,
+        tier: j + 1
+      });
+    }
+  }
+
+  // ===== RENDER POOLS =====
+  function renderPools() {
+    var buyHTML = '';
+    var sellHTML = '';
+
+    for (var i = 0; i < buyPools.length; i++) {
+      var p = buyPools[i];
+      buyHTML +=
+        '<div class="liq-row liq-row--buy tier-' + p.tier + '" data-side="buy" data-idx="' + i + '">' +
+          '<div class="liq-info">' +
+            '<span class="liq-info__type">🔴 BUY-SIDE L' + p.tier + '</span>' +
+            '<span class="liq-info__offset">+$' + p.offset + '</span>' +
+            '<span class="liq-info__price">$' + p.price.toFixed(1) + '</span>' +
+          '</div>' +
+          '<div class="liq-bar-wrap">' +
+            '<div class="liq-bar-track">' +
+              '<div class="liq-bar-fill" style="width:' + p.intensity + '%"></div>' +
+            '</div>' +
+            '<div class="liq-bar-label">' +
+              '<span class="liq-bar-label__pct">' + Math.round(p.intensity) + '%</span>' +
+              '<span class="liq-bar-label__lots">' + p.lots + ' lots</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="liq-badge">' +
+            '<span class="liq-badge__magnet">🧲 MAGNET</span>' +
+            '<span class="liq-badge__vol">' + (p.lots * 100).toFixed(0) + 'K</span>' +
+            '<span class="liq-badge__vol-label">EST. VOLUME</span>' +
+          '</div>' +
+        '</div>';
+    }
+
+    for (var j = 0; j < sellPools.length; j++) {
+      var s = sellPools[j];
+      sellHTML +=
+        '<div class="liq-row liq-row--sell tier-' + s.tier + '" data-side="sell" data-idx="' + j + '">' +
+          '<div class="liq-info">' +
+            '<span class="liq-info__type">🟢 SELL-SIDE L' + s.tier + '</span>' +
+            '<span class="liq-info__offset">-$' + s.offset + '</span>' +
+            '<span class="liq-info__price">$' + s.price.toFixed(1) + '</span>' +
+          '</div>' +
+          '<div class="liq-bar-wrap">' +
+            '<div class="liq-bar-track">' +
+              '<div class="liq-bar-fill" style="width:' + s.intensity + '%"></div>' +
+            '</div>' +
+            '<div class="liq-bar-label">' +
+              '<span class="liq-bar-label__pct">' + Math.round(s.intensity) + '%</span>' +
+              '<span class="liq-bar-label__lots">' + s.lots + ' lots</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="liq-badge">' +
+            '<span class="liq-badge__magnet">🧲 MAGNET</span>' +
+            '<span class="liq-badge__vol">' + (s.lots * 100).toFixed(0) + 'K</span>' +
+            '<span class="liq-badge__vol-label">EST. VOLUME</span>' +
+          '</div>' +
+        '</div>';
+    }
+
+    buySideEl.innerHTML = buyHTML;
+    sellSideEl.innerHTML = sellHTML;
+  }
+
+  // ===== MAGNET ANALYZER =====
+  function findMagnet() {
+    var maxPool = null;
+    var maxSide = null;
+    var maxVal  = 0;
+
+    for (var i = 0; i < buyPools.length; i++) {
+      if (buyPools[i].intensity > maxVal) {
+        maxVal = buyPools[i].intensity;
+        maxPool = buyPools[i];
+        maxSide = 'buy';
+      }
+    }
+
+    for (var j = 0; j < sellPools.length; j++) {
+      if (sellPools[j].intensity > maxVal) {
+        maxVal = sellPools[j].intensity;
+        maxPool = sellPools[j];
+        maxSide = 'sell';
+      }
+    }
+
+    return { pool: maxPool, side: maxSide };
+  }
+
+  function updateMagnet() {
+    var magnet = findMagnet();
+
+    // Reset all magnet highlights
+    document.querySelectorAll('.liq-row').forEach(function(r) {
+      r.classList.remove('liq-row--magnet');
+    });
+
+    if (!magnet.pool) return;
+
+    // Highlight the magnet row
+    var selector = '.liq-row[data-side="' + magnet.side + '"][data-idx="';
+    var idx = magnet.side === 'buy'
+      ? buyPools.indexOf(magnet.pool)
+      : sellPools.indexOf(magnet.pool);
+    var row = document.querySelector(selector + idx + '"]');
+    if (row) row.classList.add('liq-row--magnet');
+
+    // Update magnet card
+    magnetCard.classList.add('magnet-card--active');
+    magnetTarget.textContent = '$' + magnet.pool.price.toFixed(1);
+
+    if (magnet.side === 'buy') {
+      magnetSide.textContent = '🔴 BUY-SIDE (Short Stops)';
+      magnetSide.className = 'magnet-card__target-side buy';
+    } else {
+      magnetSide.textContent = '🟢 SELL-SIDE (Long Stops)';
+      magnetSide.className = 'magnet-card__target-side sell';
+    }
+
+    // Generate insight
+    var insight = generateInsight(magnet);
+    magnetInsight.innerHTML = insight;
+  }
+
+  function generateInsight(magnet) {
+    var p = magnet.pool;
+    var sideLabel = magnet.side === 'buy'
+      ? 'BUY-SIDE (шорт стоп бөөгнөрөл)'
+      : 'SELL-SIDE (лонг стоп бөөгнөрөл)';
+    var direction = magnet.side === 'buy' ? 'дээш' : 'доош';
+    var reverseDir = magnet.side === 'buy' ? 'доош' : 'дээш';
+    var sweepAction = magnet.side === 'buy' ? 'өндөр үнэ рүү push хийж' : 'доод үнэ рүү drop хийж';
+
+    var intensityLevel = p.intensity > 85 ? 'МАШ ӨНДӨР' : p.intensity > 75 ? 'ӨНДӨР' : 'ДУНДЖААС ДЭЭШ';
+
+    return '🧲 <b>SMART MONEY MAGNET ШИНЖИЛГЭЭ:</b>\n\n' +
+      'Одоогийн байдлаар <b>' + sideLabel + '</b> хамгийн өндөр liquidity ' +
+      'бөөгнөрөлтэй байна. <b>$' + p.price.toFixed(1) + '</b> түвшинд ' +
+      '<b>' + Math.round(p.intensity) + '%</b> (' + intensityLevel + ') ' +
+      'интенстэй, ~<b>' + p.lots + ' lots</b> estimated volume.\n\n' +
+      '<span class="sweep">⚠️ MAGNET SCENARIO:</span>\n' +
+      'Банкууд / институуд эхлээд үнийг ' + direction + ' нь ' + sweepAction + ' ' +
+      '<b>$' + p.price.toFixed(1) + '</b> түвшний liquidity-г <span class="sweep">sweep</span> ' +
+      'хийх магадлал өндөр. Энэ нь жижиг трейдерүүдийн stop loss-уудыг цохиулж, ' +
+      'институуд өөрсдийн том оруулгыг гүйцэтгэх боломжтой.\n\n' +
+      '<span class="reverse">✅ REVERSAL SETUP:</span>\n' +
+      'Liquidity sweep хийгдсэний дараа үнэ <b>' + reverseDir + ' чиглэлд</b> ' +
+      'буцах (reversal) магадлалтай. Энэ дотор <b>Order Block + FVG</b> ' +
+      'комбинацийг хүлээж entry авах боломжтой.\n\n' +
+      '<span class="neutral">⚡ STRYX AI ЗӨВЛӨГӨӨ:</span>\n' +
+      '• <b>' + (magnet.side === 'buy' ? 'SELL' : 'BUY') + '</b> setup-г ' +
+      '$' + p.price.toFixed(1) + ' түвшний дотор хүлээж бай\n' +
+      '• Sweep + CHoCH (Change of Character) батлагдсаны дараа entry ав\n' +
+      '• Stop Loss: sweep-н дээд/доод талын <b>3-5 пункт</b> цаана\n' +
+      '• Take Profit: дараагийн эсрэг liquidity pool хүртэл\n' +
+      '• <b>R:R минимум 1:2</b> — эрсдэлээ хянаж, хэмжээгээ баримтлах';
+  }
+
+  // ===== UPDATE PRICE DISPLAY =====
+  function updatePriceDisplay() {
+    var formatted = '$' + xauPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    centerPriceEl.textContent = formatted;
+    xauPriceEl.textContent = formatted;
+    priceBadge.classList.remove('loading');
+
+    var diff = xauPrice - prevPrice;
+    var diffStr = (diff >= 0 ? '+' : '') + diff.toFixed(2);
+    priceChangeEl.textContent = diffStr;
+    priceChangeEl.className = 'price-center__change ' + (diff >= 0 ? 'up' : 'down');
+  }
+
+  // ===== FETCH XAUUSD =====
+  function fetchPrice() {
+    fetch('https://api.gold-api.com/price/XAU')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && data.price) {
+          prevPrice = xauPrice;
+          xauPrice = Number(data.price);
+          updatePriceDisplay();
+          generatePools();
+          renderPools();
+          updateMagnet();
+        }
+      })
+      .catch(function() {
+        // Use current price, regenerate pools
+        xauPriceEl.textContent = '$' + xauPrice.toFixed(2);
+        priceBadge.classList.remove('loading');
+      });
+  }
+
+  // ===== INIT =====
+  function init() {
+    generatePools();
+    renderPools();
+    updateMagnet();
+    fetchPrice();
+    setInterval(fetchPrice, 10000);
+  }
+
+  init();
+
+})();
+</script>
+
+</body>
+
+</html>
