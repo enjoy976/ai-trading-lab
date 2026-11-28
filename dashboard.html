@@ -1750,7 +1750,39 @@ document.querySelectorAll("button, a").forEach(el => {
   });
 })();
 </script>
-  
+
+<script>
+(function() {
+  const cards = document.querySelectorAll(".card");
+  if (cards.length > 0) {
+    // Картуудын яг эцэг хайрцгийг шууд олоод 5 багана (5x3 = 15) болгож өрнө
+    const parentBox = cards[0].parentElement;
+    if (parentBox) {
+      function applyFiveGrid() {
+        if (window.innerWidth > 1100) {
+          parentBox.style.setProperty("display", "grid", "important");
+          parentBox.style.setProperty("grid-template-columns", "repeat(5, 1fr)", "important");
+          parentBox.style.setProperty("gap", "16px", "important");
+          parentBox.style.setProperty("max-width", "1340px", "important");
+          parentBox.style.setProperty("margin", "0 auto", "important");
+        } else if (window.innerWidth > 680) {
+          parentBox.style.setProperty("grid-template-columns", "repeat(3, 1fr)", "important");
+        } else {
+          parentBox.style.setProperty("grid-template-columns", "repeat(2, 1fr)", "important");
+        }
+      }
+      applyFiveGrid();
+      window.addEventListener("resize", applyFiveGrid);
+    }
+
+    // Эхний 5 гол VIP картыг алтлаг хүрээ ба VIP AI шошготой онцолно
+    cards.forEach((card, idx) => {
+      if (idx < 5) card.classList.add("stryx-vip-featured");
+    });
+  }
+})();
+</script>
+
   
 </body>
 </html>
