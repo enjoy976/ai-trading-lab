@@ -1368,6 +1368,54 @@ document.querySelectorAll("button, a").forEach(el => {
 })();
 </script>
 
+<script>
+(function() {
+  function syncGlobalSessionsWinter() {
+    // Одоогийн цагийг Улаанбаатарын цаг (UTC+8) руу хөрвүүлнэ
+    const now = new Date();
+    const ulat = new Date(now.getTime() + (8 * 3600000));
+    const day = ulat.getUTCDay(); // 0=Ням, 1=Даваа ... 5=Баасан, 6=Бямба
+    const hour = ulat.getUTCHours();
+
+    // Дэлхийн зах зээл Бямба 06:00-аас Даваа 06:00 (УБ цаг) хүртэл БҮРЭН ХААЛТТАЙ
+    const isMarketClosedWeekend =
+      (day === 6 && hour >= 6) ||
+      (day === 0) ||
+      (day === 1 && hour < 6);
+
+    // Өвлийн цагийн хуваарь (УБ цагаар нээлттэй байх цагууд)
+    const sessions = {
+      "SYDNEY": !isMarketClosedWeekend && (hour >= 6 && hour < 15),
+      "TOKYO": !isMarketClosedWeekend && (hour >= 8 && hour < 17),
+      "LONDON": !isMarketClosedWeekend && (hour >= 16 || hour < 1),
+      "NEW YORK": !isMarketClosedWeekend && (hour >= 21 || hour < 6)
+    };
+
+    // Дэлгэц дээрх 4 биржийн картыг олж төлөвийг нь шинэчилнэ
+    document.querySelectorAll("div, section, article").forEach(card => {
+      const txt = card.textContent || "";
+      Object.keys(sessions).forEach(city => {
+        if (txt.includes(city) && card.children.length > 0 && card.children.length <= 5) {
+          card.querySelectorAll("span, div, p, b").forEach(el => {
+            if (el.children.length === 0 && (el.textContent.includes("OPEN") || el.textContent.includes("CLOSED"))) {
+              if (sessions[city]) {
+                el.textContent = "🟢 OPEN";
+                el.style.color = "#22C55E";
+              } else {
+                el.textContent = isMarketClosedWeekend ? "🔴 CLOSED (WEEKEND)" : "⚪ CLOSED";
+                el.style.color = isMarketClosedWeekend ? "#EF4444" : "#94A3B8";
+              }
+            }
+          });
+        }
+      });
+    });
+  }
+
+  syncGlobalSessionsWinter();
+  setInterval(syncGlobalSessionsWinter, 1000);
+})();
+</script>
   
   
 </body>
