@@ -1467,6 +1467,70 @@ document.querySelectorAll("button, a").forEach(el => {
 })();
 </script>
 
+<style>
+@keyframes stryxMarqueeScroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.stryx-mid-ticker {
+  flex: 1;
+  max-width: 960px;
+  margin: 0 16px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(212,175,55,0.08), rgba(16,20,29,0.9), rgba(212,175,55,0.08));
+  border: 1px solid rgba(212,175,55,0.35);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-shadow: inset 0 0 12px rgba(212,175,55,0.08);
+}
+.stryx-mid-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: stryxMarqueeScroll 32s linear infinite;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #F0CE6E;
+  letter-spacing: 0.3px;
+}
+.stryx-mid-ticker:hover .stryx-mid-ticker-track {
+  animation-play-state: paused;
+}
+@media (max-width: 768px) {
+  .stryx-mid-ticker { display: none; }
+}
+</style>
+
+<script>
+(function() {
+  // MN / EN болон ГАРАХ товчны яг дунд талын хоосон зайд байрлуулна
+  const langBox = document.querySelector(".language-switcher, [data-language]")?.closest("div");
+  const parentRow = langBox ? langBox.parentElement : null;
+
+  if (parentRow && !document.querySelector(".stryx-mid-ticker")) {
+    const now = new Date();
+    const ulat = new Date(now.getTime() + (8 * 3600000));
+    const day = ulat.getUTCDay();
+    const hour = ulat.getUTCHours();
+    const isWeekend = (day === 6 && hour >= 6) || (day === 0) || (day === 1 && hour < 6);
+
+    const textItems = isWeekend
+      ? "⏸️ WEEKEND MARKET PAUSE: Дэлхийн зах зээл амарч байна (Даваа гараг 06:00 УБ цагт нээгдэнэ)   ✦   📓 АМРАЛТЫН ӨДРИЙН ДААЛГАВАР: Өнгөрсөн долоо хоногийн арилжааны алдаагаа дүгнэж, шинэ 7 хоногийн төлөвлөгөөгөө гаргаарай   ✦   🤖 AI MENTOR & SIMULATOR: Зах зээл хаалттай ч 24/7 бэлтгэл хийх боломжтой   ✦   "
+      : "🎯 SNIPER RULE: Зөвхөн Liquidity Sweep + CHoCH батлагдсан үед арилжаанд орно   ✦   🛡️ RISK MANAGEMENT: Нэг арилжаанд дансны 1%–2%-иас илүү эрсдэл бүү гарга • Stop Loss-гүй арилжаа хэзээ ч бүү нээ   ✦   ⏰ KILLZONE HOURS (ULAT): London 16:00–18:00 • New York 21:00–23:00   ✦   🤖 AI CHART SCANNER: M15 / H1 зургаа оруулж SMC Order Block ба FVG бүсээ шалгаарай   ✦   ";
+
+    const ticker = document.createElement("div");
+    ticker.className = "stryx-mid-ticker";
+    ticker.innerHTML = `<div class="stryx-mid-ticker-track"><span>${textItems}</span><span>${textItems}</span></div>`;
+
+    // MN/EN товчны баруун талд, ГАРАХ товчны зүүн талд яг дунд нь оруулна
+    langBox.after(ticker);
+  }
+})();
+</script>
+
+  
 </body>
 </html>
 
