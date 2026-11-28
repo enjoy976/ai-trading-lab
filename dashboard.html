@@ -1791,7 +1791,10 @@ document.querySelectorAll("button, a").forEach(el => {
     </div>
     <div style="display: flex; flex-wrap: wrap; gap: 18px; font-weight: 600;">
       <a href="vip.html" style="color: #F0CE6E; text-decoration: none;">👑 VIP Гишүүнчлэл</a>
-      <a href="https://t.me" target="_blank" style="color: #E8ECF2; text-decoration: none;">📱 Telegram Админ</a>
+      <a id="footer-tg-link" href="#" target="_blank" style="color: #E8ECF2; text-decoration: none;">📱 Telegram Админ</a>
+<script>
+  document.getElementById("footer-tg-link").href = ["https:", "", "t.me", "Stryx_golzonetrader"].join("/");
+</script>
       <span style="color: #22C55E;">● System Operational 24/7</span>
     </div>
   </div>
