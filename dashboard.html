@@ -1277,17 +1277,17 @@ document.querySelectorAll("button, a").forEach(el => {
         <span style="background:#EF4444; color:#fff; font-size:11px; font-weight:800; padding:3px 9px; border-radius:6px; letter-spacing:0.5px;">
           <span class="stryx-blink-dot" style="background:#fff; width:7px; height:7px; margin-right:5px;"></span>🚨 RED NEWS RADAR
         </span>
-        <strong id="newsTitle" style="color:#F8FAFC; font-size:14px;">🇺🇸 USD — High Impact Economic Data (21:30 ULAT)</strong>
+        <strong id="newsTitle" style="color:#F8FAFC; font-size:14px;">⏳ Бодит мэдээний хуваарь шалгаж байна...</strong>
       </div>
       <div style="display:flex; align-items:center; gap:12px;">
-        <span id="newsCountdown" style="color:#F0CE6E; font-weight:800; font-family:monospace; font-size:14px;">⏳ --:--:--</span>
+        <span id="newsCountdown" style="color:#F0CE6E; font-weight:800; font-family:monospace; font-size:14px;">--:--:--</span>
         <span style="color:#94A3B8; font-size:12px;">▼ AI Сценари</span>
       </div>
     </div>
     <div id="newsDetails" class="stryx-news-details">
-      <div style="color:#F0CE6E; font-weight:700; margin-bottom:4px;">🧠 STRYX AI GOLD IMPACT PREDICTOR:</div>
-      • 🟢 <b>Алт Өсөх (Bullish XAUUSD):</b> Хэрэв USD мэдээ таамгаас муу гарвал ам.доллар суларч алт <b>+$12-аас +$25</b> огцом өсөх магадлалтай.<br>
-      • 🔴 <b>Алт Унах (Bearish XAUUSD):</b> Хэрэв USD мэдээ хүчтэй гарвал алт <b>-$12-аас -$25</b> унаж доод Liquidity-г түүнэ.<br>
+      <div id="newsMeta" style="color:#F0CE6E; font-weight:700; margin-bottom:6px;">🧠 STRYX AI GOLD IMPACT PREDICTOR (Forex Factory Live):</div>
+      • 🟢 <b>Алт Өсөх (Bullish XAUUSD):</b> Бодит тоо таамгаас муу гарвал USD суларч алт <b>+$12-аас +$25</b> огцом өснө.<br>
+      • 🔴 <b>Алт Унах (Bearish XAUUSD):</b> Бодит тоо таамгаас өндөр гарвал алт <b>-$12-аас -$25</b> унаж доод Liquidity-г түүнэ.<br>
       • 🛡️ <b>Алтан Дүрэм:</b> Мэдээ гарахаас <b>15 минутын өмнө</b> шинэ арилжаа бүү нээ!
     </div>
   `;
@@ -1297,23 +1297,59 @@ document.querySelectorAll("button, a").forEach(el => {
     det.style.display = det.style.display === "block" ? "none" : "block";
   });
 
-    // Sniper дуран логоны яг дээр (ил харагдах хэсэгт) байрлуулна
   const targetBox = document.querySelector(".hero, .dashboard-header, main, .container");
-  if (targetBox) {
-    targetBox.prepend(banner);
-  } else {
-    document.body.prepend(banner);
-  }
+  if (targetBox) targetBox.prepend(banner);
+  else document.body.prepend(banner);
 
+  let nextRealEvent = null;
+
+  async function loadRealForexFactoryNews() {
+    try {
+      const ffUrl = "https://" + "nfs.faireconomy.media/ff_calendar_thisweek.json";
+      const proxyUrl = "https://" + "corsproxy.io/?" + encodeURIComponent(ffUrl);
+      const res = await fetch(proxyUrl);
+      const events = await res.json();
+      const now = new Date();
+
+      // Зөвхөн USD болон High Impact (Улаан) ирээдүйд болох мэдээнүүдийг шүүнэ
+      const upcomingUsdRed = events
+        .filter(ev => ev.country === "USD" && ev.impact === "High" && new Date(ev.date) > now)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (upcomingUsdRed.length > 0) {
+        nextRealEvent = upcomingUsdRed[0];
+        const metaEl = document.getElementById("newsMeta");
+        if (metaEl) {
+          metaEl.innerHTML = `🧠 LIVE МЭДЭЭ: <b>${nextRealEvent.title}</b> | Таамаг: <b>${nextRealEvent.forecast || "N/A"}</b> | Өмнөх: <b>${nextRealEvent.previous || "N/A"}</b>`;
+        }
+      }
+    } catch (e) {}
+  }
 
   function updateNewsTimer() {
     const now = new Date();
     const ulat = new Date(now.getTime() + (8 * 3600000));
-    const day = ulat.getUTCDay(); // 0=Ням, 6=Бямба
+    const day = ulat.getUTCDay();
     const titleEl = document.getElementById("newsTitle");
     const countEl = document.getElementById("newsCountdown");
 
-    // Бямба эсвэл Ням гарагт амралтын төлөв харуулна
+    if (nextRealEvent) {
+      const evTime = new Date(nextRealEvent.date);
+      const evUlat = new Date(evTime.getTime() + (8 * 3600000));
+      const hh = String(evUlat.getUTCHours()).padStart(2, "0");
+      const mm = String(evUlat.getUTCMinutes()).padStart(2, "0");
+      titleEl.textContent = `🇺🇸 USD — ${nextRealEvent.title} (${hh}:${mm} ULAT)`;
+
+      const diff = evTime - now;
+      if (diff > 0) {
+        const h = String(Math.floor(diff / 3600000)).padStart(2, "0");
+        const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+        const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+        countEl.textContent = `⏳ ${h}:${m}:${s}`;
+        return;
+      }
+    }
+
     if (day === 6 || day === 0) {
       banner.style.animation = "none";
       banner.style.borderColor = "rgba(212, 175, 55, 0.55)";
@@ -1322,23 +1358,16 @@ document.querySelectorAll("button, a").forEach(el => {
       return;
     }
 
-    // Өнөөдрийн 21:30 ULAT (Нью-Йорк мэдээний оргил цаг) хүртэл тоолно
-    const target = new Date(ulat);
-    target.setUTCHours(21, 30, 0, 0);
-    if (ulat > target) target.setUTCDate(target.getUTCDate() + 1);
-
-    const diff = target - ulat;
-    const h = String(Math.floor(diff / 3600000)).padStart(2, "0");
-    const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
-    const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
-
-    countEl.textContent = `⏳ ${h}:${m}:${s}`;
+    titleEl.textContent = "🇺🇸 USD — Өнөөдөр онцгой улаан мэдээгүй (Хэвийн арилжаа)";
+    countEl.textContent = "✅ SAFE";
   }
 
+  loadRealForexFactoryNews();
   updateNewsTimer();
   setInterval(updateNewsTimer, 1000);
 })();
 </script>
+
   
   
 </body>
