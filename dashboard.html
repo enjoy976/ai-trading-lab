@@ -1372,7 +1372,7 @@ document.querySelectorAll("button, a").forEach(el => {
 (function() {
   let isApplying = false;
 
-  function syncSessionsAndKillzones() {
+  function syncAllWeekendStates() {
     if (isApplying) return;
     isApplying = true;
 
@@ -1434,17 +1434,58 @@ document.querySelectorAll("button, a").forEach(el => {
           }
         });
       }
+
+      // 3. Амралтын өдөр VOLUME & ХҮЧНИЙ ХЭМЖҮҮР-ийг зогсооно
+      if (isMarketClosedWeekend && txt.includes("VOLUME & ХҮЧНИЙ ХЭМЖҮҮР") && card.children.length <= 12) {
+        card.querySelectorAll("span, div, p, b").forEach(el => {
+          if (el.children.length === 0) {
+            const t = el.textContent.trim();
+            if (t.includes("LOTS") && t !== "0 LOTS (WEEKEND)") {
+              el.textContent = "0 LOTS (WEEKEND)";
+              el.style.color = "#94A3B8";
+            }
+            if (t.includes("BUYERS:")) el.textContent = "BUYERS: 50%";
+            if (t.includes("SELLERS:")) el.textContent = "SELLERS: 50%";
+            if (t.includes("ӨНДӨР (HIGH)") || t.includes("ДУНД")) {
+              el.textContent = "⏸️ ЗАХ ЗЭЭЛ ХААЛТТАЙ";
+              el.style.color = "#FBBF24";
+            }
+          }
+        });
+      }
+
+      // 4. Амралтын өдөр STRYXZONE SNIPER RADAR-ийг STANDBY горимд шилжүүлнэ
+      if (isMarketClosedWeekend && txt.includes("SNIPER RADAR") && card.children.length <= 12) {
+        card.querySelectorAll("span, div, p, b").forEach(el => {
+          if (el.children.length === 0) {
+            const t = el.textContent.trim();
+            if (t.includes("ACTIVE") && !t.includes("STANDBY")) {
+              el.textContent = "⏸️ STANDBY";
+              el.style.color = "#FBBF24";
+            }
+            if (t.includes("BULLISH / BUY") || t.includes("BEARISH / SELL")) {
+              el.textContent = "⏸️ MARKET CLOSED (WEEKEND)";
+              el.style.color = "#94A3B8";
+            }
+            if (t.includes("SCANNING")) {
+              el.textContent = "⏸️ PAUSED (WEEKEND)";
+              el.style.color = "#94A3B8";
+            }
+          }
+        });
+      }
     });
 
     isApplying = false;
   }
 
-  syncSessionsAndKillzones();
+  syncAllWeekendStates();
 
-  const observer = new MutationObserver(syncSessionsAndKillzones);
+  const observer = new MutationObserver(syncAllWeekendStates);
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 })();
 </script>
+
 
 
   
