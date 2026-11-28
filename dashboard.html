@@ -1428,26 +1428,28 @@ document.querySelectorAll("button, a").forEach(el => {
       }
     });
 
-    // Амралтын өдөр BUYERS / SELLERS тоо ба ногоон зураасны өргөнийг 39% дээр 100% түгжинэ (Улаан суурь 100% бүтэн)
+        // Амралтын өдөр BUYERS: 39% (Ногоон богино) / SELLERS: 61% (Улаан урт) дээр 100% гагнана
     if (isMarketClosedWeekend) {
       document.querySelectorAll("div, p, span").forEach(el => {
         const txt = (el.textContent || "").trim();
-        if (txt.startsWith("BUYERS:") && txt.length < 20 && txt !== "BUYERS: 39%") {
-          el.textContent = "BUYERS: 39%";
+        if (txt.startsWith("BUYERS:") && txt.length < 20) {
+          if (txt !== "BUYERS: 39%") el.textContent = "BUYERS: 39%";
+          // Яг энэ мөрний доод талд байгаа зураасны хайрцгийг олоод доторх ногоон зураасыг 39% болгоно
+          const row = el.parentElement;
+          const barWrapper = row ? row.nextElementSibling : null;
+          if (barWrapper && barWrapper.firstElementChild) {
+            barWrapper.firstElementChild.style.setProperty("width", "39%", "important");
+            barWrapper.firstElementChild.style.setProperty("transition", "none", "important");
+          }
         }
         if (txt.startsWith("SELLERS:") && txt.length < 20 && txt !== "SELLERS: 61%") {
           el.textContent = "SELLERS: 61%";
         }
-        if (el.style && el.style.width && el.style.width.includes("%")) {
-          const cardText = el.closest("div, section")?.parentElement?.textContent || "";
-          if (cardText.includes("BUYERS:") && cardText.includes("SELLERS:") && el.children.length === 0) {
-            if (el.style.width !== "39%") el.style.width = "39%";
-          }
-        }
       });
     }
 
-        isApplying = false;
+    isApplying = false;
+
   }
 
   syncAllWeekendStates();
