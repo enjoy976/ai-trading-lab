@@ -1217,6 +1217,127 @@ document.querySelectorAll("button, a").forEach(el => {
   }
 });
 </script>
+
+<style>
+@keyframes redPulseGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.35); border-color: rgba(239, 68, 68, 0.65); }
+  50% { box-shadow: 0 0 26px rgba(239, 68, 68, 0.85); border-color: #EF4444; }
+}
+@keyframes dotBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(0.8); }
+}
+.stryx-news-banner {
+  max-width: 1180px;
+  margin: 14px auto 18px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.16), rgba(16, 20, 29, 0.95), rgba(212, 175, 55, 0.14));
+  border: 1px solid rgba(239, 68, 68, 0.65);
+  animation: redPulseGlow 2s infinite ease-in-out;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: inherit;
+}
+.stryx-news-banner:hover { transform: translateY(-1px); }
+.stryx-news-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.stryx-blink-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #EF4444;
+  margin-right: 8px;
+  animation: dotBlink 1s infinite;
+}
+.stryx-news-details {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(212, 175, 55, 0.35);
+  font-size: 13px;
+  color: #E8ECF2;
+  line-height: 1.6;
+}
+</style>
+
+<script>
+(function() {
+  const banner = document.createElement("div");
+  banner.className = "stryx-news-banner";
+  banner.innerHTML = `
+    <div class="stryx-news-top">
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span style="background:#EF4444; color:#fff; font-size:11px; font-weight:800; padding:3px 9px; border-radius:6px; letter-spacing:0.5px;">
+          <span class="stryx-blink-dot" style="background:#fff; width:7px; height:7px; margin-right:5px;"></span>🚨 RED NEWS RADAR
+        </span>
+        <strong id="newsTitle" style="color:#F8FAFC; font-size:14px;">🇺🇸 USD — High Impact Economic Data (21:30 ULAT)</strong>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span id="newsCountdown" style="color:#F0CE6E; font-weight:800; font-family:monospace; font-size:14px;">⏳ --:--:--</span>
+        <span style="color:#94A3B8; font-size:12px;">▼ AI Сценари</span>
+      </div>
+    </div>
+    <div id="newsDetails" class="stryx-news-details">
+      <div style="color:#F0CE6E; font-weight:700; margin-bottom:4px;">🧠 STRYX AI GOLD IMPACT PREDICTOR:</div>
+      • 🟢 <b>Алт Өсөх (Bullish XAUUSD):</b> Хэрэв USD мэдээ таамгаас муу гарвал ам.доллар суларч алт <b>+$12-аас +$25</b> огцом өсөх магадлалтай.<br>
+      • 🔴 <b>Алт Унах (Bearish XAUUSD):</b> Хэрэв USD мэдээ хүчтэй гарвал алт <b>-$12-аас -$25</b> унаж доод Liquidity-г түүнэ.<br>
+      • 🛡️ <b>Алтан Дүрэм:</b> Мэдээ гарахаас <b>15 минутын өмнө</b> шинэ арилжаа бүү нээ!
+    </div>
+  `;
+
+  banner.addEventListener("click", () => {
+    const det = document.getElementById("newsDetails");
+    det.style.display = det.style.display === "block" ? "none" : "block";
+  });
+
+  // Dashboard-ийн хамгийн дээд хэсэгт (header-ийн яг доор) байрлуулна
+  const header = document.querySelector("header, .topbar, .navbar");
+  if (header) {
+    header.after(banner);
+  } else {
+    document.body.prepend(banner);
+  }
+
+  function updateNewsTimer() {
+    const now = new Date();
+    const ulat = new Date(now.getTime() + (8 * 3600000));
+    const day = ulat.getUTCDay(); // 0=Ням, 6=Бямба
+    const titleEl = document.getElementById("newsTitle");
+    const countEl = document.getElementById("newsCountdown");
+
+    // Бямба эсвэл Ням гарагт амралтын төлөв харуулна
+    if (day === 6 || day === 0) {
+      banner.style.animation = "none";
+      banner.style.borderColor = "rgba(212, 175, 55, 0.55)";
+      titleEl.textContent = "⏸️ ЗАХ ЗЭЭЛ АМАРЧ БАЙНА — Дараагийн USD улаан мэдээ Даваа гарагт эхэлнэ";
+      countEl.textContent = "📅 WEEKEND";
+      return;
+    }
+
+    // Өнөөдрийн 21:30 ULAT (Нью-Йорк мэдээний оргил цаг) хүртэл тоолно
+    const target = new Date(ulat);
+    target.setUTCHours(21, 30, 0, 0);
+    if (ulat > target) target.setUTCDate(target.getUTCDate() + 1);
+
+    const diff = target - ulat;
+    const h = String(Math.floor(diff / 3600000)).padStart(2, "0");
+    const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+    const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+
+    countEl.textContent = `⏳ ${h}:${m}:${s}`;
+  }
+
+  updateNewsTimer();
+  setInterval(updateNewsTimer, 1000);
+})();
+</script>
   
   
 </body>
