@@ -1372,7 +1372,7 @@ document.querySelectorAll("button, a").forEach(el => {
 (function() {
   let isApplying = false;
 
-  function syncGlobalSessionsWinter() {
+  function syncSessionsAndKillzones() {
     if (isApplying) return;
     isApplying = true;
 
@@ -1387,7 +1387,7 @@ document.querySelectorAll("button, a").forEach(el => {
       (day === 0) ||
       (day === 1 && hour < 6);
 
-    // Өвлийн цагийн хуваарь (УБ цагаар нээлттэй байх цагууд)
+    // 1. Өвлийн цагийн хуваарь (УБ цагаар нээлттэй байх 4 бирж)
     const sessions = {
       "SYDNEY": !isMarketClosedWeekend && (hour >= 6 && hour < 15),
       "TOKYO": !isMarketClosedWeekend && (hour >= 8 && hour < 17),
@@ -1397,8 +1397,10 @@ document.querySelectorAll("button, a").forEach(el => {
 
     document.querySelectorAll("div, section, article").forEach(card => {
       const txt = card.textContent || "";
+
+      // 4 биржийн төлөвийг шинэчлэх
       Object.keys(sessions).forEach(city => {
-        if (txt.includes(city) && card.children.length > 0 && card.children.length <= 5) {
+        if (txt.includes(city) && !txt.includes("KILLZONE") && card.children.length > 0 && card.children.length <= 5) {
           card.querySelectorAll("span, div, p, b").forEach(el => {
             if (el.children.length === 0 && (el.textContent.includes("OPEN") || el.textContent.includes("CLOSED"))) {
               const targetText = sessions[city]
@@ -1416,18 +1418,34 @@ document.querySelectorAll("button, a").forEach(el => {
           });
         }
       });
+
+      // 2. Амралтын өдөр KILLZONE тоолууруудыг 00:00:00 болгож зогсооно
+      if (isMarketClosedWeekend && txt.includes("KILLZONE") && card.children.length > 0 && card.children.length <= 8) {
+        card.querySelectorAll("span, div, p, b").forEach(el => {
+          if (el.children.length === 0) {
+            const t = el.textContent.trim();
+            if (/^\d{2}$/.test(t) && t !== "00") {
+              el.textContent = "00";
+            }
+            if (t.includes("ХҮЛЭЭЖ БАЙНА") || t.includes("ACTIVE")) {
+              el.textContent = "🔴 WEEKEND CLOSED";
+              el.style.color = "#EF4444";
+            }
+          }
+        });
+      }
     });
 
     isApplying = false;
   }
 
-  syncGlobalSessionsWinter();
+  syncSessionsAndKillzones();
 
-  // Хуучин скрипт текст өөрчлөх гэж оролдмогц тэр агшинд нь шууд дарж засна (огт анивчихгүй)
-  const observer = new MutationObserver(syncGlobalSessionsWinter);
+  const observer = new MutationObserver(syncSessionsAndKillzones);
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 })();
 </script>
+
 
   
   
