@@ -1297,13 +1297,14 @@ document.querySelectorAll("button, a").forEach(el => {
     det.style.display = det.style.display === "block" ? "none" : "block";
   });
 
-  // Dashboard-ийн хамгийн дээд хэсэгт (header-ийн яг доор) байрлуулна
-  const header = document.querySelector("header, .topbar, .navbar");
-  if (header) {
-    header.after(banner);
+    // Sniper дуран логоны яг дээр (ил харагдах хэсэгт) байрлуулна
+  const targetBox = document.querySelector(".hero, .dashboard-header, main, .container");
+  if (targetBox) {
+    targetBox.prepend(banner);
   } else {
     document.body.prepend(banner);
   }
+
 
   function updateNewsTimer() {
     const now = new Date();
